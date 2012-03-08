@@ -84,3 +84,4 @@ UpgradeLog*.XML
 
 test
 
+*.cachefile
