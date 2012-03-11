@@ -23,6 +23,8 @@ namespace _3DGameProject
         Effect effect;
 
         Camera gameCamera;
+        Player player;
+        Skybox skybox = new Skybox();
 
         Texture2D scenaryTexture;
         int[,] floorPlan;
@@ -32,14 +34,8 @@ namespace _3DGameProject
         BoundingBox[] buildingBoundingBoxes;
         BoundingBox completeCityBox;
 
-        Player player;
-
         Vector3 lightDirection = new Vector3(3, -2, 5);
 
-        float gameSpeed = 0.5f;
-
-        Texture2D[] skyboxTextures;
-        Model skyboxModel;
 
         public Game1()
         {
@@ -66,6 +62,7 @@ namespace _3DGameProject
 
             gameCamera = new Camera();
             player = new Player();
+            skybox = new Skybox();
 
             base.Initialize();
         }
@@ -83,9 +80,10 @@ namespace _3DGameProject
             effect = Content.Load<Effect>("effects");
 
             scenaryTexture = Content.Load<Texture2D>("texturemap");
-            skyboxModel = LoadModel("Skybox\\skybox2", out skyboxTextures);
+            
 
             player.LoadContent(Content, "xwing");
+            skybox.LoadContent(Content, "Skybox\\skybox");
 
             LoadFloorPlan();
             SetUpVertices();
@@ -130,22 +128,6 @@ namespace _3DGameProject
         private Model LoadModel(String assetName)
         {
             Model newModel = Content.Load<Model>(assetName);
-            foreach (ModelMesh mesh in newModel.Meshes)
-                foreach (ModelMeshPart meshPart in mesh.MeshParts)
-                    meshPart.Effect = effect.Clone();
-
-            return newModel;
-        }
-
-        private Model LoadModel(string assetName, out Texture2D[] textures)
-        {
-            Model newModel = Content.Load<Model>(assetName);
-            textures = new Texture2D[newModel.Meshes.Count];
-            int i = 0;
-            foreach (ModelMesh mesh in newModel.Meshes)
-                foreach (BasicEffect currentEffect in mesh.Effects)
-                    textures[i++] = currentEffect.Texture;
-
             foreach (ModelMesh mesh in newModel.Meshes)
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     meshPart.Effect = effect.Clone();
@@ -300,7 +282,7 @@ namespace _3DGameProject
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            DrawSkybox();
+            skybox.Draw(ref device, gameCamera, player);
             DrawCity();
             player.Draw(gameCamera);
 
@@ -325,39 +307,6 @@ namespace _3DGameProject
                 device.SetVertexBuffer(cityVertexBuffer);
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
-        }
-
-        private void DrawSkybox()
-        {
-            SamplerState ss = new SamplerState();
-            ss.AddressU = TextureAddressMode.Clamp;
-            ss.AddressV = TextureAddressMode.Clamp;
-            device.SamplerStates[0] = ss;
-
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = false;
-            device.DepthStencilState = dss;
-
-            Matrix[] skyboxTransforms = new Matrix[skyboxModel.Bones.Count];
-            skyboxModel.CopyAbsoluteBoneTransformsTo(skyboxTransforms);
-            int i = 0;
-            foreach (ModelMesh mesh in skyboxModel.Meshes)
-            {
-                foreach (Effect currentEffect in mesh.Effects)
-                {
-                    Matrix worldMatrix = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(player.Position);
-                    currentEffect.CurrentTechnique = currentEffect.Techniques["Textured"];
-                    currentEffect.Parameters["xWorld"].SetValue(worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
-                    currentEffect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
-                    currentEffect.Parameters["xTexture"].SetValue(skyboxTextures[i++]);
-                }
-                mesh.Draw();
-            }
-
-            dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            device.DepthStencilState = dss;
         }
     }
 }

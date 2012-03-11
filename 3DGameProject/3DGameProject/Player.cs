@@ -18,8 +18,7 @@ namespace _3DGameProject
 
         public Player()
         {
-            ForwardDirection = MathHelper.PiOver2;
-            Position = new Vector3(16.5f, 0.1f, -9.5f);
+            Position = new Vector3(15.5f, 0.1f, -9.5f);
         }
 
         public void LoadContent(ContentManager content, String assetName)
