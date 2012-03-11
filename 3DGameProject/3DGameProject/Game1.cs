@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Series3D2
+namespace _3DGameProject
 {
     /// <summary>
     /// This is the main type for your game
@@ -22,8 +22,7 @@ namespace Series3D2
         GraphicsDevice device;
         Effect effect;
 
-        Matrix viewMatrix;
-        Matrix projectionMatrix;
+        Camera gameCamera;
         Quaternion cameraRotation = Quaternion.Identity;
 
         Texture2D scenaryTexture;
@@ -35,12 +34,12 @@ namespace Series3D2
         BoundingBox completeCityBox;
         
         Model xwingModel;
-        Vector3 xwingPosition = new Vector3(8, 1, -3);
+        Vector3 xwingPosition = new Vector3(16.5f, 0.1f, -9.5f);
         Quaternion xwingRotation = Quaternion.Identity;
 
         Vector3 lightDirection = new Vector3(3, -2, 5);
 
-        float gameSpeed = 1.0f;
+        float gameSpeed = 0.5f;
 
         Texture2D[] skyboxTextures;
         Model skyboxModel;
@@ -67,6 +66,7 @@ namespace Series3D2
             Window.Title = "Riemer's XNA Tutorials -- 3D Series 2";
 
             lightDirection.Normalize();
+            gameCamera = new Camera();
 
             base.Initialize();
         }
@@ -87,7 +87,6 @@ namespace Series3D2
             xwingModel = LoadModel("xwing");
 
             LoadFloorPlan();
-            SetUpCamera();
             SetUpVertices();
             SetUpBoundingBoxes();
         }
@@ -96,26 +95,27 @@ namespace Series3D2
         {
             floorPlan = new int[,]
             {
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,1,1,0,0,0,1,1,0,0,1,0,1},
-                {1,0,0,1,1,0,0,0,1,0,0,0,1,0,1},
-                {1,0,0,0,1,1,0,1,1,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,1,1,0,0,0,1,0,0,0,0,0,0,1},
-                {1,0,1,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,1,0,0,0,1,0,0,0,0,1},
-                {1,0,1,0,0,0,0,0,0,1,0,0,0,0,1},
-                {1,0,1,1,0,0,0,0,1,1,0,0,0,1,1},
-                {1,0,0,0,0,0,0,0,1,1,0,0,0,1,1},
-                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+                {1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+                {1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1},
+                {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+                {1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
+                {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
+                {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+                {1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1},
+                {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+                {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
+                {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+                {1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+                {1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+                {1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+                {1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1},
+                {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+                {1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1},
+                {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
             };
 
             Random random = new Random();
@@ -150,12 +150,6 @@ namespace Series3D2
                     meshPart.Effect = effect.Clone();
 
             return newModel;
-        }
-
-        private void SetUpCamera()
-        {
-            viewMatrix = Matrix.CreateLookAt(new Vector3(20, 13, -5), new Vector3(8, 0, -7), new Vector3(0, 1, 0));
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 0.2f, 500.0f);
         }
 
         private void SetUpVertices()
@@ -233,22 +227,22 @@ namespace Series3D2
 
             List<BoundingBox> bbList = new List<BoundingBox>();
 
-            for (int x = 0; x < cityWidth; x++)
-            {
-                for (int z = 0; z < cityLength; z++)
-                {
-                    int buildingType = floorPlan[x, z];
-                    if (buildingType != 0)
-                    {
-                        int buildingHeight = buildingHeights[buildingType];
-                        Vector3[] buildingPoints = new Vector3[2];
-                        buildingPoints[0] = new Vector3(x, 0, -z);
-                        buildingPoints[1] = new Vector3(x + 1, buildingHeight, -z - 1);
-                        BoundingBox buildingBox = BoundingBox.CreateFromPoints(buildingPoints);
-                        bbList.Add(buildingBox);
-                    }
-                }
-            }
+            //for (int x = 0; x < cityWidth; x++)
+            //{
+            //    for (int z = 0; z < cityLength; z++)
+            //    {
+            //        int buildingType = floorPlan[x, z];
+            //        if (buildingType != 0)
+            //        {
+            //            int buildingHeight = buildingHeights[buildingType];
+            //            Vector3[] buildingPoints = new Vector3[2];
+            //            buildingPoints[0] = new Vector3(x, 0, -z);
+            //            buildingPoints[1] = new Vector3(x + 1, buildingHeight, -z - 1);
+            //            BoundingBox buildingBox = BoundingBox.CreateFromPoints(buildingPoints);
+            //            bbList.Add(buildingBox);
+             //       }
+            //    }
+            //}
 
             buildingBoundingBoxes = bbList.ToArray();
 
@@ -295,15 +289,7 @@ namespace Series3D2
 
         private void UpdateCamera()
         {
-            Vector3 campos = new Vector3(0, 0.1f, 0.6f);
-            campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(cameraRotation));
-            campos += xwingPosition;
-
-            Vector3 camup = new Vector3(0, 1, 0);
-            camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(cameraRotation));
-
-            viewMatrix = Matrix.CreateLookAt(campos, xwingPosition, camup);
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 0.2f, 500.0f);
+            gameCamera.Update(0.0f, xwingPosition, device.Viewport.AspectRatio);
         }
 
         private void ProcessKeyboard(GameTime gameTime)
@@ -365,8 +351,8 @@ namespace Series3D2
         {
             effect.CurrentTechnique = effect.Techniques["Textured"];
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
-            effect.Parameters["xView"].SetValue(viewMatrix);
-            effect.Parameters["xProjection"].SetValue(projectionMatrix);
+            effect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
+            effect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
             effect.Parameters["xTexture"].SetValue(scenaryTexture);
             effect.Parameters["xEnableLighting"].SetValue(true);
             effect.Parameters["xLightDirection"].SetValue(lightDirection);
@@ -393,8 +379,8 @@ namespace Series3D2
                 {
                     currentEffect.CurrentTechnique = currentEffect.Techniques["Colored"];
                     currentEffect.Parameters["xWorld"].SetValue(xwingTransforms[mesh.ParentBone.Index] * worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(viewMatrix);
-                    currentEffect.Parameters["xProjection"].SetValue(projectionMatrix);
+                    currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
+                    currentEffect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
                     currentEffect.Parameters["xEnableLighting"].SetValue(true);
                     currentEffect.Parameters["xLightDirection"].SetValue(lightDirection);
                     currentEffect.Parameters["xAmbient"].SetValue(0.5f);
@@ -424,8 +410,8 @@ namespace Series3D2
                     Matrix worldMatrix = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(xwingPosition);
                     currentEffect.CurrentTechnique = currentEffect.Techniques["Textured"];
                     currentEffect.Parameters["xWorld"].SetValue(worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(viewMatrix);
-                    currentEffect.Parameters["xProjection"].SetValue(projectionMatrix);
+                    currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
+                    currentEffect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
                     currentEffect.Parameters["xTexture"].SetValue(skyboxTextures[i++]);
                 }
                 mesh.Draw();

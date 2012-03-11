@@ -1,6 +1,6 @@
 using System;
 
-namespace Series3D2
+namespace _3DGameProject
 {
 #if WINDOWS || XBOX
     static class Program
