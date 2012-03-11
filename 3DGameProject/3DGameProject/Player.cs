@@ -32,65 +32,68 @@ namespace _3DGameProject
 
             BoundingSphere = CalculateBoundingSphere();
 
-            BoundingSphere scaledSphere;
-            scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.04f;
-            BoundingSphere = new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            BoundingSphere updatedSphere = BoundingSphere;
+            updatedSphere.Center.X = Position.X;
+            updatedSphere.Center.Z = Position.Z;
+            updatedSphere.Radius *= 1.0f;
+            BoundingSphere = new BoundingSphere(updatedSphere.Center, updatedSphere.Radius);
         }
 
         public void Update(KeyboardState keyboardState, ref Map map)
         {
-            Vector3 FuturePosition;
-            Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+            float turnAmount = 0;
 
-            Vector3 speed = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), orientationMatrix);
-            speed *= velocity;
-            FuturePosition = Position + speed;
+            if (keyboardState.IsKeyDown(Keys.W))
+            {
+                if (velocity < 0) // braking
+                    velocity += -GameConstants.Brake;
+                else
+                    velocity += GameConstants.Accel;
+            }
+            else if (keyboardState.IsKeyDown(Keys.S))
+            {
+                if (velocity > 0) // braking
+                    velocity += GameConstants.Brake;
+                else // reversing
+                    velocity += GameConstants.Rev;
+            }
+
+            if (velocity > GameConstants.MaxVelocity)
+                velocity = GameConstants.MaxVelocity;
+            else if (velocity < -GameConstants.MaxVelocity)
+                velocity = -GameConstants.MaxVelocity;
+
+            if (keyboardState.IsKeyDown(Keys.A))
+                turnAmount = 1;
+            else if (keyboardState.IsKeyDown(Keys.D))
+                turnAmount = -1;
+
+            ForwardDirection += turnAmount * velocity * GameConstants.TurnSpeed;
+
+            Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
+            movement *= velocity;
+            Position = Position + movement;
+            UpdateBoundingSphere();
+
             GameConstants.CollisionType collision = map.CheckCollision(this);
 
 
-            if (collision == GameConstants.CollisionType.None)
+            if (collision == GameConstants.CollisionType.Building)
             {
-                Position = FuturePosition;
+                // undo the movement and set velocity to zero
+                Position -= movement;
+                velocity = 0.0f;
 
-                BoundingSphere updatedSphere;
-                updatedSphere = BoundingSphere;
-
-                updatedSphere.Center.X = Position.X;
-                updatedSphere.Center.Z = Position.Z;
-                BoundingSphere = new BoundingSphere(updatedSphere.Center,
-                    updatedSphere.Radius);
-
-
-                if (keyboardState.IsKeyDown(Keys.W))
-                {
-                    if (velocity < 0) // braking
-                        velocity += 0.04f / 60f;
-                    else
-                        velocity += 0.015f / 60f;
-                }
-                else if (keyboardState.IsKeyDown(Keys.S))
-                {
-                    if (velocity > 0) // braking
-                        velocity += -0.04f / 60f;
-                    else // reversing
-                        velocity += -0.01f / 60f;
-                }
-
-                if (velocity > GameConstants.MaxVelocity)
-                    velocity = GameConstants.MaxVelocity;
-                else if (velocity < -GameConstants.MaxVelocity)
-                    velocity = -GameConstants.MaxVelocity;
-
-                float turnAmount = 0;
-
-                if (keyboardState.IsKeyDown(Keys.A))
-                    turnAmount = 1;
-                else if (keyboardState.IsKeyDown(Keys.D))
-                    turnAmount = -1;
-
-                ForwardDirection += turnAmount * velocity * GameConstants.TurnSpeed;
+                UpdateBoundingSphere();
             }
+        }
+
+        private void UpdateBoundingSphere()
+        {
+            BoundingSphere updatedSphere = BoundingSphere;
+            updatedSphere.Center.X = Position.X;
+            updatedSphere.Center.Z = Position.Z;
+            BoundingSphere = updatedSphere;
         }
 
         public void Draw(Camera gameCamera)
@@ -110,7 +113,6 @@ namespace _3DGameProject
                     currentEffect.Parameters["xEnableLighting"].SetValue(true);
                     currentEffect.Parameters["xLightDirection"].SetValue(GameConstants.LightDirection);
                     currentEffect.Parameters["xAmbient"].SetValue(0.5f);
-                    //currentEffect.Parameters["color"].SetValue = Color.AliceBlue;
                 }
                 mesh.Draw();
             }

@@ -21,6 +21,9 @@ namespace _3DGameProject
         //player constants
         public const float MaxVelocity = 1.25f / 30.0f;
         public const float TurnSpeed = 0.7f;
+        public const float Brake = -0.04f / 60f;
+        public const float Accel = 0.015f / 60f;
+        public const float Rev = -0.01f / 60f;
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
     }
