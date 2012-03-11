@@ -23,7 +23,6 @@ namespace _3DGameProject
         Effect effect;
 
         Camera gameCamera;
-        Quaternion cameraRotation = Quaternion.Identity;
 
         Texture2D scenaryTexture;
         int[,] floorPlan;
@@ -32,10 +31,8 @@ namespace _3DGameProject
         int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
         BoundingBox[] buildingBoundingBoxes;
         BoundingBox completeCityBox;
-        
-        Model xwingModel;
-        Vector3 xwingPosition = new Vector3(16.5f, 0.1f, -9.5f);
-        Quaternion xwingRotation = Quaternion.Identity;
+
+        Player player;
 
         Vector3 lightDirection = new Vector3(3, -2, 5);
 
@@ -63,10 +60,12 @@ namespace _3DGameProject
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
 
-            Window.Title = "Riemer's XNA Tutorials -- 3D Series 2";
+            Window.Title = "Alien Attack";
 
             lightDirection.Normalize();
+
             gameCamera = new Camera();
+            player = new Player();
 
             base.Initialize();
         }
@@ -82,9 +81,11 @@ namespace _3DGameProject
 
             device = graphics.GraphicsDevice;
             effect = Content.Load<Effect>("effects");
+
             scenaryTexture = Content.Load<Texture2D>("texturemap");
             skyboxModel = LoadModel("Skybox\\skybox2", out skyboxTextures);
-            xwingModel = LoadModel("xwing");
+
+            player.LoadContent(Content, "xwing");
 
             LoadFloorPlan();
             SetUpVertices();
@@ -268,57 +269,16 @@ namespace _3DGameProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            cameraRotation = Quaternion.Lerp(cameraRotation, xwingRotation, 0.1f);
             UpdateCamera();
 
-            ProcessKeyboard(gameTime);
-
-            float moveSpeed = gameTime.ElapsedGameTime.Milliseconds / 500.0f * gameSpeed;
-            MoveForward(ref xwingPosition, xwingRotation, moveSpeed);
-
-            BoundingSphere xwingSphere = new BoundingSphere(xwingPosition, 0.04f);
-            if (CheckCollision(xwingSphere) != CollisionType.None)
-            {
-                xwingPosition = new Vector3(8, 1, -3);
-                xwingRotation = Quaternion.Identity;
-                gameSpeed /= 1.1f;
-            }
+            player.Update(Keyboard.GetState());
 
             base.Update(gameTime);
         }
 
         private void UpdateCamera()
         {
-            gameCamera.Update(0.0f, xwingPosition, device.Viewport.AspectRatio);
-        }
-
-        private void ProcessKeyboard(GameTime gameTime)
-        {
-            float leftRightRot = 0.0f;
-            float upDownRot = 0.0f;
-            float turningSpeed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f;
-            turningSpeed *= 1.6f * gameSpeed;
-
-            KeyboardState keys = Keyboard.GetState();
-            if (keys.IsKeyDown(Keys.Right))
-                leftRightRot += turningSpeed;
-            if (keys.IsKeyDown(Keys.Left))
-                leftRightRot -= turningSpeed;
-
-            if (keys.IsKeyDown(Keys.Down))
-                upDownRot += turningSpeed;
-            if (keys.IsKeyDown(Keys.Up))
-                upDownRot -= turningSpeed;
-
-            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), leftRightRot) * 
-                                       Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), upDownRot);
-            xwingRotation *= additionalRot;
-        }
-
-        private void MoveForward(ref Vector3 position, Quaternion rotationQuat, float speed)
-        {
-            Vector3 addVector = Vector3.Transform(new Vector3(0, 0, -1), rotationQuat);
-            position += addVector * speed;
+            gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
         }
 
         private CollisionType CheckCollision(BoundingSphere sphere)
@@ -342,7 +302,7 @@ namespace _3DGameProject
 
             DrawSkybox();
             DrawCity();
-            DrawModel();
+            player.Draw(gameCamera);
 
             base.Draw(gameTime);
         }
@@ -367,28 +327,6 @@ namespace _3DGameProject
             }
         }
 
-        private void DrawModel()
-        {
-            Matrix worldMatrix = Matrix.CreateScale(0.0005f, 0.0005f, 0.0005f) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateFromQuaternion(xwingRotation) * Matrix.CreateTranslation(xwingPosition);
-            Matrix[] xwingTransforms = new Matrix[xwingModel.Bones.Count];
-            xwingModel.CopyAbsoluteBoneTransformsTo(xwingTransforms);
-
-            foreach (ModelMesh mesh in xwingModel.Meshes)
-            {
-                foreach (Effect currentEffect in mesh.Effects)
-                {
-                    currentEffect.CurrentTechnique = currentEffect.Techniques["Colored"];
-                    currentEffect.Parameters["xWorld"].SetValue(xwingTransforms[mesh.ParentBone.Index] * worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
-                    currentEffect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
-                    currentEffect.Parameters["xEnableLighting"].SetValue(true);
-                    currentEffect.Parameters["xLightDirection"].SetValue(lightDirection);
-                    currentEffect.Parameters["xAmbient"].SetValue(0.5f);
-                }
-                mesh.Draw();
-            }
-        }
-
         private void DrawSkybox()
         {
             SamplerState ss = new SamplerState();
@@ -407,7 +345,7 @@ namespace _3DGameProject
             {
                 foreach (Effect currentEffect in mesh.Effects)
                 {
-                    Matrix worldMatrix = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(xwingPosition);
+                    Matrix worldMatrix = skyboxTransforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(player.Position);
                     currentEffect.CurrentTechnique = currentEffect.Techniques["Textured"];
                     currentEffect.Parameters["xWorld"].SetValue(worldMatrix);
                     currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
