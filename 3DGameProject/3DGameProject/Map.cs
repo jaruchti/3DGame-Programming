@@ -159,10 +159,8 @@ namespace _3DGameProject
             buildingBoundingBoxes = bbList.ToArray();
         }
 
-        public GameConstants.CollisionType CheckCollision(Player player)
+        public GameConstants.CollisionType CheckCollision(BoundingSphere sphere)
         {
-            BoundingSphere sphere = player.BoundingSphere;
-
             for (int i = 0; i < buildingBoundingBoxes.Length; i++)
                 if (buildingBoundingBoxes[i].Contains(sphere) != ContainmentType.Disjoint)
                     return GameConstants.CollisionType.Building;

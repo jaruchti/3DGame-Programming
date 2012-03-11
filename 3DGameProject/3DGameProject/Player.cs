@@ -41,8 +41,42 @@ namespace _3DGameProject
 
         public void Update(KeyboardState keyboardState, ref Map map)
         {
+            float turnAmount = DetermineTurnAmount(keyboardState);
+            UpdateVelocity(keyboardState);
+
+            ForwardDirection += turnAmount * velocity * GameConstants.TurnSpeed;
+            Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
+            movement *= velocity;
+
+            Position = Position + movement;
+            UpdateBoundingSphere();
+            GameConstants.CollisionType collision = map.CheckCollision(this.BoundingSphere);
+
+
+            if (collision == GameConstants.CollisionType.Building)
+            {
+                // undo the movement and set velocity to zero
+                Position -= movement;
+                velocity = 0.0f;
+
+                UpdateBoundingSphere();
+            }
+        }
+
+        private float DetermineTurnAmount(KeyboardState keyboardState)
+        {
             float turnAmount = 0;
 
+            if (keyboardState.IsKeyDown(Keys.A))
+                turnAmount = 1;
+            else if (keyboardState.IsKeyDown(Keys.D))
+                turnAmount = -1;
+
+            return turnAmount;
+        }
+
+        private void UpdateVelocity(KeyboardState keyboardState)
+        {
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 if (velocity < 0) // braking
@@ -58,34 +92,15 @@ namespace _3DGameProject
                     velocity += GameConstants.Rev;
             }
 
+            if (velocity < 0)
+                velocity += GameConstants.Friction;
+            else
+                velocity -= GameConstants.Friction;
+
             if (velocity > GameConstants.MaxVelocity)
                 velocity = GameConstants.MaxVelocity;
             else if (velocity < -GameConstants.MaxVelocity)
                 velocity = -GameConstants.MaxVelocity;
-
-            if (keyboardState.IsKeyDown(Keys.A))
-                turnAmount = 1;
-            else if (keyboardState.IsKeyDown(Keys.D))
-                turnAmount = -1;
-
-            ForwardDirection += turnAmount * velocity * GameConstants.TurnSpeed;
-
-            Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
-            movement *= velocity;
-            Position = Position + movement;
-            UpdateBoundingSphere();
-
-            GameConstants.CollisionType collision = map.CheckCollision(this);
-
-
-            if (collision == GameConstants.CollisionType.Building)
-            {
-                // undo the movement and set velocity to zero
-                Position -= movement;
-                velocity = 0.0f;
-
-                UpdateBoundingSphere();
-            }
         }
 
         private void UpdateBoundingSphere()
