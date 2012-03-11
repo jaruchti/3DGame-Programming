@@ -16,10 +16,10 @@ namespace _3DGameProject
         Model skyboxModel;
         Effect effect;
 
-        public void LoadContent(ContentManager content, string assetName)
+        public void LoadContent(ContentManager content)
         {
-            Effect effect = content.Load<Effect>("effects");
-            skyboxModel = content.Load<Model>(assetName);
+            effect = content.Load<Effect>("effects");
+            skyboxModel = content.Load<Model>("Skybox\\skybox");
 
             skyboxTextures = new Texture2D[skyboxModel.Meshes.Count];
             int i = 0;
