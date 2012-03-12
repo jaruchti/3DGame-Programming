@@ -26,12 +26,12 @@ namespace _3DGameProject
             spriteBatch = new SpriteBatch(device);
         }
 
-        public void Draw(float PlayerVelocity)
+        public void Draw(float playerVelocity)
         {
             int percentOfMaxVelocity;
 
-            PlayerVelocity = Math.Abs(PlayerVelocity);
-            percentOfMaxVelocity = (int) Math.Floor(PlayerVelocity / GameConstants.MaxVelocity * 100);
+            playerVelocity = Math.Abs(playerVelocity);
+            percentOfMaxVelocity = (int) Math.Floor(playerVelocity / GameConstants.MaxVelocity * 100);
 
             if (percentOfMaxVelocity == 100) 
                 percentOfMaxVelocity--;

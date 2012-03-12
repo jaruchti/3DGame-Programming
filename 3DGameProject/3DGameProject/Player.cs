@@ -14,16 +14,23 @@ namespace _3DGameProject
     {
         public float ForwardDirection { get; set; }
         private Effect effect;
-        private float velocity = 0.0f;
+
+        private float velocity;
+        private float fuel;
 
         private Spedometer sped;
+        private FuelGauge fuelGauge;
 
         public Player()
         {
             Position = new Vector3(15.5f, 0.1f, -9.5f);
             UpdateBoundingSphere();
 
+            velocity = 0.0f;
+            fuel = GameConstants.MAX_FUEL;
+
             sped = new Spedometer();
+            fuelGauge = new FuelGauge();
         }
 
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
@@ -36,6 +43,7 @@ namespace _3DGameProject
                     meshPart.Effect = effect.Clone();
 
             sped.LoadContent(ref device, content);
+            fuelGauge.LoadContent(ref device, content);
 
             BoundingSphere = CalculateBoundingSphere();
         }
@@ -51,6 +59,7 @@ namespace _3DGameProject
 
             Position = Position + movement;
             UpdateBoundingSphere();
+
             GameConstants.CollisionType collision = map.CheckCollision(this.BoundingSphere);
 
             if (collision == GameConstants.CollisionType.Building)
@@ -61,6 +70,8 @@ namespace _3DGameProject
 
                 UpdateBoundingSphere();
             }
+
+            fuel -= 1.0f / 60f;
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -115,6 +126,7 @@ namespace _3DGameProject
         {
             DrawModel(ref gameCamera);
             sped.Draw(velocity);
+            fuelGauge.Draw(fuel);
         }
 
         public void DrawModel(ref Camera gameCamera)

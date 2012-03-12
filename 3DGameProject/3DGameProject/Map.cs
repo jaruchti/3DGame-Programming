@@ -191,9 +191,5 @@ namespace _3DGameProject
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
         }
-
-        public void DrawModel()
-        {
-        }
     }
 }
