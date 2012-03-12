@@ -29,7 +29,7 @@ namespace _3DGameProject
             UpdateBoundingSphere();
 
             velocity = 0.0f;
-            fuel = GameConstants.MAX_FUEL;
+            fuel = GameConstants.MaxFuel;
 
             sped = new Spedometer();
             fuelGauge = new FuelGauge();
@@ -82,7 +82,7 @@ namespace _3DGameProject
                 UpdateBoundingSphere();
             }
 
-            fuel -= 1.0f / 60f;
+            fuel -= GameConstants.FuelDrawDown;
             if (fuel < 0)
                 fuel = 0;
         }

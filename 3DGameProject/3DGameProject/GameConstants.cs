@@ -26,7 +26,8 @@ namespace _3DGameProject
         public const float Accel = 0.015f / 60f;
         public const float Rev = -0.01f / 60f;
         public const float Friction = 0.002f / 60f;
-        public const float MAX_FUEL = 99 + 59.0f / 60.0f;
+        public const float MaxFuel = 99 + 59.0f / 60.0f;
+        public const float FuelDrawDown = 1.0f / 60.0f;
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
 
