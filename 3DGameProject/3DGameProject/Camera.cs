@@ -18,6 +18,7 @@ namespace _3DGameProject
         public Vector3 TargetOffset { get; set; }
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
+        float cameraRotation = 0.0f;
 
         public Camera()
         {
@@ -29,7 +30,9 @@ namespace _3DGameProject
 
         public void Update(float avatarYaw, Vector3 position, float aspectRatio)
         {
-            Matrix rotationMatrix = Matrix.CreateRotationY(avatarYaw);
+            cameraRotation = MathHelper.Lerp(cameraRotation, avatarYaw, 0.1f);
+            
+            Matrix rotationMatrix = Matrix.CreateRotationY(cameraRotation);
 
             Vector3 transformedheadOffset =
                 Vector3.Transform(AvatarHeadOffset, rotationMatrix);
