@@ -23,6 +23,16 @@ namespace _3DGameProject
             BoundingSphere = new BoundingSphere();
         }
 
+        public void UpdatePositionAndBoundingSphere(Vector3 newPos)
+        {
+            BoundingSphere updatedSphere = BoundingSphere;
+            Position = newPos;
+
+            updatedSphere.Center.X = Position.X;
+            updatedSphere.Center.Z = Position.Z;
+            BoundingSphere = updatedSphere;
+        }
+
         protected BoundingSphere CalculateBoundingSphere()
         {
             BoundingSphere mergedSphere = new BoundingSphere();

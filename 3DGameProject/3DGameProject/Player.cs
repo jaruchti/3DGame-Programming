@@ -26,7 +26,7 @@ namespace _3DGameProject
         public Player()
         {
             Position = new Vector3(15.5f, 0.0f, -9.5f);
-            UpdateBoundingSphere();
+            UpdatePositionAndBoundingSphere(Position);
 
             velocity = 0.0f;
             fuel = GameConstants.MaxFuel;
@@ -68,22 +68,20 @@ namespace _3DGameProject
             Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
             movement *= velocity;
 
-            Position = Position + movement;
-            UpdateBoundingSphere();
+            UpdatePositionAndBoundingSphere(Position + movement);
 
             GameConstants.CollisionType collision = map.CheckCollision(this.BoundingSphere);
 
             if (collision == GameConstants.CollisionType.Building)
             {
                 // undo the movement and set velocity to zero, can cause "bounceback effect"
-                Position -= movement;
+                UpdatePositionAndBoundingSphere(Position - movement);
                 velocity = 0.0f;
 
-                UpdateBoundingSphere();
             }
 
             sped.Update(velocity);
-            DrawDownFuel();
+            UpdateFuel(collision);
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -126,19 +124,14 @@ namespace _3DGameProject
                 velocity = -GameConstants.MaxVelocity;
         }
 
-        private void UpdateBoundingSphere()
-        {
-            BoundingSphere updatedSphere = BoundingSphere;
-            updatedSphere.Center.X = Position.X;
-            updatedSphere.Center.Z = Position.Z;
-            BoundingSphere = updatedSphere;
-        }
-
-        private void DrawDownFuel()
+        private void UpdateFuel(GameConstants.CollisionType collision)
         {
             fuel -= GameConstants.FuelDrawDown;
+
             if (fuel < 0)
                 fuel = 0;
+            else if (collision == GameConstants.CollisionType.Fuel)
+                fuel = GameConstants.MaxFuel;
 
             fuelGauge.Update(fuel);
         }

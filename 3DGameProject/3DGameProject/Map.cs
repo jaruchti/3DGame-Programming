@@ -81,25 +81,10 @@ namespace _3DGameProject
                 fuelBarrels[i].LoadContent(content);
             }
 
-            fuelBarrels[0].Position = new Vector3(
-                2.5f - fuelBarrels[0].BoundingSphere.Radius,
-                0,
-                -1.5f + fuelBarrels[0].BoundingSphere.Radius);
-
-            fuelBarrels[1].Position = new Vector3(
-                15.5f - fuelBarrels[2].BoundingSphere.Radius,
-                0,
-                -1.5f + fuelBarrels[2].BoundingSphere.Radius);
-
-            fuelBarrels[2].Position = new Vector3(
-                2.5f - fuelBarrels[2].BoundingSphere.Radius,
-                0,
-                -17.5f + fuelBarrels[2].BoundingSphere.Radius);
-
-            fuelBarrels[3].Position = new Vector3(
-                15.5f - fuelBarrels[3].BoundingSphere.Radius,
-                0,
-                -17.5f + fuelBarrels[3].BoundingSphere.Radius);
+            fuelBarrels[0].UpdatePositionAndBoundingSphere(new Vector3(2.5f, 0, -1.5f));
+            fuelBarrels[1].UpdatePositionAndBoundingSphere(new Vector3(15.5f, 0, -1.5f));
+            fuelBarrels[2].UpdatePositionAndBoundingSphere(new Vector3(2.5f, 0, -17.5f));
+            fuelBarrels[3].UpdatePositionAndBoundingSphere(new Vector3(15.5f, 0, -17.5f));
         }
 
         private void SetUpVertices(ref GraphicsDevice device)
@@ -202,6 +187,12 @@ namespace _3DGameProject
             for (int i = 0; i < buildingBoundingBoxes.Length; i++)
                 if (buildingBoundingBoxes[i].Contains(sphere) != ContainmentType.Disjoint)
                     return GameConstants.CollisionType.Building;
+
+            for (int i = 0; i < fuelBarrels.Length; i++)
+            {
+                if (fuelBarrels[i].BoundingSphere.Contains(sphere) != ContainmentType.Disjoint)
+                    return GameConstants.CollisionType.Fuel;
+            }
 
             return GameConstants.CollisionType.None;
         }

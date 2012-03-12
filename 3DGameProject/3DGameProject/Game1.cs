@@ -136,10 +136,10 @@ namespace _3DGameProject
             }
             if (gameState == GameConstants.GameState.Playing)
             {
-                RasterizerState rs = new RasterizerState();
-                rs.FillMode = FillMode.Solid;
+                //RasterizerState rs = new RasterizerState();
+                //rs.FillMode = FillMode.Solid;
 
-                GraphicsDevice.RasterizerState = rs;
+                //GraphicsDevice.RasterizerState = rs;
 
                 skybox.Draw(ref device, gameCamera, player);
                 map.Draw(ref device, gameCamera);
