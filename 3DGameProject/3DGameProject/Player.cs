@@ -72,6 +72,8 @@ namespace _3DGameProject
             }
 
             fuel -= 1.0f / 60f;
+            if (fuel < 0)
+                fuel = 0;
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)

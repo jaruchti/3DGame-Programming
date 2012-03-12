@@ -112,7 +112,8 @@ namespace _3DGameProject
             skybox.Draw(ref device, gameCamera, player);
             map.Draw(ref device, gameCamera);
             player.Draw(gameCamera);
-            timer.Draw(gameTime.TotalGameTime.Seconds);
+
+            timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
 
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
