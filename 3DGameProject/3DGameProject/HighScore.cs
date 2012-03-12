@@ -18,24 +18,23 @@ namespace _3DGameProject
 
         public HighScore()
         {
-            DisplayDigits = 5;
-            FirstDigitXOffset = 390;
-            DigitYOffset = 2;
-            DigitWidth = 20;
-
             textureRect = new Rectangle(382, 68, 339, 60);
             displayDrawRect = new Rectangle(320, 0, 180, 30);
-            digitPositions = new Vector2[DisplayDigits];
 
+            FirstDigitXOffset = 390;
+            SetUpDigitContants();
             SetUpDigitPositions();
 
-            score = ReadHighScore();
+            Score = ReadHighScore();
         }
 
-        public void UpdateHighScore(float newHighScore)
+        public override void Update(float newHighScore)
         {
-            score = newHighScore;
-            WriteHighScore();
+            if (newHighScore > Score)
+            {
+                Score = newHighScore;
+                WriteHighScore();
+            }
         }
 
         private float ReadHighScore()
@@ -51,7 +50,7 @@ namespace _3DGameProject
         private void WriteHighScore()
         {
             tw = new StreamWriter("Scores/scores.txt");
-            tw.WriteLine(score);
+            tw.WriteLine(Score);
         }
     }
 }

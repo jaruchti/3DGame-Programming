@@ -85,6 +85,9 @@ namespace _3DGameProject
             fuel -= GameConstants.FuelDrawDown;
             if (fuel < 0)
                 fuel = 0;
+
+            sped.Update(velocity);
+            fuelGauge.Update(fuel);
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -138,8 +141,8 @@ namespace _3DGameProject
         public void Draw(Camera gameCamera)
         {
             DrawModel(ref gameCamera);
-            sped.Draw(velocity);
-            fuelGauge.Draw(fuel);
+            sped.Draw();
+            fuelGauge.Draw();
         }
 
         public void DrawModel(ref Camera gameCamera)

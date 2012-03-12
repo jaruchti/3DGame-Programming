@@ -10,62 +10,24 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
-    class ScoreDisplay
+    abstract class ScoreDisplay : InGameDisplay
     {
-        protected int DisplayDigits;
-        protected int FirstDigitXOffset;
-        protected int DigitYOffset;
-        protected int DigitWidth;
-
-        protected float score;
-        protected SpriteBatch spriteBatch;
-        protected Texture2D ingameTextures;
-
-        protected Rectangle textureRect;
-        protected Rectangle displayDrawRect;
-        protected Vector2[] digitPositions;
-
-        protected void SetUpDigitPositions()
+        protected void SetUpDigitContants()
         {
-            for (int i = 0; i < DisplayDigits; i++)
-            {
-                digitPositions[i] = new Vector2(FirstDigitXOffset + i * DigitWidth, DigitYOffset);
-            }
+            NumDisplayDigits = 5;
+            DigitYOffset = 2;
+            DigitWidth = 20;
+            DigitScale = 0.2f;
         }
 
-        public void LoadContent(ref GraphicsDevice device, ContentManager content)
-        {
-            ingameTextures = content.Load<Texture2D>("Textures/ingame");
-            spriteBatch = new SpriteBatch(device);
-        }
-
-        public float Score { 
-            get { return score; }
-        }
-
-        public void Draw()
-        {
-            spriteBatch.Begin();
-
-            spriteBatch.Draw(ingameTextures, displayDrawRect, textureRect, Color.White);
-
-            for (int i = 0; i < DisplayDigits; i++)
-            {
-
-                spriteBatch.Draw(ingameTextures, digitPositions[DisplayDigits - 1 - i], 
-                    Helpers.GetDigitRect(((int) score / (int) (Helpers.Pow(10, i)) % 10)), 
-                    Color.White, 0.0f, new Vector2(0, 0), 
-                    0.2f, 
-                    SpriteEffects.None, 
-                    0.0f);
-            }
-   
-            spriteBatch.End();
+        protected float Score { 
+            get { return digits; }
+            set { digits = value; }
         }
 
         public void Reset()
         {
-            score = 0.0f;
+            digits = 0.0f;
         }
     }
 }

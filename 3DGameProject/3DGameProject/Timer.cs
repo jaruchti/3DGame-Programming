@@ -14,23 +14,19 @@ namespace _3DGameProject
     {
         public Timer()
         {
-            DisplayDigits = 5;
-            FirstDigitXOffset = 70;
-            DigitYOffset = 2;
-            DigitWidth = 20;
-
             textureRect = new Rectangle(382, 2, 339, 60);
             displayDrawRect = new Rectangle(0, 0, 180, 30);
-            digitPositions = new Vector2[DisplayDigits];
 
+            FirstDigitXOffset = 70;
+            SetUpDigitContants();
             SetUpDigitPositions();
         }
 
-        public void Update(float elapsedSecs)
+        public override void Update(float elapsedSecs)
         {
-            score += elapsedSecs;
-            if (score > GameConstants.MaxTime)
-                score = GameConstants.MaxTime;
+            Score += elapsedSecs;
+            if (Score > GameConstants.MaxTime)
+                Score = GameConstants.MaxTime;
         }
     }
 }
