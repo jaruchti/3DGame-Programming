@@ -43,6 +43,7 @@ namespace _3DGameProject
 
             tr = new StreamReader("Scores/scores.txt");
             r = (float) Convert.ToDouble(tr.ReadLine());
+            tr.Close();
 
             return r;
         }
@@ -51,6 +52,7 @@ namespace _3DGameProject
         {
             tw = new StreamWriter("Scores/scores.txt");
             tw.WriteLine(Score);
+            tr.Close();
         }
     }
 }

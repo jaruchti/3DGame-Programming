@@ -20,14 +20,9 @@ namespace _3DGameProject
             DigitScale = 0.2f;
         }
 
-        protected float Score { 
+        public float Score { 
             get { return digits; }
             set { digits = value; }
-        }
-
-        public void Reset()
-        {
-            digits = 0.0f;
         }
     }
 }

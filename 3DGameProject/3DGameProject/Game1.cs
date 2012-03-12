@@ -19,11 +19,13 @@ namespace _3DGameProject
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
 
-        GameConstants.GameState gameState;
+        GameConstants.GameState currentGameState;
+        GameConstants.GameState prevGameState;
         TitleScreen titleScreen;
+        GameOverScreen gameOverScreen;
+
         Camera gameCamera;
         Player player;
-
         Map map;
         MiniMap miniMap;
         Skybox skybox;
@@ -54,9 +56,11 @@ namespace _3DGameProject
 
             Window.Title = "Alien Attack";
 
-            gameState = GameConstants.GameState.Title;
+            currentGameState = GameConstants.GameState.Title;
+            prevGameState = currentGameState;
 
             titleScreen = new TitleScreen();
+            gameOverScreen = new GameOverScreen();
 
             gameCamera = new Camera();
             player = new Player();
@@ -78,7 +82,8 @@ namespace _3DGameProject
         {
             device = graphics.GraphicsDevice;
 
-            titleScreen.LoadContent(ref device, Content); 
+            titleScreen.LoadContent(ref device, Content);
+            gameOverScreen.LoadContent(ref device, Content);
 
             player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
@@ -107,17 +112,34 @@ namespace _3DGameProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (gameState == GameConstants.GameState.Title)
+            prevGameState = currentGameState;
+
+            if (currentGameState == GameConstants.GameState.Title)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                    gameState = GameConstants.GameState.Playing;
+                    currentGameState = GameConstants.GameState.Playing;
             }
-            else if (gameState == GameConstants.GameState.Playing)
+            else if (currentGameState == GameConstants.GameState.Playing)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
-                player.Update(Keyboard.GetState(), ref map);
-                timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+                player.Update(Keyboard.GetState(), ref map, ref currentGameState);
+                timer.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             }
+            else if (currentGameState == GameConstants.GameState.End)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    currentGameState = GameConstants.GameState.Playing;
+                    Reset();
+                }
+            }
+            
+            if (currentGameState == GameConstants.GameState.End && prevGameState == GameConstants.GameState.Playing)
+            {
+                highScore.Update(timer.Score);
+                gameOverScreen.Update(timer.Score);
+            }
+
             base.Update(gameTime);
         }
 
@@ -130,11 +152,11 @@ namespace _3DGameProject
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            if (gameState == GameConstants.GameState.Title)
+            if (currentGameState == GameConstants.GameState.Title)
             {
                 titleScreen.Draw();
             }
-            if (gameState == GameConstants.GameState.Playing)
+            else if (currentGameState == GameConstants.GameState.Playing || currentGameState == GameConstants.GameState.End)
             {
                 //RasterizerState rs = new RasterizerState();
                 //rs.FillMode = FillMode.Solid;
@@ -154,10 +176,19 @@ namespace _3DGameProject
                 //GraphicsDevice.RasterizerState = rs;
                 //player.DrawBoundingSphere(gameCamera.ViewMatrix,
                 //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                if (currentGameState == GameConstants.GameState.End)
+                    gameOverScreen.Draw();
             }
 
 
             base.Draw(gameTime);
-        }        
+        }
+
+        void Reset()
+        {
+            timer.Reset();
+            player.Reset();
+        }
     }
 }

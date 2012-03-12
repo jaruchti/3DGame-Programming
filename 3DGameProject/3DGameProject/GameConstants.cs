@@ -39,5 +39,11 @@ namespace _3DGameProject
 
         // Timer constants
         public const int MaxTime = 99999;
+
+        // Rank constants
+        public const int AmatuerAbductee = 25;
+        public const int MediocreAbductee = 100;
+        public const int Abductee = 200;
+        public const int MasterAbductee = 500;
     }
 }

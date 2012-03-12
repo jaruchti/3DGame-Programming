@@ -28,5 +28,10 @@ namespace _3DGameProject
             if (Score > GameConstants.MaxTime)
                 Score = GameConstants.MaxTime;
         }
+
+        public void Reset()
+        {
+            digits = 0.0f;
+        }
     }
 }

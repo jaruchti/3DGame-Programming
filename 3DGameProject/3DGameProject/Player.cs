@@ -28,6 +28,7 @@ namespace _3DGameProject
             Position = new Vector3(15.5f, 0.0f, -9.5f);
             UpdatePositionAndBoundingSphere(Position);
 
+            ForwardDirection = 0.0f;
             velocity = 0.0f;
             fuel = GameConstants.MaxFuel;
 
@@ -59,7 +60,7 @@ namespace _3DGameProject
             BoundingSphere = scaledSphere;
         }
 
-        public void Update(KeyboardState keyboardState, ref Map map)
+        public void Update(KeyboardState keyboardState, ref Map map, ref GameConstants.GameState gameState)
         {
             float turnAmount = DetermineTurnAmount(keyboardState);
             UpdateVelocity(keyboardState);
@@ -81,7 +82,7 @@ namespace _3DGameProject
             }
 
             sped.Update(velocity);
-            UpdateFuel(collision);
+            UpdateFuel(collision, ref gameState);
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -124,12 +125,15 @@ namespace _3DGameProject
                 velocity = -GameConstants.MaxVelocity;
         }
 
-        private void UpdateFuel(GameConstants.CollisionType collision)
+        private void UpdateFuel(GameConstants.CollisionType collision, ref GameConstants.GameState gameState)
         {
             fuel -= GameConstants.FuelDrawDown;
 
             if (fuel < 0)
+            {
                 fuel = 0;
+                gameState = GameConstants.GameState.End;
+            }
             else if (collision == GameConstants.CollisionType.Fuel)
                 fuel = GameConstants.MaxFuel;
 
@@ -143,7 +147,7 @@ namespace _3DGameProject
             fuelGauge.Draw();
         }
 
-        public void DrawModel(ref Camera gameCamera)
+        private void DrawModel(ref Camera gameCamera)
         {
             Matrix[] modelTransforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(modelTransforms);
@@ -164,6 +168,16 @@ namespace _3DGameProject
                 }
                 mesh.Draw();
             }
+        }
+
+        public void Reset()
+        {
+            Position = new Vector3(15.5f, 0.0f, -9.5f);
+            UpdatePositionAndBoundingSphere(Position);
+
+            ForwardDirection = 0.0f;
+            velocity = 0.0f;
+            fuel = GameConstants.MaxFuel;
         }
     }
 }
