@@ -21,9 +21,9 @@ namespace _3DGameProject
 
         public Camera()
         {
-            AvatarHeadOffset = new Vector3(0.0f, 0.1f, 0.5f);
+            AvatarHeadOffset = new Vector3(0.0f, 0.15f, 0.6f);
             TargetOffset = new Vector3(0, 0, 0);
-            ViewMatrix = Matrix.CreateLookAt(new Vector3(20, 13, -5), new Vector3(8, 0, -7), new Vector3(0, 1, 0));
+            ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.Identity;
         }
 

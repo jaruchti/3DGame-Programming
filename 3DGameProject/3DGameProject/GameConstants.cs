@@ -11,6 +11,7 @@ namespace _3DGameProject
 {
     class GameConstants
     {
+        public enum GameState { Title, Intro, Playing, End };
         public enum CollisionType { None, Building, Fuel };
 
         //camera constants

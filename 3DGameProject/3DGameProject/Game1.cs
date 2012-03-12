@@ -19,6 +19,8 @@ namespace _3DGameProject
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
 
+        GameConstants.GameState gameState;
+        TitleScreen titleScreen;
         Camera gameCamera;
         Player player;
         Map map;
@@ -48,6 +50,10 @@ namespace _3DGameProject
 
             Window.Title = "Alien Attack";
 
+            gameState = GameConstants.GameState.Title;
+
+            titleScreen = new TitleScreen();
+
             gameCamera = new Camera();
             player = new Player();
             map = new Map();
@@ -64,6 +70,8 @@ namespace _3DGameProject
         protected override void LoadContent()
         {
             device = graphics.GraphicsDevice;
+
+            titleScreen.LoadContent(ref device, Content); 
 
             player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
@@ -89,10 +97,16 @@ namespace _3DGameProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
-            //gameCamera.ViewMatrix = Matrix.CreateLookAt(new Vector3(10, 20, -10), player.Position, new Vector3(0, 0, 1));
-            player.Update(Keyboard.GetState(), ref map);
-
+            if (gameState == GameConstants.GameState.Title)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                    gameState = GameConstants.GameState.Playing;
+            }
+            else if (gameState == GameConstants.GameState.Playing)
+            {
+                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                player.Update(Keyboard.GetState(), ref map);
+            }
             base.Update(gameTime);
         }
 
@@ -105,23 +119,30 @@ namespace _3DGameProject
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            RasterizerState rs = new RasterizerState();
-            rs.FillMode = FillMode.Solid;
+            if (gameState == GameConstants.GameState.Title)
+            {
+                titleScreen.Draw();
+            }
+            if (gameState == GameConstants.GameState.Playing)
+            {
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.Solid;
 
-            GraphicsDevice.RasterizerState = rs;
+                GraphicsDevice.RasterizerState = rs;
 
-            skybox.Draw(ref device, gameCamera, player);
-            map.Draw(ref device, gameCamera);
-            map.DrawMiniMap(player);
-            player.Draw(gameCamera);
+                skybox.Draw(ref device, gameCamera, player);
+                map.Draw(ref device, gameCamera);
+                map.DrawMiniMap(player);
+                player.Draw(gameCamera);
 
-            timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
+                timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
 
-            rs = new RasterizerState();
-            rs.FillMode = FillMode.WireFrame;
-            GraphicsDevice.RasterizerState = rs;
-            player.DrawBoundingSphere(gameCamera.ViewMatrix,
-                gameCamera.ProjectionMatrix, boundingSphere);
+                rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                GraphicsDevice.RasterizerState = rs;
+                player.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    gameCamera.ProjectionMatrix, boundingSphere);
+            }
 
 
             base.Draw(gameTime);

@@ -159,7 +159,7 @@
       <Name>car</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.05</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>0.07</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +184,13 @@
       <Name>careffect</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\background.png">
+      <Name>background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
