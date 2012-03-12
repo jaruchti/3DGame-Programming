@@ -23,7 +23,9 @@ namespace _3DGameProject
         TitleScreen titleScreen;
         Camera gameCamera;
         Player player;
+
         Map map;
+        MiniMap miniMap;
         Skybox skybox;
 
         Timer timer;
@@ -59,6 +61,7 @@ namespace _3DGameProject
             gameCamera = new Camera();
             player = new Player();
             map = new Map();
+            miniMap = new MiniMap();
             skybox = new Skybox();
 
             timer = new Timer();
@@ -79,6 +82,7 @@ namespace _3DGameProject
 
             player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
+            miniMap.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
 
             timer.LoadContent(ref device, Content);
@@ -139,7 +143,7 @@ namespace _3DGameProject
 
                 skybox.Draw(ref device, gameCamera, player);
                 map.Draw(ref device, gameCamera);
-                map.DrawMiniMap(player);
+                miniMap.Draw(player, map);
                 player.Draw(gameCamera);
 
                 timer.Draw();

@@ -82,12 +82,8 @@ namespace _3DGameProject
                 UpdateBoundingSphere();
             }
 
-            fuel -= GameConstants.FuelDrawDown;
-            if (fuel < 0)
-                fuel = 0;
-
             sped.Update(velocity);
-            fuelGauge.Update(fuel);
+            DrawDownFuel();
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -136,6 +132,15 @@ namespace _3DGameProject
             updatedSphere.Center.X = Position.X;
             updatedSphere.Center.Z = Position.Z;
             BoundingSphere = updatedSphere;
+        }
+
+        private void DrawDownFuel()
+        {
+            fuel -= GameConstants.FuelDrawDown;
+            if (fuel < 0)
+                fuel = 0;
+
+            fuelGauge.Update(fuel);
         }
 
         public void Draw(Camera gameCamera)

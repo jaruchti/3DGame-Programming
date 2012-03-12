@@ -19,17 +19,12 @@ namespace _3DGameProject
         private VertexBuffer cityVertexBuffer;
         private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
         private BoundingBox[] buildingBoundingBoxes;
-
-        private SpriteBatch spriteBatch;
-        private Texture2D whiteRect;
-                    
+      
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             effect = content.Load<Effect>("Effects/effects");
             scenaryTexture = content.Load<Texture2D>("Textures/texturemap");
-            whiteRect = content.Load<Texture2D>("Textures/whiterect");
 
-            spriteBatch = new SpriteBatch(device);
 
             LoadFloorPlan();
             SetUpVertices(ref device);
@@ -48,7 +43,7 @@ namespace _3DGameProject
                 {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
                 {1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
                 {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
-                {0,0,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,0,0},
+                {0,0,0,1,0,1,0,1,1,0,1,1,0,1,0,1,0,0,0},
                 {0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0},
                 {0,0,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,0,0},
                 {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
@@ -66,9 +61,13 @@ namespace _3DGameProject
             Random random = new Random();
             int differentBuildings = buildingHeights.Length - 1;
             for (int x = 0; x < floorPlan.GetLength(0); x++)
+            {
                 for (int y = 0; y < floorPlan.GetLength(1); y++)
+                {
                     if (floorPlan[x, y] == 1)
                         floorPlan[x, y] = random.Next(differentBuildings) + 1;
+                }
+            }    
         }
 
         private void SetUpVertices(ref GraphicsDevice device)
@@ -195,39 +194,6 @@ namespace _3DGameProject
             }
         }
 
-        public void DrawMiniMap(Player player)
-        {
-            const int xOffset = 400;
-            const int yOffset = 40;
-            const int rectWidth = 5;
-            const int rectHeight = 5;
-
-            spriteBatch.Begin();
-
-            Rectangle rect = new Rectangle();
-            rect.Width = rectWidth;
-            rect.Height = rectHeight;
-
-            for (int x = 0; x < floorPlan.GetLength(0); x++)
-            {
-                for (int z = 0; z < floorPlan.GetLength(1); z++)
-                {
-                    if (floorPlan[x, z] != 0)
-                    {
-                        rect.X = xOffset + rectWidth*z;
-                        rect.Y = yOffset + rectHeight*x;
-
-                        spriteBatch.Draw(whiteRect, rect, Color.Orange);
-                    }
-                }
-            }
-
-            rect.X = xOffset - rectWidth * (int)player.Position.Z;
-            rect.Y = yOffset + rectHeight * (int)player.Position.X;
-
-            spriteBatch.Draw(whiteRect, rect, Color.Green);
-
-            spriteBatch.End();
-        }
+        public int[,] FloorPlan { get { return floorPlan; } }
     }
 }
