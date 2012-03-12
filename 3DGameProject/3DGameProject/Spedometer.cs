@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+namespace _3DGameProject
+{
+    class Spedometer
+    {
+        private SpriteBatch spriteBatch;
+        private Texture2D spedometer;
+
+        private Rectangle displayTextureRect = new Rectangle(0, 0, 243, 102);
+        private Rectangle displayDrawRect = new Rectangle(375, 440, 125, 60);
+        private Vector2 digitFirstPosition = new Vector2(435, 445);
+        private Vector2 digitSecondPosition = new Vector2(468, 445);
+
+        public void LoadContent(ref GraphicsDevice device, ContentManager content)
+        {
+            spedometer = content.Load<Texture2D>("Textures/ingame");
+            spriteBatch = new SpriteBatch(device);
+        }
+
+        public void Draw(float PlayerVelocity)
+        {
+            int percentOfMaxVelocity;
+
+            PlayerVelocity = Math.Abs(PlayerVelocity);
+            percentOfMaxVelocity = (int) Math.Floor(PlayerVelocity / GameConstants.MaxVelocity * 100);
+
+            if (percentOfMaxVelocity == 100) 
+                percentOfMaxVelocity--;
+
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(spedometer, displayDrawRect, displayTextureRect, Color.White);
+
+            spriteBatch.Draw(spedometer, digitFirstPosition, Helpers.GetDigitRect(percentOfMaxVelocity / 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(spedometer, digitSecondPosition, Helpers.GetDigitRect(percentOfMaxVelocity % 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
+            spriteBatch.End();
+        }
+    }
+}

@@ -42,12 +42,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="effects.fx">
+    <Compile Include="Effects\effects.fx">
       <Name>effects</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
-    <Compile Include="xwing.x">
+    <Compile Include="Models\xwing.x">
       <Name>xwing</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -55,7 +55,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="texturemap.jpg">
+    <Compile Include="Textures\texturemap.jpg">
       <Name>texturemap</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -124,6 +124,27 @@
       <Name>UFO</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Road.tga">
+      <Name>Road</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\RoadCement.tga">
+      <Name>RoadCement</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\ingame.png">
+      <Name>ingame</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

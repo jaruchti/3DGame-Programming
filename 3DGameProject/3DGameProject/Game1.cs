@@ -17,9 +17,7 @@ namespace _3DGameProject
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         GraphicsDevice device;
-        Effect effect;
 
         Camera gameCamera;
         Player player;
@@ -63,13 +61,9 @@ namespace _3DGameProject
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
             device = graphics.GraphicsDevice;
-            effect = Content.Load<Effect>("effects");
 
-            player.LoadContent(Content);
+            player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
 

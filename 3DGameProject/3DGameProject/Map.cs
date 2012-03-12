@@ -13,6 +13,8 @@ namespace _3DGameProject
     class Map
     {
         private Texture2D scenaryTexture;
+        private Texture2D roadTexture;
+        private Texture2D cementTexture;
         private Effect effect;
         private int[,] floorPlan;
         private VertexBuffer cityVertexBuffer;
@@ -21,8 +23,10 @@ namespace _3DGameProject
                     
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            effect = content.Load<Effect>("effects");
-            scenaryTexture = content.Load<Texture2D>("texturemap");
+            effect = content.Load<Effect>("Effects/effects");
+            scenaryTexture = content.Load<Texture2D>("Textures/texturemap");
+            roadTexture = content.Load<Texture2D>("Textures/Road");
+            cementTexture = content.Load<Texture2D>("Textures/RoadCement");
 
             LoadFloorPlan();
             SetUpVertices(ref device);
@@ -186,6 +190,10 @@ namespace _3DGameProject
                 device.SetVertexBuffer(cityVertexBuffer);
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
+        }
+
+        public void DrawModel()
+        {
         }
     }
 }

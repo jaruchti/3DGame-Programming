@@ -27,5 +27,11 @@ namespace _3DGameProject
         public const float Friction = 0.002f / 60f;
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
+
+        // Digits display
+        public const int DigitXPos = 0;
+        public const int DigitYPos = 344;
+        public const int DigitWidth = 83;
+        public const int DigitHeight = 129;
     }
 }

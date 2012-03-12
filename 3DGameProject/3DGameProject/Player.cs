@@ -16,27 +16,28 @@ namespace _3DGameProject
         private Effect effect;
         private float velocity = 0.0f;
 
+        private Spedometer sped;
+
         public Player()
         {
             Position = new Vector3(15.5f, 0.1f, -9.5f);
+            UpdateBoundingSphere();
+
+            sped = new Spedometer();
         }
 
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            effect = content.Load<Effect>("effects");
-            Model = content.Load<Model>("xwing");
+            effect = content.Load<Effect>("Effects/effects");
+            Model = content.Load<Model>("Models/xwing");
 
             foreach (ModelMesh mesh in Model.Meshes)
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     meshPart.Effect = effect.Clone();
 
-            BoundingSphere = CalculateBoundingSphere();
+            sped.LoadContent(ref device, content);
 
-            BoundingSphere updatedSphere = BoundingSphere;
-            updatedSphere.Center.X = Position.X;
-            updatedSphere.Center.Z = Position.Z;
-            updatedSphere.Radius *= 1.0f;
-            BoundingSphere = new BoundingSphere(updatedSphere.Center, updatedSphere.Radius);
+            BoundingSphere = CalculateBoundingSphere();
         }
 
         public void Update(KeyboardState keyboardState, ref Map map)
@@ -52,10 +53,9 @@ namespace _3DGameProject
             UpdateBoundingSphere();
             GameConstants.CollisionType collision = map.CheckCollision(this.BoundingSphere);
 
-
             if (collision == GameConstants.CollisionType.Building)
             {
-                // undo the movement and set velocity to zero
+                // undo the movement and set velocity to zero, can cause "bounceback effect"
                 Position -= movement;
                 velocity = 0.0f;
 
@@ -112,6 +112,12 @@ namespace _3DGameProject
         }
 
         public void Draw(Camera gameCamera)
+        {
+            DrawModel(ref gameCamera);
+            sped.Draw(velocity);
+        }
+
+        public void DrawModel(ref Camera gameCamera)
         {
             Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi + ForwardDirection) * Matrix.CreateTranslation(Position);
             Matrix[] xwingTransforms = new Matrix[Model.Bones.Count];

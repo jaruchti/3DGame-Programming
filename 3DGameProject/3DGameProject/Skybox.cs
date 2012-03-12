@@ -18,8 +18,8 @@ namespace _3DGameProject
 
         public void LoadContent(ContentManager content)
         {
-            effect = content.Load<Effect>("effects");
-            skyboxModel = content.Load<Model>("Skybox\\skybox");
+            effect = content.Load<Effect>("Effects/effects");
+            skyboxModel = content.Load<Model>("Skybox/skybox");
 
             skyboxTextures = new Texture2D[skyboxModel.Meshes.Count];
             int i = 0;
