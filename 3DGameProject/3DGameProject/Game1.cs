@@ -23,6 +23,7 @@ namespace _3DGameProject
         Player player;
         Map map;
         Skybox skybox;
+        Timer timer;
 
         GameObject boundingSphere = new GameObject();
 
@@ -51,6 +52,7 @@ namespace _3DGameProject
             player = new Player();
             map = new Map();
             skybox = new Skybox();
+            timer = new Timer();
 
             base.Initialize();
         }
@@ -66,6 +68,7 @@ namespace _3DGameProject
             player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
+            timer.LoadContent(ref device, Content);
 
             boundingSphere.Model = Content.Load<Model>("sphere1uR");
         }
@@ -86,16 +89,10 @@ namespace _3DGameProject
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            UpdateCamera();
-
+            gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
             player.Update(Keyboard.GetState(), ref map);
 
             base.Update(gameTime);
-        }
-
-        private void UpdateCamera()
-        {
-            gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
         }
 
 
@@ -115,12 +112,13 @@ namespace _3DGameProject
             skybox.Draw(ref device, gameCamera, player);
             map.Draw(ref device, gameCamera);
             player.Draw(gameCamera);
+            timer.Draw(gameTime.TotalGameTime.Seconds);
 
-            rs = new RasterizerState();
-            rs.FillMode = FillMode.WireFrame;
-            GraphicsDevice.RasterizerState = rs;
-            player.DrawBoundingSphere(gameCamera.ViewMatrix,
-                gameCamera.ProjectionMatrix, boundingSphere);
+            //rs = new RasterizerState();
+            //rs.FillMode = FillMode.WireFrame;
+            //GraphicsDevice.RasterizerState = rs;
+            //player.DrawBoundingSphere(gameCamera.ViewMatrix,
+            //    gameCamera.ProjectionMatrix, boundingSphere);
 
             base.Draw(gameTime);
         }        

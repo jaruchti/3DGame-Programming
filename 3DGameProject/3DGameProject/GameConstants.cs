@@ -34,5 +34,8 @@ namespace _3DGameProject
         public const int DigitYPos = 344;
         public const int DigitWidth = 83;
         public const int DigitHeight = 129;
+
+        // Timer constants
+        public const int MaxTime = 99999;
     }
 }

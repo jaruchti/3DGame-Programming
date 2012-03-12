@@ -24,5 +24,26 @@ namespace _3DGameProject
                 GameConstants.DigitWidth, 
                 GameConstants.DigitHeight);
         }
+
+        public static double Pow(double x, int n)
+        {
+            double r = 1.0;
+
+            if (n < 0)
+            {
+                n = -n;
+                x = 1 / x;
+            }
+
+            while (n > 0)
+            {
+                if ((n & 1) == 1)
+                    r *= x;
+                x *= x;
+                n >>= 1;
+            }
+
+            return r;
+        }
     }
 }
