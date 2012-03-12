@@ -13,20 +13,23 @@ namespace _3DGameProject
     class Map
     {
         private Texture2D scenaryTexture;
-        private Texture2D roadTexture;
-        private Texture2D cementTexture;
         private Effect effect;
+
         private int[,] floorPlan;
         private VertexBuffer cityVertexBuffer;
         private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
         private BoundingBox[] buildingBoundingBoxes;
+
+        private SpriteBatch spriteBatch;
+        private Texture2D whiteRect;
                     
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             effect = content.Load<Effect>("Effects/effects");
             scenaryTexture = content.Load<Texture2D>("Textures/texturemap");
-            roadTexture = content.Load<Texture2D>("Textures/Road");
-            cementTexture = content.Load<Texture2D>("Textures/RoadCement");
+            whiteRect = content.Load<Texture2D>("Textures/whiterect");
+
+            spriteBatch = new SpriteBatch(device);
 
             LoadFloorPlan();
             SetUpVertices(ref device);
@@ -45,9 +48,9 @@ namespace _3DGameProject
                 {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
                 {1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
                 {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
-                {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
-                {1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1},
-                {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+                {0,0,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,0,0},
+                {0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0},
+                {0,0,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,0,0},
                 {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
                 {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
                 {1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
@@ -190,6 +193,41 @@ namespace _3DGameProject
                 device.SetVertexBuffer(cityVertexBuffer);
                 device.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
+        }
+
+        public void DrawMiniMap(Player player)
+        {
+            const int xOffset = 400;
+            const int yOffset = 10;
+            const int rectWidth = 5;
+            const int rectHeight = 5;
+
+            spriteBatch.Begin();
+
+            Rectangle rect = new Rectangle();
+            rect.Width = rectWidth;
+            rect.Height = rectHeight;
+
+            for (int x = 0; x < floorPlan.GetLength(0); x++)
+            {
+                for (int z = 0; z < floorPlan.GetLength(1); z++)
+                {
+                    if (floorPlan[x, z] != 0)
+                    {
+                        rect.X = xOffset + rectWidth*z;
+                        rect.Y = yOffset + rectHeight*x;
+
+                        spriteBatch.Draw(whiteRect, rect, Color.Orange);
+                    }
+                }
+            }
+
+            rect.X = xOffset - rectWidth * (int)player.Position.Z;
+            rect.Y = yOffset + rectHeight * (int)player.Position.X;
+
+            spriteBatch.Draw(whiteRect, rect, Color.Green);
+
+            spriteBatch.End();
         }
     }
 }

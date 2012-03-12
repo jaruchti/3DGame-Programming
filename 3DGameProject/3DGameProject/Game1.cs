@@ -111,6 +111,7 @@ namespace _3DGameProject
 
             skybox.Draw(ref device, gameCamera, player);
             map.Draw(ref device, gameCamera);
+            map.DrawMiniMap(player);
             player.Draw(gameCamera);
 
             timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
