@@ -13,7 +13,7 @@ namespace _3DGameProject
     class FuelGauge
     {
         private SpriteBatch spriteBatch;
-        private Texture2D spedometer;
+        private Texture2D ingameTexture;
 
         private Rectangle textureRect = new Rectangle(0, 103, 243, 102);
         private Rectangle displayDrawRect = new Rectangle(0, 440, 125, 60);
@@ -22,7 +22,7 @@ namespace _3DGameProject
 
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            spedometer = content.Load<Texture2D>("Textures/ingame");
+            ingameTexture = content.Load<Texture2D>("Textures/ingame");
             spriteBatch = new SpriteBatch(device);
         }
 
@@ -32,10 +32,10 @@ namespace _3DGameProject
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(spedometer, displayDrawRect, textureRect, Color.White);
+            spriteBatch.Draw(ingameTexture, displayDrawRect, textureRect, Color.White);
 
-            spriteBatch.Draw(spedometer, digitFirstPosition, Helpers.GetDigitRect(fuelDisplay / 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
-            spriteBatch.Draw(spedometer, digitSecondPosition, Helpers.GetDigitRect(fuelDisplay % 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(ingameTexture, digitFirstPosition, Helpers.GetDigitRect(fuelDisplay / 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(ingameTexture, digitSecondPosition, Helpers.GetDigitRect(fuelDisplay % 10), Color.White, 0.0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0.0f);
             
             spriteBatch.End();
         }
