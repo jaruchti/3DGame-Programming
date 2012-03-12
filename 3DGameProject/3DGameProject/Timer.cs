@@ -12,38 +12,61 @@ namespace _3DGameProject
 {
     class Timer
     {
-        private SpriteBatch spriteBatch;
-        private Texture2D spedometer;
+        private readonly int DisplayDigits;
+        private readonly int FirstDigitXOffset;
+        private readonly int DigitYOffset;
+        private readonly int DigitWidth;
 
-        private Rectangle textureRect = new Rectangle(382, 2, 339, 60);
-        private Rectangle displayDrawRect = new Rectangle(0, 0, 180, 30);
-        private Vector2[] digitPositions = { new Vector2(70, 2),
-                                             new Vector2(90, 2),
-                                             new Vector2(110, 2),
-                                             new Vector2(130, 2),
-                                             new Vector2(150, 2)
-                                           };
+        private float score;
+        private SpriteBatch spriteBatch;
+        private Texture2D ingameTextures;
+
+        private Rectangle textureRect;
+        private Rectangle displayDrawRect;
+        private Vector2[] digitPositions;
+
+        public Timer()
+        {
+            DisplayDigits = 5;
+            FirstDigitXOffset = 70;
+            DigitYOffset = 2;
+            DigitWidth = 20;
+
+            textureRect = new Rectangle(382, 2, 339, 60);
+            displayDrawRect = new Rectangle(0, 0, 180, 30);
+            digitPositions = new Vector2[DisplayDigits];
+
+            for (int i = 0; i < DisplayDigits; i++)
+            {
+                digitPositions[i] = new Vector2(FirstDigitXOffset + i * DigitWidth, DigitYOffset);
+            }
+        }
 
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            spedometer = content.Load<Texture2D>("Textures/ingame");
+            ingameTextures = content.Load<Texture2D>("Textures/ingame");
             spriteBatch = new SpriteBatch(device);
         }
 
-        public void Draw(int secs)
-        {
-            if (secs > GameConstants.MaxTime)
-                secs = GameConstants.MaxTime;
+        public int Score { get { return (int) score; } }
 
+        public void Update(float elapsedSecs)
+        {
+            score += elapsedSecs;
+            if (score > GameConstants.MaxTime)
+                score = GameConstants.MaxTime;
+        }
+        public void Draw()
+        {
             spriteBatch.Begin();
 
-            spriteBatch.Draw(spedometer, displayDrawRect, textureRect, Color.White);
+            spriteBatch.Draw(ingameTextures, displayDrawRect, textureRect, Color.White);
 
-            for (int i = 0; i < digitPositions.Length; i++)
+            for (int i = 0; i < DisplayDigits; i++)
             {
 
-                spriteBatch.Draw(spedometer, digitPositions[digitPositions.Length - 1 - i], 
-                    Helpers.GetDigitRect((secs / (int) (Helpers.Pow(10, i)) % 10)), 
+                spriteBatch.Draw(ingameTextures, digitPositions[DisplayDigits - 1 - i], 
+                    Helpers.GetDigitRect(((int) score / (int) (Helpers.Pow(10, i)) % 10)), 
                     Color.White, 0.0f, new Vector2(0, 0), 
                     0.2f, 
                     SpriteEffects.None, 
@@ -51,6 +74,11 @@ namespace _3DGameProject
             }
    
             spriteBatch.End();
+        }
+
+        public void Reset()
+        {
+            score = 0.0f;
         }
     }
 }

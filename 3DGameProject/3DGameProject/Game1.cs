@@ -106,6 +106,7 @@ namespace _3DGameProject
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
                 player.Update(Keyboard.GetState(), ref map);
+                timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
             }
             base.Update(gameTime);
         }
@@ -135,13 +136,13 @@ namespace _3DGameProject
                 map.DrawMiniMap(player);
                 player.Draw(gameCamera);
 
-                timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
+                timer.Draw();
 
-                rs = new RasterizerState();
-                rs.FillMode = FillMode.WireFrame;
-                GraphicsDevice.RasterizerState = rs;
-                player.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix, boundingSphere);
+                //rs = new RasterizerState();
+                //rs.FillMode = FillMode.WireFrame;
+                //GraphicsDevice.RasterizerState = rs;
+                //player.DrawBoundingSphere(gameCamera.ViewMatrix,
+                //    gameCamera.ProjectionMatrix, boundingSphere);
             }
 
 
