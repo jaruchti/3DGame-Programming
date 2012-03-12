@@ -36,6 +36,7 @@ namespace _3DGameProject
             rect.Height = rectHeight;
 
             int[,] floorPlan = map.FloorPlan;
+            Fuel[] fuelBarrels = map.FuelBarrels;
 
             spriteBatch.Begin();
 
@@ -54,10 +55,17 @@ namespace _3DGameProject
                 }
             }
 
+            // draw fuel barrels
+            for (int i = 0; i < fuelBarrels.Length; i++)
+            {
+                rect.X = xOffset - rectWidth * (int)fuelBarrels[i].Position.Z;
+                rect.Y = yOffset + rectHeight * (int)fuelBarrels[i].Position.X;
+                spriteBatch.Draw(whiteSphere, rect, Color.White);
+            }
+
             // draw player
             rect.X = xOffset - rectWidth * (int)player.Position.Z;
             rect.Y = yOffset + rectHeight * (int)player.Position.X;
-
             spriteBatch.Draw(whiteRect, rect, Color.Green);
 
             spriteBatch.End();

@@ -16,6 +16,7 @@ namespace _3DGameProject
         private Effect effect;
 
         private int[,] floorPlan;
+        private Fuel[] fuelBarrels;
         private VertexBuffer cityVertexBuffer;
         private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
         private BoundingBox[] buildingBoundingBoxes;
@@ -25,8 +26,8 @@ namespace _3DGameProject
             effect = content.Load<Effect>("Effects/effects");
             scenaryTexture = content.Load<Texture2D>("Textures/texturemap");
 
-
             LoadFloorPlan();
+            LoadFuel(content);
             SetUpVertices(ref device);
             SetUpBoundingBoxes();
         }
@@ -68,6 +69,37 @@ namespace _3DGameProject
                         floorPlan[x, y] = random.Next(differentBuildings) + 1;
                 }
             }    
+        }
+
+        private void LoadFuel(ContentManager content)
+        {
+            fuelBarrels = new Fuel[4];
+
+            for (int i = 0; i < fuelBarrels.Length; i++)
+            {
+                fuelBarrels[i] = new Fuel();
+                fuelBarrels[i].LoadContent(content);
+            }
+
+            fuelBarrels[0].Position = new Vector3(
+                2.5f - fuelBarrels[0].BoundingSphere.Radius,
+                0,
+                -1.5f + fuelBarrels[0].BoundingSphere.Radius);
+
+            fuelBarrels[1].Position = new Vector3(
+                15.5f - fuelBarrels[2].BoundingSphere.Radius,
+                0,
+                -1.5f + fuelBarrels[2].BoundingSphere.Radius);
+
+            fuelBarrels[2].Position = new Vector3(
+                2.5f - fuelBarrels[2].BoundingSphere.Radius,
+                0,
+                -17.5f + fuelBarrels[2].BoundingSphere.Radius);
+
+            fuelBarrels[3].Position = new Vector3(
+                15.5f - fuelBarrels[3].BoundingSphere.Radius,
+                0,
+                -17.5f + fuelBarrels[3].BoundingSphere.Radius);
         }
 
         private void SetUpVertices(ref GraphicsDevice device)
@@ -173,8 +205,14 @@ namespace _3DGameProject
 
             return GameConstants.CollisionType.None;
         }
-        
+
         public void Draw(ref GraphicsDevice device, Camera gameCamera)
+        {
+            DrawCity(ref device, gameCamera);
+            DrawFuelBarrels(gameCamera);
+        }
+
+        public void DrawCity(ref GraphicsDevice device, Camera gameCamera)
         {
             effect.CurrentTechnique = effect.Techniques["Textured"];
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
@@ -194,6 +232,13 @@ namespace _3DGameProject
             }
         }
 
+        public void DrawFuelBarrels(Camera gameCamera)
+        {
+            foreach (Fuel f in fuelBarrels)
+                f.Draw(gameCamera);
+        }
+
         public int[,] FloorPlan { get { return floorPlan; } }
+        public Fuel[] FuelBarrels { get { return fuelBarrels; } }
     }
 }

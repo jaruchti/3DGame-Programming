@@ -19,7 +19,7 @@ namespace _3DGameProject
 
         public void LoadContent(ContentManager content)
         {
-            Model = content.Load<Model>("fuelcell");
+            Model = content.Load<Model>("Models/fuelcell");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
