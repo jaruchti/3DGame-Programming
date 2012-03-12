@@ -25,7 +25,9 @@ namespace _3DGameProject
         Player player;
         Map map;
         Skybox skybox;
+
         Timer timer;
+        HighScore highScore;
 
         GameObject boundingSphere = new GameObject();
 
@@ -58,7 +60,9 @@ namespace _3DGameProject
             player = new Player();
             map = new Map();
             skybox = new Skybox();
+
             timer = new Timer();
+            highScore = new HighScore();
 
             base.Initialize();
         }
@@ -76,7 +80,9 @@ namespace _3DGameProject
             player.LoadContent(ref device, Content);
             map.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
+
             timer.LoadContent(ref device, Content);
+            highScore.LoadContent(ref device, Content);
 
             boundingSphere.Model = Content.Load<Model>("sphere1uR");
         }
@@ -137,6 +143,7 @@ namespace _3DGameProject
                 player.Draw(gameCamera);
 
                 timer.Draw();
+                highScore.Draw();
 
                 //rs = new RasterizerState();
                 //rs.FillMode = FillMode.WireFrame;

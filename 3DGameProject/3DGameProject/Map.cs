@@ -198,7 +198,7 @@ namespace _3DGameProject
         public void DrawMiniMap(Player player)
         {
             const int xOffset = 400;
-            const int yOffset = 10;
+            const int yOffset = 40;
             const int rectWidth = 5;
             const int rectHeight = 5;
 
