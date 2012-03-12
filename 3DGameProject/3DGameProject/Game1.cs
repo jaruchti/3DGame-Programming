@@ -90,6 +90,7 @@ namespace _3DGameProject
         protected override void Update(GameTime gameTime)
         {
             gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+            //gameCamera.ViewMatrix = Matrix.CreateLookAt(new Vector3(10, 20, -10), player.Position, new Vector3(0, 0, 1));
             player.Update(Keyboard.GetState(), ref map);
 
             base.Update(gameTime);
@@ -116,11 +117,12 @@ namespace _3DGameProject
 
             timer.Draw((int)gameTime.TotalGameTime.TotalSeconds);
 
-            //rs = new RasterizerState();
-            //rs.FillMode = FillMode.WireFrame;
-            //GraphicsDevice.RasterizerState = rs;
-            //player.DrawBoundingSphere(gameCamera.ViewMatrix,
-            //    gameCamera.ProjectionMatrix, boundingSphere);
+            rs = new RasterizerState();
+            rs.FillMode = FillMode.WireFrame;
+            GraphicsDevice.RasterizerState = rs;
+            player.DrawBoundingSphere(gameCamera.ViewMatrix,
+                gameCamera.ProjectionMatrix, boundingSphere);
+
 
             base.Draw(gameTime);
         }        

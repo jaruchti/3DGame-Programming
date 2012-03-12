@@ -21,9 +21,11 @@ namespace _3DGameProject
         private Spedometer sped;
         private FuelGauge fuelGauge;
 
+        Texture2D[] textures;
+
         public Player()
         {
-            Position = new Vector3(15.5f, 0.1f, -9.5f);
+            Position = new Vector3(15.5f, 0.0f, -9.5f);
             UpdateBoundingSphere();
 
             velocity = 0.0f;
@@ -35,8 +37,14 @@ namespace _3DGameProject
 
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            effect = content.Load<Effect>("Effects/effects");
-            Model = content.Load<Model>("Models/xwing");
+            effect = content.Load<Effect>("Effects/careffect");
+            Model = content.Load<Model>("Models/car");
+
+            textures = new Texture2D[7];
+            int i = 0;
+            foreach (ModelMesh mesh in Model.Meshes)
+                foreach (BasicEffect currentEffect in mesh.Effects)
+                    textures[i++] = currentEffect.Texture;
 
             foreach (ModelMesh mesh in Model.Meshes)
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
@@ -46,6 +54,9 @@ namespace _3DGameProject
             fuelGauge.LoadContent(ref device, content);
 
             BoundingSphere = CalculateBoundingSphere();
+            BoundingSphere scaledSphere = BoundingSphere;
+            scaledSphere.Radius = BoundingSphere.Radius * 0.53f;
+            BoundingSphere = scaledSphere;
         }
 
         public void Update(KeyboardState keyboardState, ref Map map)
@@ -133,21 +144,22 @@ namespace _3DGameProject
 
         public void DrawModel(ref Camera gameCamera)
         {
-            Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi + ForwardDirection) * Matrix.CreateTranslation(Position);
-            Matrix[] xwingTransforms = new Matrix[Model.Bones.Count];
-            Model.CopyAbsoluteBoneTransformsTo(xwingTransforms);
+            Matrix[] modelTransforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(modelTransforms);
+            Matrix worldMatrix = Matrix.Identity;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection + MathHelper.Pi);
+            Matrix translateMatrix = Matrix.CreateTranslation(Position);
+
+            worldMatrix = rotationYMatrix * translateMatrix;
+            int i = 0;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (Effect currentEffect in mesh.Effects)
                 {
-                    currentEffect.CurrentTechnique = currentEffect.Techniques["Colored"];
-                    currentEffect.Parameters["xWorld"].SetValue(xwingTransforms[mesh.ParentBone.Index] * worldMatrix);
-                    currentEffect.Parameters["xView"].SetValue(gameCamera.ViewMatrix);
-                    currentEffect.Parameters["xProjection"].SetValue(gameCamera.ProjectionMatrix);
-                    currentEffect.Parameters["xEnableLighting"].SetValue(true);
-                    currentEffect.Parameters["xLightDirection"].SetValue(GameConstants.LightDirection);
-                    currentEffect.Parameters["xAmbient"].SetValue(0.5f);
+                    currentEffect.CurrentTechnique = currentEffect.Techniques["Simplest"];
+                    currentEffect.Parameters["xWorldViewProjection"].SetValue(modelTransforms[mesh.ParentBone.Index] * worldMatrix * gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
+                    currentEffect.Parameters["xTexture"].SetValue(textures[i++]);
                 }
                 mesh.Draw();
             }
