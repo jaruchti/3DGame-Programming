@@ -181,8 +181,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\whitesphere.png">
-      <Name>whitesphere</Name>
+    <Compile Include="Textures\whitecircle.png">
+      <Name>whitecircle</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
