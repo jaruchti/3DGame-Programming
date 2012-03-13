@@ -12,14 +12,16 @@ namespace _3DGameProject
 {
     class Enemy : GameObject
     {
-        private float ForwardDirection { get; set; }
-        private float velocity;
+        enum IntroState { Moving, Circling };
+        IntroState introState = IntroState.Moving;
+        private float angularPosition = 3*MathHelper.PiOver2; 
+
+        public float ForwardDirection { get; set; }
 
         private int[,] floorPlan;
 
         public Enemy() : base()
         {
-            velocity = GameConstants.MaxVelocity;
             ForwardDirection = 0.0f;
         }
 
@@ -36,6 +38,49 @@ namespace _3DGameProject
         public void LoadFloorPlan(int[,] floorPlan)
         {
             this.floorPlan = floorPlan;
+        }
+
+        public void MakeIntroMoves()
+        {
+            if (introState == IntroState.Moving)
+            {
+                Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
+                movement *= GameConstants.IntroVelocity;
+                Position += movement;
+
+                if (Position.Z < GameConstants.IntroCenter.Z - GameConstants.IntroRadius)
+                {
+                    introState = IntroState.Circling;
+                    ForwardDirection = -angularPosition;
+                }
+            }
+            else if (introState == IntroState.Circling)
+            {
+                circle(GameConstants.IntroCenter, GameConstants.IntroRadius);
+            }
+        }
+
+        public void circle(Vector3 center, float radius)
+        {
+            // Change the angular position of the drone based on the elapsed time since last update
+            // and the angular velocity
+            angularPosition += GameConstants.IntroVelocity;
+
+            // Normalize angularPosition so it is between 0 and 2 pi.
+            if (angularPosition > 2 * MathHelper.Pi)
+                angularPosition = angularPosition - 2 * MathHelper.Pi;
+
+            // Transform the polor coordinates given by the drone's angular position and radius into
+            // Cartesian coordinates, and store the values in the futurePosition vector.
+            // The futurePosition vector holds the position the drone will be.
+            Vector3 futurePosition = new Vector3(0, Position.Y, radius);
+            futurePosition.X = radius * (float)Math.Cos(angularPosition) + center.X;
+            futurePosition.Z = radius * (float)Math.Sin(angularPosition) + center.Z;
+
+            // Now, update the Position and ForwardDirection after the calculations for the update
+            // have completed.
+            Position = futurePosition;
+            ForwardDirection = -angularPosition;
         }
 
         public void Draw(Camera gameCamera)

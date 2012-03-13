@@ -47,6 +47,18 @@ namespace _3DGameProject
             this.floorPlan = floorPlan;
         }
 
+        public void ViewTopDown(float aspectRatio)
+        {
+            ViewMatrix =
+                Matrix.CreateLookAt(new Vector3(19 / 2.0f, 20.0f, -10.0f),
+                                    new Vector3(19 / 2.0f, 0.0f, -10.0f),
+                                    new Vector3(0, 0, 1));
+            ProjectionMatrix =
+                Matrix.CreatePerspectiveFieldOfView(
+                    MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,
+                    GameConstants.NearClip, GameConstants.FarClip);
+        }
+
         public void Update(float avatarYaw, Vector3 position, float aspectRatio)
         {
             Matrix rotationMatrix;
@@ -64,8 +76,6 @@ namespace _3DGameProject
 
             cameraPosition = position + transformedheadOffset;
             cameraTarget = position + transformedReference;
-
-            double angleWithWall = MathHelper.ToDegrees((float) Math.Atan2(-position.Z + (int) (cameraPosition.Z), position.X - (int) (cameraPosition.X)));
 
             while (floorPlan[(int)(cameraPosition.X), (int)(-cameraPosition.Z)] != 0)
             {

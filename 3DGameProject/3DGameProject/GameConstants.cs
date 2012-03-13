@@ -47,6 +47,13 @@ namespace _3DGameProject
 
         // Enemy constants
         public const int NumEnemy = 4;
-        public const float EnemyVelocity = 0.8f;
+        public const float EnemyVelocity = 0.8f / 60.0f;
+
+        // Intro constants
+        public const int Altitude = 8;
+        public const int IntroRadius = 3;
+        public const float IntroVelocity = 2.0f / 60.0f;
+        public const float AngularVelocity = MathHelper.Pi / 60;
+        public static readonly Vector3 IntroCenter = new Vector3(9.5f, 0.0f, -9.5f);
     }
 }

@@ -35,6 +35,27 @@ namespace _3DGameProject
                 enemies[i].LoadFloorPlan(floorPlan);
         }
 
+        public void SetUpIntroPositions()
+        {
+            enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -9.5f));
+            enemies[1].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -8.5f));
+            enemies[2].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -7.5f));
+            enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -6.5f));
+
+            foreach (Enemy e in enemies)
+            {
+                e.ForwardDirection = 0;
+            }
+        }
+
+        public void PlayIntro(GameTime gameTime)
+        {
+            foreach (Enemy e in enemies)
+            {
+                e.MakeIntroMoves();
+            }
+        }
+
         public void SetUpEnemyPositions()
         {
             enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.1f, -8.5f));
@@ -52,6 +73,7 @@ namespace _3DGameProject
             foreach (Enemy e in enemies)
                 e.Draw(gameCamera);
         }
+
         public void Reset()
         {
         }

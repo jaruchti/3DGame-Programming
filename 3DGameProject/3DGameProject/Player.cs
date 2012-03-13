@@ -78,7 +78,6 @@ namespace _3DGameProject
                 // undo the movement and set velocity to zero, can cause "bounceback effect"
                 UpdatePositionAndBoundingSphere(Position - movement);
                 velocity = 0.0f;
-
             }
 
             sped.Update(velocity);
