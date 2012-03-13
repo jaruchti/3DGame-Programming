@@ -25,6 +25,7 @@ namespace _3DGameProject
         KeyboardState prevKeyBoardState;
 
         TitleScreen titleScreen;
+        IntroScreen introScreen;
         GameOverScreen gameOverScreen;
 
         Camera gameCamera;
@@ -63,6 +64,7 @@ namespace _3DGameProject
             prevKeyBoardState = currentKeyboardState;
 
             titleScreen = new TitleScreen();
+            introScreen = new IntroScreen();
             gameOverScreen = new GameOverScreen();
 
             gameCamera = new Camera();
@@ -87,6 +89,7 @@ namespace _3DGameProject
             device = graphics.GraphicsDevice;
 
             titleScreen.LoadContent(ref device, Content);
+            introScreen.LoadContent(ref device, Content);
             gameOverScreen.LoadContent(ref device, Content);
 
             player.LoadContent(ref device, Content);
@@ -186,6 +189,7 @@ namespace _3DGameProject
                 enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
                 player.Draw(gameCamera, gameState);
+                introScreen.Draw();
             }
             else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.End)
             {

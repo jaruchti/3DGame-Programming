@@ -196,15 +196,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fonts\GameOverFont.spritefont">
-      <Name>GameOverFont</Name>
+    <Compile Include="Fonts\LargeFont.spritefont">
+      <Name>LargeFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fonts\Information.spritefont">
-      <Name>Information</Name>
+    <Compile Include="Fonts\MediumFont.spritefont">
+      <Name>MediumFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
