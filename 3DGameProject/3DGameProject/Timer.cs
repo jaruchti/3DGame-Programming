@@ -31,7 +31,7 @@ namespace _3DGameProject
         public Timer()
         {
             textureRect = new Rectangle(382, 2, 339, 60);   // position of the Timer background in ingame texture
-            displayDrawRect = new Rectangle(0, 0, 180, 30); // draw Timer background on top right of screen
+            displayDrawRect = new Rectangle(0, 0, 180, 30); // draw Timer background on top left of screen
 
 
             DisplayDigitXPos = 70;

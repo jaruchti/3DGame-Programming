@@ -34,12 +34,6 @@ namespace _3DGameProject
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
 
-        // Rank constants
-        public const int AmatuerAbductee = 25;
-        public const int MediocreAbductee = 100;
-        public const int Abductee = 200;
-        public const int MasterAbductee = 500;
-
         // Enemy constants
         public const int NumEnemy = 4;
         public const float EnemyVelocity = 0.8f / 60.0f;
