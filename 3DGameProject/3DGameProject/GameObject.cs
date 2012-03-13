@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 3D Game Programming Project
+ * Dr. Liu
+ * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +16,33 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
+    /// <summary>
+    /// Base class for the GameObjects in the game.
+    /// </summary>
+    /// <remarks>
+    /// Manages Models, Position, and BoundingSpheres
+    /// Slightly modified from the Microsoft Fuel Cell example.
+    /// </remarks>
     class GameObject
     {
+        /// <summary>
+        /// Property to allow the client access to the GameObject's model.
+        /// </summary>
         public Model Model { get; set; }
+
+        /// <summary>
+        /// Property to allow the client access to the GameObject's position.
+        /// </summary>
         public Vector3 Position { get; set; }
+
+        /// <summary>
+        /// Property to allow the client access to the GameObject's BoundingSphere
+        /// </summary>
         public BoundingSphere BoundingSphere { get; set; }
 
+        /// <summary>
+        /// Create a new GameObject
+        /// </summary>
         public GameObject()
         {
             Model = null;
@@ -23,20 +50,29 @@ namespace _3DGameProject
             BoundingSphere = new BoundingSphere();
         }
 
+        /// <summary>
+        /// Update the game object's position and the position of the bounding sphere.
+        /// </summary>
+        /// <param name="newPos">The position to move to.</param>
         public void UpdatePositionAndBoundingSphere(Vector3 newPos)
         {
-            BoundingSphere updatedSphere = BoundingSphere;
             Position = newPos;
 
+            BoundingSphere updatedSphere = BoundingSphere;
             updatedSphere.Center.X = Position.X;
             updatedSphere.Center.Z = Position.Z;
             BoundingSphere = updatedSphere;
         }
 
+        /// <summary>
+        /// Calculate the bounding sphere for the game object's model.
+        /// </summary>
+        /// <returns>Bounding sphere for this game object</returns>
+        /// <remarks>Usually too large of a fit; scale with a constant.</remarks>
         protected BoundingSphere CalculateBoundingSphere()
         {
-            BoundingSphere mergedSphere = new BoundingSphere();
-            BoundingSphere[] boundingSpheres;
+            BoundingSphere mergedSphere = new BoundingSphere(); // merge bounding sphere's for individual components
+            BoundingSphere[] boundingSpheres;   // bounding spheres for each mesh
             int index = 0;
             int meshCount = Model.Meshes.Count;
 
@@ -61,8 +97,13 @@ namespace _3DGameProject
             return mergedSphere;
         }
 
-        internal void DrawBoundingSphere(Matrix view, Matrix projection,
-            GameObject boundingSphereModel)
+        /// <summary>
+        /// Draw the bounding sphere for a given game object
+        /// </summary>
+        /// <param name="gameCamera">Used to get the view and projection matrices</param>
+        /// <param name="boundingSphereModel">Model to use for the bounding sphere</param>
+        /// <remarks>Used for debugging</remarks>
+        internal void DrawBoundingSphere(Camera gameCamera, GameObject boundingSphereModel)
         {
             Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
             Matrix translateMatrix =
@@ -74,8 +115,8 @@ namespace _3DGameProject
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.World = worldMatrix;
-                    effect.View = view;
-                    effect.Projection = projection;
+                    effect.View = gameCamera.ViewMatrix;
+                    effect.Projection = gameCamera.ProjectionMatrix;
                 }
                 mesh.Draw();
             }
