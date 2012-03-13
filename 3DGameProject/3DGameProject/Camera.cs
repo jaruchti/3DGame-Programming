@@ -147,8 +147,7 @@ namespace _3DGameProject
                 Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
             ProjectionMatrix =
                 Matrix.CreatePerspectiveFieldOfView(
-                    MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,
-                    GameConstants.NearClip, GameConstants.FarClip);
+                    MathHelper.ToRadians(ViewAngle), aspectRatio, NearClip, FarClip);
         }
     }
 }

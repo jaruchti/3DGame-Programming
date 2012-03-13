@@ -104,7 +104,6 @@ namespace _3DGameProject
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
 
-            gameCamera.LoadFloorPlan(map.FloorPlan);
             enemies.LoadFloorPlan(map.FloorPlan);
         }
 
@@ -137,7 +136,7 @@ namespace _3DGameProject
             else if (gameState == GameConstants.GameState.Intro)
             {
                 player.AutoPilot(ref gameState);
-                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.PlayIntro(player.Position);
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space) ||
@@ -149,12 +148,12 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.Ready)
             {
-                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 readyScreen.Update((float) gameTime.ElapsedGameTime.TotalSeconds, ref gameState);
             }
             else if (gameState == GameConstants.GameState.Playing)
             {
-                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 player.Update(Keyboard.GetState(), gameTime, ref map, ref gameState);
                 timer.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
