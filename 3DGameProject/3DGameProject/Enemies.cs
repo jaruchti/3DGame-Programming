@@ -37,14 +37,10 @@ namespace _3DGameProject
 
         public void SetUpIntroPositions()
         {
-            enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -9.5f));
-            enemies[1].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -8.5f));
-            enemies[2].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -7.5f));
-            enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 7.5f, -6.5f));
-
-            foreach (Enemy e in enemies)
+            for (int i = 0; i < enemies.Length; i++)
             {
-                e.ForwardDirection = 0;
+                enemies[i].Position = new Vector3(0, GameConstants.IntroAltitude, 0);
+                enemies[i].AngularPosition = i * MathHelper.PiOver2;
             }
         }
 

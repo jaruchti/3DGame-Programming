@@ -49,10 +49,16 @@ namespace _3DGameProject
 
         public void ViewTopDown(float aspectRatio)
         {
-            ViewMatrix =
-                Matrix.CreateLookAt(new Vector3(19 / 2.0f, 20.0f, -10.0f),
-                                    new Vector3(19 / 2.0f, 0.0f, -10.0f),
-                                    new Vector3(0, 0, 1));
+            //ViewMatrix =
+            //    Matrix.CreateLookAt(new Vector3(19 / 2.0f, 20.0f, -10.0f),
+            //                        new Vector3(19 / 2.0f, 0.0f, -10.0f),
+            //                        new Vector3(0, 0, 1));
+
+            ViewMatrix = Matrix.CreateLookAt(
+                new Vector3(20, 13, -5), 
+                new Vector3(8, 0, -12), 
+                new Vector3(0, 1, 0));
+            
             ProjectionMatrix =
                 Matrix.CreatePerspectiveFieldOfView(
                     MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,

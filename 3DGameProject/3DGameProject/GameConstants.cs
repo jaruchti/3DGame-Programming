@@ -50,7 +50,7 @@ namespace _3DGameProject
         public const float EnemyVelocity = 0.8f / 60.0f;
 
         // Intro constants
-        public const int Altitude = 8;
+        public const int IntroAltitude = 8;
         public const int IntroRadius = 3;
         public const float IntroVelocity = 2.0f / 60.0f;
         public const float AngularVelocity = MathHelper.Pi / 60;

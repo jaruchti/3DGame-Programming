@@ -37,8 +37,6 @@ namespace _3DGameProject
         Timer timer;
         HighScore highScore;
 
-        GameObject boundingSphere = new GameObject();
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -102,8 +100,6 @@ namespace _3DGameProject
 
             gameCamera.LoadFloorPlan(map.FloorPlan);
             enemies.LoadFloorPlan(map.FloorPlan);
-
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
         }
 
         /// <summary>
@@ -190,11 +186,6 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.End)
             {
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-
-                //GraphicsDevice.RasterizerState = rs;
-
                 skybox.Draw(ref device, gameCamera, player);
                 enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
@@ -203,12 +194,6 @@ namespace _3DGameProject
 
                 timer.Draw();
                 highScore.Draw();
-
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //enemy.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
 
                 if (gameState == GameConstants.GameState.End)
                     gameOverScreen.Draw();
