@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 3D Game Programming Project
+ * Dr. Liu
+ * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +16,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
+    /// <summary>
+    /// Class which represents a fuel object in the game for the player to pick up.
+    /// </summary>
     class Fuel : GameObject
     {
         public Fuel() : base()
@@ -17,6 +26,10 @@ namespace _3DGameProject
             // nothing to do here
         }
 
+        /// <summary>
+        /// Load the fuel model and calculate the bounding sphere.
+        /// </summary>
+        /// <param name="content">Content pipeline (for models)</param>
         public void LoadContent(ContentManager content)
         {
             Model = content.Load<Model>("Models/fuelcell");
@@ -29,6 +42,10 @@ namespace _3DGameProject
             BoundingSphere = new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 
+        /// <summary>
+        /// Draw the fuel object to the screen.
+        /// </summary>
+        /// <param name="gameCamera">Used to get view and projection matrices</param>
         public void Draw(Camera gameCamera)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
