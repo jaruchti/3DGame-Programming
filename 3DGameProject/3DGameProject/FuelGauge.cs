@@ -27,8 +27,14 @@ namespace _3DGameProject
         /// <remarks>This is a singleton in the game</remarks>
         public FuelGauge()
         {
-            textureRect = new Rectangle(0, 103, 243, 102);      // position of the Fuel Gauge in ingame texture
-            displayDrawRect = new Rectangle(0, 440, 125, 60);   // draw Fuel Gauge background on bottom left of screen
+            textureRect = new Rectangle(0, 103, 243, 102); // position of the Fuel Gauge in ingame texture
+
+            // draw Fuel Gauge background on bottom left of screen
+            displayDrawRect = new Rectangle(
+                0, 
+                (int) (0.885f * GameConstants.ViewportHeight),
+                (int) (0.25f * GameConstants.ViewportWidth),
+                (int) (0.125f * GameConstants.ViewportHeight));  
 
             DisplayDigitXPos = 0;   // display digits on left side of screen
             SetUpDigitContants();

@@ -39,8 +39,8 @@ namespace _3DGameProject
 
         protected float digits;             // digits to display
 
-        protected SpriteBatch spriteBatch;  // used to draw the digits
-        protected Texture2D ingameTextures; // holds the texture with the images to display
+        private SpriteBatch spriteBatch;    // used to draw the digits
+        private Texture2D ingameTextures;   // holds the texture with the images to display
 
         protected Rectangle textureRect;    // holds the section of ingameTexture to display 
         protected Rectangle displayDrawRect;// holds the position in the display to draw textureRect
@@ -48,7 +48,18 @@ namespace _3DGameProject
         protected Vector2[] digitPositions; // positions to draw the numbers in the digits variable
                                             // this field is calculated from the information provided
                                             // by the above variables
-        
+
+        /// <summary>
+        /// Load the content required for an InGameDisplay (namely the ingame texture)
+        /// </summary>
+        /// <param name="device">Graphics card (to initialize spritebatch)</param>
+        /// <param name="content">Content pipeline (for texture)</param>
+        public void LoadContent(ref GraphicsDevice device, ContentManager content)
+        {
+            ingameTextures = content.Load<Texture2D>("Textures/ingame");
+            spriteBatch = new SpriteBatch(device);
+        }
+
         /// <summary>
         /// Determine where to draw the digits on the screen and store in digitPositions array. 
         /// </summary>
@@ -60,17 +71,6 @@ namespace _3DGameProject
             {
                 digitPositions[i] = new Vector2(DisplayDigitXPos + i * DisplayDigitWidth, DisplayDigitYPos);
             }
-        }
-
-        /// <summary>
-        /// Load the content required for an InGameDisplay (namely the ingame texture)
-        /// </summary>
-        /// <param name="device">Graphics card (to initialize spritebatch)</param>
-        /// <param name="content">Content pipeline (for texture)</param>
-        public void LoadContent(ref GraphicsDevice device, ContentManager content)
-        {
-            ingameTextures = content.Load<Texture2D>("Textures/ingame");
-            spriteBatch = new SpriteBatch(device);
         }
 
         /// <summary>

@@ -31,10 +31,16 @@ namespace _3DGameProject
         /// <remarks>This is a singleton in the game</remarks>
         public HighScore()
         {
-            textureRect = new Rectangle(382, 68, 339, 60);      // position of the HighScore background in ingame texture
-            displayDrawRect = new Rectangle(320, 0, 180, 30);   // draw HighScore background on top right of screen
+            textureRect = new Rectangle(382, 68, 339, 60); // position of the HighScore background in ingame texture
 
-            DisplayDigitXPos = 390;
+            // draw HighScore background on top right of screen
+            displayDrawRect = new Rectangle(
+                (int) (0.66f * GameConstants.ViewportWidth), 
+                0, 
+                (int) (0.34f * GameConstants.ViewportWidth), 
+                (int) (0.06f * GameConstants.ViewportHeight));   
+
+            DisplayDigitXPos = (int) (0.78f * GameConstants.ViewportWidth);
             SetUpDigitContants();
             SetUpDigitPositions();
 

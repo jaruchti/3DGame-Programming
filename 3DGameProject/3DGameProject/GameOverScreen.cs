@@ -54,13 +54,19 @@ namespace _3DGameProject
             mediumFont = content.Load<SpriteFont>("Fonts/MediumFont");
 
             textSize = largeFont.MeasureString(strGameOver);
-            gameOverPosition = new Vector2(250 - textSize.X / 2, 300);  // position gameOver slightly below center of screen
+
+            // position gameOver slightly below center of screen
+            gameOverPosition = new Vector2(
+                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                (int) (0.6f * GameConstants.ViewportHeight));  
 
             rankPosition = new Vector2(0, 0);
 
             // position instructions at bottom of screen
             textSize = mediumFont.MeasureString(strInstructions);
-            instructionsPosition = new Vector2(250 - textSize.X / 2, 500 - largeFont.LineSpacing);  
+            instructionsPosition = new Vector2(
+                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                GameConstants.ViewportHeight - largeFont.LineSpacing);  
         }
 
         /// <summary>
@@ -80,7 +86,9 @@ namespace _3DGameProject
 
             // position rank directly below strGameOver
             textSize = mediumFont.MeasureString(strRank);
-            rankPosition = new Vector2(250 - textSize.X / 2, gameOverPosition.Y + largeFont.LineSpacing);
+            rankPosition = new Vector2(
+                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                gameOverPosition.Y + largeFont.LineSpacing);
         }
 
         /// <summary>

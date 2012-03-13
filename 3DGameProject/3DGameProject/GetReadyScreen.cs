@@ -44,7 +44,9 @@ namespace _3DGameProject
 
             // Place instructions at bottom of screen
             textSize = mediumFont.MeasureString(strInstructions);
-            instructionsPosition = new Vector2(250 - textSize.X / 2, 500 - largeFont.LineSpacing);
+            instructionsPosition = new Vector2(
+                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                GameConstants.ViewportHeight - largeFont.LineSpacing);
         }
 
         /// <summary>
@@ -62,7 +64,9 @@ namespace _3DGameProject
 
             // Place countdown slightly below center of the screen
             textSize = largeFont.MeasureString(strCountdown);
-            countdownPosition = new Vector2(250 - textSize.X / 2, 300);
+            countdownPosition = new Vector2(
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                (int)(0.6f * GameConstants.ViewportHeight));
 
             if (seconds > SecondsOnScreen)
             {

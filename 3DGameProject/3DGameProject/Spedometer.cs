@@ -27,10 +27,18 @@ namespace _3DGameProject
         /// <remarks>This is a singleton in the game</remarks>
         public Spedometer()
         {
-            textureRect = new Rectangle(0, 0, 243, 102);        // position of the Spedometer in ingame texture
-            displayDrawRect = new Rectangle(375, 440, 125, 60); // draw Spedometer background on bottom right of screen
+            textureRect = new Rectangle(0, 0, 243, 102);  // position of the Spedometer in ingame texture
 
-            DisplayDigitXPos = 435;  // display digits on right side of screen
+            // draw Spedometer background on bottom right of screen
+            displayDrawRect = new Rectangle(
+                (int) (0.750f * GameConstants.ViewportWidth), 
+                (int) (0.885f * GameConstants.ViewportHeight), 
+                (int) (0.250f * GameConstants.ViewportWidth), 
+                (int) (0.125f * GameConstants.ViewportHeight));
+
+            // display digits on right side of screen
+            DisplayDigitXPos = (int) (0.87f * GameConstants.ViewportWidth); 
+ 
             SetUpDigitContants();
             SetUpDigitPositions();
         }

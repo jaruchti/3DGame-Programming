@@ -28,14 +28,14 @@ namespace _3DGameProject
         private Texture2D whiteRect;        // holds a white rectangle texture
         private Texture2D whiteCircle;      // holds a white circle texture
 
-        /// <summary>xOffset on display to the left side of the mini-map</summary>
-        private const int xOffset = 400;
-        /// <summary>xOffset on display to the top side of the mini-map</summary>
-        private const int yOffset = 40;
-        /// <summary>width of each item in the mini-map</summary>
-        private const int rectWidth = 5;
-        /// <summary>height of each item in the mini-map</summary>
-        private const int rectHeight = 5;
+        /// <summary>percentage xOffset on display to the left side of the mini-map</summary>
+        private const float xOffset = 0.8f;
+        /// <summary>percentage yOffset on display to the top side of the mini-map</summary>
+        private const float yOffset = 0.1f;
+        /// <summary>width of each item in the mini-map as a percentage of the viewport</summary>
+        private const float rectWidth = 0.01f;
+        /// <summary>height of each item in the mini-map as a percentage of the viewport</summary>
+        private const float rectHeight = 0.01f;
 
         /// <summary>
         /// Load the content required for the minimap.
@@ -59,9 +59,10 @@ namespace _3DGameProject
         /// <param name="map">The position of the fuel barrels and building is needed for minimap</param>
         public void Draw(Player player, Enemies enemies, Map map)
         {
-            Rectangle rect = new Rectangle();   // this rectangle describes the position on screen where an object will be drawn
-            rect.Width = rectWidth;
-            rect.Height = rectHeight;
+            // this rectangle describes the position on screen where an object will be drawn
+            Rectangle rect = new Rectangle();   
+            rect.Width = (int) Math.Round((rectWidth * GameConstants.ViewportWidth));
+            rect.Height = (int) Math.Round((rectHeight * GameConstants.ViewportHeight));
 
             // get items to display
             int[,] floorPlan = map.FloorPlan;
@@ -78,8 +79,8 @@ namespace _3DGameProject
                     if (floorPlan[x, z] != 0)
                     {
                         // move the rectangle into the correct position of the screen
-                        rect.X = xOffset + rectWidth * z;
-                        rect.Y = yOffset + rectHeight * x;
+                        rect.X = (int)(xOffset * GameConstants.ViewportWidth) + rect.Width * z;
+                        rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * x;
 
                         spriteBatch.Draw(whiteRect, rect, Color.Orange);
                     }
@@ -89,21 +90,21 @@ namespace _3DGameProject
             // draw fuel barrels
             for (int i = 0; i < fuelBarrels.Length; i++)
             {
-                rect.X = xOffset - rectWidth * (int)fuelBarrels[i].Position.Z;
-                rect.Y = yOffset + rectHeight * (int)fuelBarrels[i].Position.X;
+                rect.X = (int) (xOffset * GameConstants.ViewportWidth) - rect.Width * (int)fuelBarrels[i].Position.Z;
+                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)fuelBarrels[i].Position.X;
                 spriteBatch.Draw(whiteCircle, rect, Color.White);
             }
 
             // draw player
-            rect.X = xOffset - rectWidth * (int)player.Position.Z;
-            rect.Y = yOffset + rectHeight * (int)player.Position.X;
+            rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)player.Position.Z;
+            rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)player.Position.X;
             spriteBatch.Draw(whiteRect, rect, Color.Green);
 
             // draw enemies
             for (int i = 0; i < enemyArr.Length; i++)
             {
-                rect.X = xOffset - rectWidth * (int)enemyArr[i].Position.Z;
-                rect.Y = yOffset + rectHeight * (int)enemyArr[i].Position.X;
+                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)enemyArr[i].Position.Z;
+                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)enemyArr[i].Position.X;
                 spriteBatch.Draw(whiteRect, rect, Color.Red);
             }
 

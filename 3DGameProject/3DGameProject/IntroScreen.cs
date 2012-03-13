@@ -40,11 +40,15 @@ namespace _3DGameProject
 
             // place title slightly below center of screen
             textSize = largeFont.MeasureString(strTitle);
-            titlePosition = new Vector2(250 - textSize.X / 2, 300);
+            titlePosition = new Vector2(
+                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                (int) (0.6f * GameConstants.ViewportHeight));
 
             // place instructions at bottom of screen
             textSize = mediumFont.MeasureString(strInstructions);
-            instructionsPosition = new Vector2(250 - textSize.X / 2, 500 - largeFont.LineSpacing);  
+            instructionsPosition = new Vector2(
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                GameConstants.ViewportHeight - largeFont.LineSpacing);  
         }
 
         /// <summary>

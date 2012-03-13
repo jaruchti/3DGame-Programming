@@ -37,5 +37,8 @@ namespace _3DGameProject
         public const float IntroVelocity = 2.0f / 60.0f;
         public const float AngularVelocity = MathHelper.Pi / 60;
         public static readonly Vector3 IntroCenter = new Vector3(9.5f, 0.0f, -9.5f);
+
+        public static int ViewportWidth;
+        public static int ViewportHeight;
     }
 }

@@ -55,8 +55,11 @@ namespace _3DGameProject
         {
             graphics.PreferredBackBufferWidth = 500;
             graphics.PreferredBackBufferHeight = 500;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+
+            GameConstants.ViewportHeight = graphics.GraphicsDevice.Viewport.Height;
+            GameConstants.ViewportWidth = graphics.GraphicsDevice.Viewport.Width;
 
             Window.Title = "Alien Attack";
 

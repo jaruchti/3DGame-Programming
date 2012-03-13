@@ -28,9 +28,9 @@ namespace _3DGameProject
         protected void SetUpDigitContants()
         {
             DisplayNumDigits = 2;       // only two digits needed
-            DisplayDigitScale = 0.4f;
-            DisplayDigitYPos = 445;     // display at bottom of screen
-            DisplayDigitWidth = 35;
+            DisplayDigitScale = 0.35f;
+            DisplayDigitYPos = (int) (0.905f * GameConstants.ViewportHeight); // display at bottom of screen
+            DisplayDigitWidth = (int) (0.07f * GameConstants.ViewportWidth);
         }
     }
 }

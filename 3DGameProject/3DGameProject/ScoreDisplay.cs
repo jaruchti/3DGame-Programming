@@ -38,8 +38,8 @@ namespace _3DGameProject
         protected void SetUpDigitContants()
         {
             DisplayNumDigits = 5;
-            DisplayDigitYPos = 2;       // display at top of screen
-            DisplayDigitWidth = 20;
+            DisplayDigitYPos = (int) (0.004f * GameConstants.ViewportHeight); // display at top of screen
+            DisplayDigitWidth = (int) (0.04f * GameConstants.ViewportWidth);
             DisplayDigitScale = 0.2f;
         }
     }
