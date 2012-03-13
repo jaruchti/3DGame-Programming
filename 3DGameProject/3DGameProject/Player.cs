@@ -25,7 +25,7 @@ namespace _3DGameProject
 
         public Player()
         {
-            Position = new Vector3(15.5f, 0.0f, -9.5f);
+            Position = GameConstants.playerStartPos;
             UpdatePositionAndBoundingSphere(Position);
 
             ForwardDirection = 0.0f;
@@ -139,11 +139,54 @@ namespace _3DGameProject
             fuelGauge.Update(fuel);
         }
 
-        public void Draw(Camera gameCamera)
+        public void AutoPilot(ref GameConstants.GameState gameState)
+        {
+            Rectangle playerStartRect = new Rectangle((int) GameConstants.playerStartPos.X, (int) -GameConstants.playerStartPos.Z, 1, 1);
+            Rectangle[] pivots = { new Rectangle( 3,  4, 1, 1),
+                                   new Rectangle( 3, 14, 1, 1),
+                                   new Rectangle(15,  4, 1, 1),
+                                   new Rectangle(15, 14, 1, 1) };
+
+            float[] pivotForwardDirections = {  3 * MathHelper.PiOver2,
+                                                MathHelper.Pi,
+                                                MathHelper.TwoPi,
+                                                MathHelper.PiOver2 };                             
+
+            float turnAmount = 0.0f;
+            velocity = 2.0f / 60.0f;
+
+            for (int i = 0; i < pivots.Length; i++)
+            {
+                if (pivots[i].Contains((int) Position.X, (int) -Position.Z))
+                {
+                    turnAmount = 2.90f;
+                    ForwardDirection += turnAmount * velocity * GameConstants.TurnSpeed;
+
+                    if (ForwardDirection > pivotForwardDirections[i])
+                        ForwardDirection = pivotForwardDirections[i];
+                }
+            }
+
+            if (playerStartRect.Contains((int)Position.X, (int)-Position.Z) && ForwardDirection > 0)
+            {
+                gameState = GameConstants.GameState.Playing;
+            }
+            
+            Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
+            movement *= velocity;
+
+            UpdatePositionAndBoundingSphere(Position + movement);
+        }
+
+        public void Draw(Camera gameCamera, GameConstants.GameState gameState)
         {
             DrawModel(ref gameCamera);
-            sped.Draw();
-            fuelGauge.Draw();
+
+            if (gameState == GameConstants.GameState.Playing)
+            {
+                sped.Draw();
+                fuelGauge.Draw();
+            }
         }
 
         private void DrawModel(ref Camera gameCamera)
@@ -171,7 +214,7 @@ namespace _3DGameProject
 
         public void Reset()
         {
-            Position = new Vector3(15.5f, 0.0f, -9.5f);
+            Position = GameConstants.playerStartPos;
             UpdatePositionAndBoundingSphere(Position);
 
             ForwardDirection = 0.0f;

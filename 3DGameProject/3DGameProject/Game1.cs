@@ -125,17 +125,19 @@ namespace _3DGameProject
                 if (currentKeyboardState.IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Intro;
-                    gameCamera.ViewTopDown(device.Viewport.AspectRatio);
-                    enemies.SetUpIntroPositions();
+                    enemies.SetUpIntroPositions(player.Position);
                 }
             }
             else if (gameState == GameConstants.GameState.Intro)
             {
-                enemies.PlayIntro(gameTime);
+                player.AutoPilot(ref gameState);
+                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                enemies.PlayIntro(player.Position);
 
-                if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space))
+                if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space) ||
+                    gameState == GameConstants.GameState.Playing)
                 {
-                    enemies.SetUpEnemyPositions();
+                    Reset();
                     gameState = GameConstants.GameState.Playing;
                 }
             }
@@ -183,6 +185,7 @@ namespace _3DGameProject
                 skybox.Draw(ref device, gameCamera, player);
                 enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
+                player.Draw(gameCamera, gameState);
             }
             else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.End)
             {
@@ -190,7 +193,7 @@ namespace _3DGameProject
                 enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
                 miniMap.Draw(player, enemies, map);
-                player.Draw(gameCamera);
+                player.Draw(gameCamera, gameState);
 
                 timer.Draw();
                 highScore.Draw();

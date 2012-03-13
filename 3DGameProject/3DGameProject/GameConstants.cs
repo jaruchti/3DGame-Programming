@@ -11,6 +11,8 @@ namespace _3DGameProject
 {
     class GameConstants
     {
+        private GameConstants() { /* nothing to do here*/ }
+
         public enum GameState { Title, Intro, Playing, End };
         public enum CollisionType { None, Building, Fuel };
 
@@ -27,6 +29,7 @@ namespace _3DGameProject
         public const float Rev = -0.01f / 60f;
         public const float Friction = 0.002f / 60f;
         public const float MaxFuel = 99 + 59.0f / 60.0f;
+        public static readonly Vector3 playerStartPos = new Vector3(15.5f, 0.0f, -9.5f);
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
 

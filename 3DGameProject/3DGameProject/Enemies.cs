@@ -35,21 +35,14 @@ namespace _3DGameProject
                 enemies[i].LoadFloorPlan(floorPlan);
         }
 
-        public void SetUpIntroPositions()
+        public void SetUpIntroPositions(Vector3 playerPosition)
         {
-            for (int i = 0; i < enemies.Length; i++)
-            {
-                enemies[i].Position = new Vector3(0, GameConstants.IntroAltitude, 0);
-                enemies[i].AngularPosition = i * MathHelper.PiOver2;
-            }
+            enemies[0].Position = playerPosition + new Vector3(0.0f, 0.2f, 0.0f);
         }
 
-        public void PlayIntro(GameTime gameTime)
+        public void PlayIntro(Vector3 playerPosition)
         {
-            foreach (Enemy e in enemies)
-            {
-                e.MakeIntroMoves();
-            }
+            enemies[0].circle(playerPosition, 0.1f);
         }
 
         public void SetUpEnemyPositions()
@@ -72,6 +65,7 @@ namespace _3DGameProject
 
         public void Reset()
         {
+            SetUpEnemyPositions();
         }
     }
 }
