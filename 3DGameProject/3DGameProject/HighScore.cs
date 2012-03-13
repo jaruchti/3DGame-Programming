@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 3D Game Programming Project
+ * Dr. Liu
+ * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +17,34 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
+    /// <summary>
+    /// Class which implements the logic for the High (Best) Score display in the game
+    /// </summary>
     class HighScore : ScoreDisplay
     {
         TextReader tr;
         TextWriter tw;
 
+        /// <summary>
+        /// Create a new HighScore display.
+        /// </summary>
+        /// <remarks>This is a singleton in the game</remarks>
         public HighScore()
         {
-            textureRect = new Rectangle(382, 68, 339, 60);
-            displayDrawRect = new Rectangle(320, 0, 180, 30);
+            textureRect = new Rectangle(382, 68, 339, 60);      // position of the HighScore background in ingame texture
+            displayDrawRect = new Rectangle(320, 0, 180, 30);   // draw HighScore background on top right of screen
 
-            FirstDigitXOffset = 390;
+            DisplayDigitXPos = 390;
             SetUpDigitContants();
             SetUpDigitPositions();
 
             Score = ReadHighScore();
         }
 
+        /// <summary>
+        /// Update display with new HighScore.
+        /// </summary>
+        /// <param name="newHighScore">Potential highscore</param>
         public override void Update(float newHighScore)
         {
             if (newHighScore > Score)
@@ -37,6 +54,10 @@ namespace _3DGameProject
             }
         }
 
+        /// <summary>
+        /// Reads in the current highscore from the highscores file
+        /// </summary>
+        /// <returns>Current best highscore</returns>
         private float ReadHighScore()
         {
             float r = 0.0f;
@@ -48,6 +69,9 @@ namespace _3DGameProject
             return r;
         }
 
+        /// <summary>
+        /// Write new highscore to highscores file.
+        /// </summary>
         private void WriteHighScore()
         {
             tw = new StreamWriter("Scores/scores.txt");

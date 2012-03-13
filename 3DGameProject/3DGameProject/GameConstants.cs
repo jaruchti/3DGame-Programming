@@ -34,15 +34,6 @@ namespace _3DGameProject
 
         public static readonly Vector3 LightDirection = new Vector3(3/6.164414f, -2/6.164414f, 5/6.164414f);
 
-        // Digits display
-        public const int DigitXPos = 0;
-        public const int DigitYPos = 344;
-        public const int DigitWidth = 83;
-        public const int DigitHeight = 129;
-
-        // Timer constants
-        public const int MaxTime = 99999;
-
         // Rank constants
         public const int AmatuerAbductee = 25;
         public const int MediocreAbductee = 100;
