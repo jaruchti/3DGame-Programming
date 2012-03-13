@@ -44,5 +44,9 @@ namespace _3DGameProject
         public const int MediocreAbductee = 100;
         public const int Abductee = 200;
         public const int MasterAbductee = 500;
+
+        // Enemy constants
+        public const int NumEnemy = 4;
+        public const float EnemyVelocity = 0.8f;
     }
 }

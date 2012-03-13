@@ -65,6 +65,8 @@ namespace _3DGameProject
             cameraPosition = position + transformedheadOffset;
             cameraTarget = position + transformedReference;
 
+            double angleWithWall = MathHelper.ToDegrees((float) Math.Atan2(-position.Z + (int) (cameraPosition.Z), position.X - (int) (cameraPosition.X)));
+
             while (floorPlan[(int)(cameraPosition.X), (int)(-cameraPosition.Z)] != 0)
             {
                 avatarHeadOffset.Z -= 1 / 600f;

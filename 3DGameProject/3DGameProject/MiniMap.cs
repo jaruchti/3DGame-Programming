@@ -29,7 +29,7 @@ namespace _3DGameProject
             spriteBatch = new SpriteBatch(device);
         }
 
-        public void Draw(Player player, Map map)
+        public void Draw(Player player, Enemy[] enemies, Map map)
         {
             Rectangle rect = new Rectangle();
             rect.Width = rectWidth;
@@ -67,6 +67,13 @@ namespace _3DGameProject
             rect.X = xOffset - rectWidth * (int)player.Position.Z;
             rect.Y = yOffset + rectHeight * (int)player.Position.X;
             spriteBatch.Draw(whiteRect, rect, Color.Green);
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                rect.X = xOffset - rectWidth * (int)enemies[i].Position.Z;
+                rect.Y = yOffset + rectHeight * (int)enemies[i].Position.X;
+                spriteBatch.Draw(whiteRect, rect, Color.Red);
+            }
 
             spriteBatch.End();
         }
