@@ -27,7 +27,7 @@ namespace _3DGameProject
 
         Camera gameCamera;
         Player player;
-        Enemy[] enemies;
+        Enemies enemies;
         Map map;
         MiniMap miniMap;
         Skybox skybox;
@@ -66,11 +66,7 @@ namespace _3DGameProject
 
             gameCamera = new Camera();
             player = new Player();
-
-            enemies = new Enemy[GameConstants.NumEnemy];
-            for (int i = 0; i < enemies.Length; i++)
-                enemies[i] = new Enemy();
-
+            enemies = new Enemies();
             map = new Map();
             miniMap = new MiniMap();
             skybox = new Skybox();
@@ -96,19 +92,13 @@ namespace _3DGameProject
             map.LoadContent(ref device, Content);
             miniMap.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
-
-            for (int i = 0; i < enemies.Length; i++)
-            {
-                enemies[i].LoadContent(Content);
-                enemies[i].LoadFloorPlan(map.FloorPlan);
-            }
-
-            SetUpEnemyPositions();
+            enemies.LoadContent(Content);
 
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
 
             gameCamera.LoadFloorPlan(map.FloorPlan);
+            enemies.LoadFloorPlan(map.FloorPlan);
 
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
         }
@@ -183,10 +173,7 @@ namespace _3DGameProject
                 //GraphicsDevice.RasterizerState = rs;
 
                 skybox.Draw(ref device, gameCamera, player);
-
-                foreach (Enemy e in enemies)
-                    e.Draw(gameCamera);
-
+                enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
                 miniMap.Draw(player, enemies, map);
                 player.Draw(gameCamera);
@@ -204,7 +191,6 @@ namespace _3DGameProject
                     gameOverScreen.Draw();
             }
 
-
             base.Draw(gameTime);
         }
 
@@ -212,14 +198,7 @@ namespace _3DGameProject
         {
             timer.Reset();
             player.Reset();
-        }
-
-        private void SetUpEnemyPositions()
-        {
-            enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.1f, -8.5f));
-            enemies[1].UpdatePositionAndBoundingSphere(new Vector3(8.5f, 0.1f, -9.5f));
-            enemies[2].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.1f, -9.5f));
-            enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.1f, -10.5f));
+            enemies.Reset();
         }
     }
 }

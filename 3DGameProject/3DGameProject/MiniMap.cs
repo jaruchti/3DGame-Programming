@@ -29,7 +29,7 @@ namespace _3DGameProject
             spriteBatch = new SpriteBatch(device);
         }
 
-        public void Draw(Player player, Enemy[] enemies, Map map)
+        public void Draw(Player player, Enemies enemies, Map map)
         {
             Rectangle rect = new Rectangle();
             rect.Width = rectWidth;
@@ -37,6 +37,7 @@ namespace _3DGameProject
 
             int[,] floorPlan = map.FloorPlan;
             Fuel[] fuelBarrels = map.FuelBarrels;
+            Enemy[] enemyArr = enemies.getEnemiesArray();
 
             spriteBatch.Begin();
 
@@ -68,10 +69,10 @@ namespace _3DGameProject
             rect.Y = yOffset + rectHeight * (int)player.Position.X;
             spriteBatch.Draw(whiteRect, rect, Color.Green);
 
-            for (int i = 0; i < enemies.Length; i++)
+            for (int i = 0; i < enemyArr.Length; i++)
             {
-                rect.X = xOffset - rectWidth * (int)enemies[i].Position.Z;
-                rect.Y = yOffset + rectHeight * (int)enemies[i].Position.X;
+                rect.X = xOffset - rectWidth * (int)enemyArr[i].Position.Z;
+                rect.Y = yOffset + rectHeight * (int)enemyArr[i].Position.X;
                 spriteBatch.Draw(whiteRect, rect, Color.Red);
             }
 
