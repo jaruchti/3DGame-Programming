@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 3D Game Programming Project
+ * Dr. Liu
+ * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +16,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
+    /// <summary>
+    /// Class with a number of common functions used thoughout the project.
+    /// </summary>
     class Helpers
     {
         private Helpers()
@@ -17,14 +26,13 @@ namespace _3DGameProject
             // no instances can be created with private constructor
         }
 
-        public static Rectangle GetDigitRect(int digit)
-        {
-            return new Rectangle(GameConstants.DigitXPos + digit * GameConstants.DigitWidth, 
-                GameConstants.DigitYPos, 
-                GameConstants.DigitWidth, 
-                GameConstants.DigitHeight);
-        }
-
+        /// <summary>
+        /// Efficient power function.
+        /// </summary>
+        /// <param name="x">Variable</param>
+        /// <param name="n">Power</param>
+        /// <returns>x^n</returns>
+        /// <remarks>0^0 is undefined</remarks>
         public static double Pow(double x, int n)
         {
             double r = 1.0;

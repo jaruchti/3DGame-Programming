@@ -55,7 +55,7 @@ namespace _3DGameProject
             {
 
                 spriteBatch.Draw(ingameTextures, digitPositions[NumDisplayDigits - 1 - i],
-                    Helpers.GetDigitRect(((int)digits / (int)(Helpers.Pow(10, i)) % 10)),
+                    GetDigitRect(((int)digits / (int)(Helpers.Pow(10, i)) % 10)),
                     Color.White, 0.0f, new Vector2(0, 0),
                     DigitScale,
                     SpriteEffects.None,
@@ -63,6 +63,14 @@ namespace _3DGameProject
             }
 
             spriteBatch.End();
+        }
+
+        public static Rectangle GetDigitRect(int digit)
+        {
+            return new Rectangle(GameConstants.DigitXPos + digit * GameConstants.DigitWidth,
+                GameConstants.DigitYPos,
+                GameConstants.DigitWidth,
+                GameConstants.DigitHeight);
         }
     }
 }
