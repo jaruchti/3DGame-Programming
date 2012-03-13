@@ -24,13 +24,13 @@ namespace _3DGameProject
     class GameOverScreen : GameTextScreen
     {
         /// <summary>Score needed for title "AmatuerAbductee"</summary>
-        public const int AmatuerAbductee = 25;
+        private const int AmatuerAbductee = 25;
         /// <summary>Score needed for title "MediocreAbductee"</summary>
-        public const int MediocreAbductee = 100;
+        private const int MediocreAbductee = 100;
         /// <summary>Score needed for title "Abductee"</summary>
-        public const int Abductee = 200;
+        private const int Abductee = 200;
         /// <summary>Score needed for title "MasterAbductee"</summary>
-        public const int MasterAbductee = 500;
+        private const int MasterAbductee = 500;
 
         Vector2 gameOverPosition;       // position to display strGameOver
         Vector2 rankPosition;           // position to display strRank

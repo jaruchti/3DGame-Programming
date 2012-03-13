@@ -10,17 +10,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
-    class GameConstants
+    static class GameConstants
     {
-        private GameConstants() { /* nothing to do here*/ }
-
         public enum GameState { Title, Intro, Ready, Playing, End };
         public enum CollisionType { None, Building, Fuel };
-
-        //camera constants
-        public const float NearClip = 0.2f;
-        public const float FarClip = 500.0f;
-        public const float ViewAngle = 45.0f;
 
         //player constants
         public const float MaxVelocity = 1.25f / 30.0f;

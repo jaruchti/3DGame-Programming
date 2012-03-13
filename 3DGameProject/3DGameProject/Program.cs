@@ -1,3 +1,9 @@
+/*
+ * 3D Game Programming Project
+ * Dr. Liu
+ * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
+ */
+
 using System;
 
 namespace _3DGameProject
