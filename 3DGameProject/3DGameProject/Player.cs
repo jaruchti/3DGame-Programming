@@ -60,7 +60,7 @@ namespace _3DGameProject
             BoundingSphere = scaledSphere;
         }
 
-        public void Update(KeyboardState keyboardState, ref Map map, ref GameConstants.GameState gameState)
+        public void Update(KeyboardState keyboardState, GameTime gameTime, ref Map map, ref GameConstants.GameState gameState)
         {
             float turnAmount = DetermineTurnAmount(keyboardState);
             UpdateVelocity(keyboardState);
@@ -82,7 +82,7 @@ namespace _3DGameProject
             }
 
             sped.Update(velocity);
-            UpdateFuel(collision, ref gameState);
+            UpdateFuel(gameTime, collision, ref gameState);
         }
 
         private float DetermineTurnAmount(KeyboardState keyboardState)
@@ -125,9 +125,9 @@ namespace _3DGameProject
                 velocity = -GameConstants.MaxVelocity;
         }
 
-        private void UpdateFuel(GameConstants.CollisionType collision, ref GameConstants.GameState gameState)
+        private void UpdateFuel(GameTime gameTime, GameConstants.CollisionType collision, ref GameConstants.GameState gameState)
         {
-            fuel -= GameConstants.FuelDrawDown;
+            fuel -= (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             if (fuel < 0)
             {

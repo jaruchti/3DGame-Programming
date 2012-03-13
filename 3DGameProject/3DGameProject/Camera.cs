@@ -14,33 +14,83 @@ namespace _3DGameProject
 {
     class Camera
     {
-        public Vector3 AvatarHeadOffset { get; set; }
-        public Vector3 TargetOffset { get; set; }
+        private Vector3 avatarHeadOffset;
+        private Vector3 targetOffset;
+        private float cameraRotation = 0.0f;
+        private int[,] floorPlan;
+
+        public Vector3 AvatarHeadOffset
+        {
+            get { return avatarHeadOffset; }
+            set { avatarHeadOffset = value; }
+        }
+
+        public Vector3 TargetOffset 
+        {
+            get { return targetOffset; }
+            set { avatarHeadOffset = value; }
+        }
+
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
-        float cameraRotation = 0.0f;
 
         public Camera()
         {
-            AvatarHeadOffset = new Vector3(0.0f, 0.15f, 0.6f);
-            TargetOffset = new Vector3(0, 0, 0);
+            avatarHeadOffset = new Vector3(0.0f, 0.15f, 0.6f);
+            targetOffset = new Vector3(0, 0, 0);
             ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.Identity;
         }
 
+        public void LoadFloorPlan(int[,] floorPlan)
+        {
+            this.floorPlan = floorPlan;
+        }
+
         public void Update(float avatarYaw, Vector3 position, float aspectRatio)
         {
+            Matrix rotationMatrix;
+            Vector3 transformedheadOffset;
+            Vector3 transformedReference;
+            Vector3 cameraPosition;
+            Vector3 cameraTarget;
+
             cameraRotation = MathHelper.Lerp(cameraRotation, avatarYaw, 0.1f);
             
-            Matrix rotationMatrix = Matrix.CreateRotationY(cameraRotation);
+            rotationMatrix = Matrix.CreateRotationY(cameraRotation);
 
-            Vector3 transformedheadOffset =
-                Vector3.Transform(AvatarHeadOffset, rotationMatrix);
-            Vector3 transformedReference =
-                Vector3.Transform(TargetOffset, rotationMatrix);
+            transformedheadOffset = Vector3.Transform(AvatarHeadOffset, rotationMatrix);
+            transformedReference = Vector3.Transform(TargetOffset, rotationMatrix);
 
-            Vector3 cameraPosition = position + transformedheadOffset;
-            Vector3 cameraTarget = position + transformedReference;
+            cameraPosition = position + transformedheadOffset;
+            cameraTarget = position + transformedReference;
+
+            while (floorPlan[(int)(cameraPosition.X), (int)(-cameraPosition.Z)] != 0)
+            {
+                avatarHeadOffset.Z -= 1 / 600f;
+                avatarHeadOffset.Y += 1 / 1200f;
+                targetOffset.Z -= 1 / 600f;
+
+                transformedheadOffset = Vector3.Transform(AvatarHeadOffset, rotationMatrix);
+                transformedReference = Vector3.Transform(TargetOffset, rotationMatrix);
+
+                cameraPosition = position + transformedheadOffset;
+                cameraTarget = position + transformedReference;
+            }
+
+            while (floorPlan[(int)cameraPosition.X, (int)-cameraPosition.Z] == 0 &&
+                avatarHeadOffset.Z < 0.6f)
+            {
+                avatarHeadOffset.Z += 1 / 600f;
+                avatarHeadOffset.Y -= 1 / 1200f;
+                targetOffset.Z += 1 / 600f;
+
+                transformedheadOffset = Vector3.Transform(AvatarHeadOffset, rotationMatrix);
+                transformedReference = Vector3.Transform(TargetOffset, rotationMatrix);
+
+                cameraPosition = position + transformedheadOffset;
+                cameraTarget = position + transformedReference;
+            }
 
             //Calculate the camera's view and projection 
             //matrices based on current values.

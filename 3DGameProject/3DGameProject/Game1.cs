@@ -93,7 +93,9 @@ namespace _3DGameProject
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
 
-            boundingSphere.Model = Content.Load<Model>("sphere1uR");
+            gameCamera.LoadFloorPlan(map.FloorPlan);
+
+            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace _3DGameProject
             else if (currentGameState == GameConstants.GameState.Playing)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
-                player.Update(Keyboard.GetState(), ref map, ref currentGameState);
+                player.Update(Keyboard.GetState(), gameTime, ref map, ref currentGameState);
                 timer.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             }
             else if (currentGameState == GameConstants.GameState.End)
@@ -158,10 +160,10 @@ namespace _3DGameProject
             }
             else if (currentGameState == GameConstants.GameState.Playing || currentGameState == GameConstants.GameState.End)
             {
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.Solid;
 
-                //GraphicsDevice.RasterizerState = rs;
+                GraphicsDevice.RasterizerState = rs;
 
                 skybox.Draw(ref device, gameCamera, player);
                 map.Draw(ref device, gameCamera);
@@ -171,11 +173,11 @@ namespace _3DGameProject
                 timer.Draw();
                 highScore.Draw();
 
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //player.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
+                rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                GraphicsDevice.RasterizerState = rs;
+                player.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    gameCamera.ProjectionMatrix, boundingSphere);
 
                 if (currentGameState == GameConstants.GameState.End)
                     gameOverScreen.Draw();

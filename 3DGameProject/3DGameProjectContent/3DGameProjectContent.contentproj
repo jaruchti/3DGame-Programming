@@ -62,7 +62,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="sphere1uR.x">
+    <Compile Include="Models\sphere1uR.x">
       <Name>sphere1uR</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -113,7 +113,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="White.png">
+    <Compile Include="Models\White.png">
       <Name>White</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
