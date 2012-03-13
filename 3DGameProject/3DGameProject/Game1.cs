@@ -26,6 +26,7 @@ namespace _3DGameProject
 
         TitleScreen titleScreen;
         IntroScreen introScreen;
+        GetReadyScreen readyScreen;
         GameOverScreen gameOverScreen;
 
         Camera gameCamera;
@@ -65,6 +66,7 @@ namespace _3DGameProject
 
             titleScreen = new TitleScreen();
             introScreen = new IntroScreen();
+            readyScreen = new GetReadyScreen();
             gameOverScreen = new GameOverScreen();
 
             gameCamera = new Camera();
@@ -90,6 +92,7 @@ namespace _3DGameProject
 
             titleScreen.LoadContent(ref device, Content);
             introScreen.LoadContent(ref device, Content);
+            readyScreen.LoadContent(ref device, Content);
             gameOverScreen.LoadContent(ref device, Content);
 
             player.LoadContent(ref device, Content);
@@ -138,11 +141,16 @@ namespace _3DGameProject
                 enemies.PlayIntro(player.Position);
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space) ||
-                    gameState == GameConstants.GameState.Playing)
+                    gameState == GameConstants.GameState.Ready)
                 {
                     Reset();
-                    gameState = GameConstants.GameState.Playing;
+                    gameState = GameConstants.GameState.Ready;
                 }
+            }
+            else if (gameState == GameConstants.GameState.Ready)
+            {
+                gameCamera.Update(player.ForwardDirection, player.Position, device.Viewport.AspectRatio);
+                readyScreen.Update((float) gameTime.ElapsedGameTime.TotalSeconds, ref gameState);
             }
             else if (gameState == GameConstants.GameState.Playing)
             {
@@ -160,7 +168,7 @@ namespace _3DGameProject
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
-                    gameState = GameConstants.GameState.Playing;
+                    gameState = GameConstants.GameState.Ready;
                     Reset();
                 }
             }
@@ -183,27 +191,27 @@ namespace _3DGameProject
             {
                 titleScreen.Draw();
             }
-            else if (gameState == GameConstants.GameState.Intro)
+            else
             {
                 skybox.Draw(ref device, gameCamera, player);
                 enemies.Draw(gameCamera);
                 map.Draw(ref device, gameCamera);
                 player.Draw(gameCamera, gameState);
-                introScreen.Draw();
-            }
-            else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.End)
-            {
-                skybox.Draw(ref device, gameCamera, player);
-                enemies.Draw(gameCamera);
-                map.Draw(ref device, gameCamera);
-                miniMap.Draw(player, enemies, map);
-                player.Draw(gameCamera, gameState);
 
-                timer.Draw();
-                highScore.Draw();
+                if (gameState == GameConstants.GameState.Intro)
+                    introScreen.Draw();
+                else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.Ready ||
+                    gameState == GameConstants.GameState.End)
+                {
+                    miniMap.Draw(player, enemies, map);
+                    timer.Draw();
+                    highScore.Draw();
 
-                if (gameState == GameConstants.GameState.End)
-                    gameOverScreen.Draw();
+                    if (gameState == GameConstants.GameState.End)
+                        gameOverScreen.Draw();
+                    else if (gameState == GameConstants.GameState.Ready)
+                        readyScreen.Draw();
+                }
             }
 
             base.Draw(gameTime);

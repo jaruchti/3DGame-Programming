@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +14,7 @@ namespace _3DGameProject
     {
         private GameConstants() { /* nothing to do here*/ }
 
-        public enum GameState { Title, Intro, Playing, End };
+        public enum GameState { Title, Intro, Ready, Playing, End };
         public enum CollisionType { None, Building, Fuel };
 
         //camera constants

@@ -169,7 +169,7 @@ namespace _3DGameProject
 
             if (playerStartRect.Contains((int)Position.X, (int)-Position.Z) && ForwardDirection > 0)
             {
-                gameState = GameConstants.GameState.Playing;
+                gameState = GameConstants.GameState.Ready;
             }
             
             Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
@@ -182,7 +182,7 @@ namespace _3DGameProject
         {
             DrawModel(ref gameCamera);
 
-            if (gameState == GameConstants.GameState.Playing)
+            if (gameState != GameConstants.GameState.Intro)
             {
                 sped.Draw();
                 fuelGauge.Draw();

@@ -20,7 +20,7 @@ namespace _3DGameProject
         String strRank = "";
         String strInstructions = "Press Space to Continue";
 
-        public void LoadContent(ref GraphicsDevice device, ContentManager content)
+        public override void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             base.LoadContent(ref device, content);
 
@@ -34,7 +34,7 @@ namespace _3DGameProject
             rankPosition = new Vector2(0, 0);
 
             textSize = mediumFont.MeasureString(strInstructions);
-            instructionsPosition = new Vector2(250 - textSize.X / 2, 500 - informationFont.LineSpacing);
+            instructionsPosition = new Vector2(250 - textSize.X / 2, 500 - largeFont.LineSpacing);
         }
 
         public void Update(float score)
