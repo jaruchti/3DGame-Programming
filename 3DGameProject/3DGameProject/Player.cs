@@ -336,7 +336,7 @@ namespace _3DGameProject
 
 
         // Rectangle with the player's starting position
-        Rectangle playerStartRect = new Rectangle((int)PlayerStartPos.X, (int)PlayerStartPos.Z, 1, 1);
+        Rectangle playerStartRect = new Rectangle((int)PlayerStartPos.X, (int) -PlayerStartPos.Z, 1, 1);
 
         // When the car enters one of these rectangles during the introduction, the car should turn
         Rectangle[] pivots = { new Rectangle( 3,  4, 1, 1),

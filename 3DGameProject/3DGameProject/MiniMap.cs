@@ -67,7 +67,6 @@ namespace _3DGameProject
             // get items to display
             int[,] floorPlan = map.FloorPlan;
             Fuel[] fuelBarrels = map.FuelBarrels;
-            Enemy[] enemyArr = enemies.getEnemiesArray();
 
             spriteBatch.Begin();
 
@@ -101,10 +100,10 @@ namespace _3DGameProject
             spriteBatch.Draw(whiteRect, rect, Color.Green);
 
             // draw enemies
-            for (int i = 0; i < enemyArr.Length; i++)
+            foreach (Enemy e in enemies)
             {
-                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)enemyArr[i].Position.Z;
-                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)enemyArr[i].Position.X;
+                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)e.Position.Z;
+                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)e.Position.X;
                 spriteBatch.Draw(whiteRect, rect, Color.Red);
             }
 

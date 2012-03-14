@@ -45,6 +45,8 @@ namespace _3DGameProject
         Timer timer;
         HighScore highScore;
 
+        GameSongs gameSongs;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -88,6 +90,8 @@ namespace _3DGameProject
             timer = new Timer();
             highScore = new HighScore();
 
+            gameSongs = new GameSongs();
+
             base.Initialize();
         }
 
@@ -112,6 +116,8 @@ namespace _3DGameProject
 
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
+
+            gameSongs.LoadContent(Content);
         }
 
         /// <summary>
@@ -134,9 +140,13 @@ namespace _3DGameProject
 
             if (gameState == GameConstants.GameState.Title)
             {
+                gameSongs.PlayTitleSong();
+
                 if (currentKeyboardState.IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Intro;
+
+                    gameSongs.StopTitleSong();
                     enemies.SetUpIntroPositions(player.Position);
                 }
             }
@@ -173,9 +183,13 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.End)
             {
+                gameSongs.PlayGameOverSong();
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Ready;
+
+                    gameSongs.StopGameOverSong();
                     Reset();
                 }
             }

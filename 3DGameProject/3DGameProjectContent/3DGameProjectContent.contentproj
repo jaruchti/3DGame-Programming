@@ -209,7 +209,6 @@
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="Audio\BrakeMajor.wav">
       <Name>BrakeMajor</Name>
@@ -233,6 +232,18 @@
     </Compile>
     <Compile Include="Audio\Engine.wav">
       <Name>Engine</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Songs\GameOverSong.wav">
+      <Name>GameOverSong</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Songs\TitleSong.wav">
+      <Name>TitleSong</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

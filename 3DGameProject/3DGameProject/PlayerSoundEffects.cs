@@ -17,6 +17,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _3DGameProject
 {
+    /// <summary>
+    /// Class which contains the sound effects for the player, namely the sounds
+    /// the player's car makes.
+    /// </summary>
+    /// <remarks>This is a singleton in the game</remarks>
     class PlayerSoundEffects
     {
         private SoundEffect carCrashMinorEffect;
