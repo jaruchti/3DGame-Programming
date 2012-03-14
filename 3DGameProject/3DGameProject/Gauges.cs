@@ -20,10 +20,10 @@ namespace _3DGameProject
     /// Abstract class used to set up contants associated with 
     /// the player's gauges (e.g. fuel gauge and spedometer).
     /// </summary>
-    abstract class Gauges : InGameDisplay
+    public abstract class Gauges : InGameDisplay
     {
         /// <summary>
-        /// Set up the contants for the player's gauges
+        /// Set up the constants for the player's gauges
         /// </summary>
         protected void SetUpDigitContants()
         {

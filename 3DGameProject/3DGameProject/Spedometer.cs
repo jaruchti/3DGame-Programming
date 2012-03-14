@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which implements the logic for the player's Spedometer.
     /// </summary>
-    class Spedometer : Gauges
+    public class Spedometer : Gauges
     {
         /// <summary>
         /// Create a new Spedometer

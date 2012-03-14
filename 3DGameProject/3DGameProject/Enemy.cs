@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which defines the attributes of an enemy in the game.
     /// </summary>
-    class Enemy : GameObject
+    public class Enemy : GameObject
     {
         /// <summary>Velocity of the enemy</summary>
         public const float EnemyVelocity = 0.8f / 60.0f;

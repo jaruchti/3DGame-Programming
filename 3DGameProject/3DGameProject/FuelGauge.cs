@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which implements the logic for the player's Fuel Gauge.
     /// </summary>
-    class FuelGauge : Gauges
+    public class FuelGauge : Gauges
     {
         /// <summary>
         /// Create a new Fuel Gauge

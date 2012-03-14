@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which represents a fuel object in the game for the player to pick up.
     /// </summary>
-    class Fuel : GameObject
+    public class Fuel : GameObject
     {
         public Fuel() : base()
         {

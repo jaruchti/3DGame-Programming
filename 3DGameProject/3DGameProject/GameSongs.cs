@@ -21,7 +21,7 @@ namespace _3DGameProject
     /// Class which contains songs to be played when the game is in a certain state
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class GameSongs
+    public class GameSongs
     {
         private SoundEffect titleSongEffect;
         private SoundEffect gameOverSongEffect;

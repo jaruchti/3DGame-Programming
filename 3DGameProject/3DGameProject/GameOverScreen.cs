@@ -21,16 +21,16 @@ namespace _3DGameProject
     /// the game is over (e.g. Game Over, player rank, instructions on what to do next).
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class GameOverScreen : GameTextScreen
+    public class GameOverScreen : GameTextScreen
     {
         /// <summary>Score needed for title "AmatuerAbductee"</summary>
-        private const int AmatuerAbductee = 25;
+        public const int AmatuerAbductee = 25;
         /// <summary>Score needed for title "MediocreAbductee"</summary>
-        private const int MediocreAbductee = 100;
+        public const int MediocreAbductee = 100;
         /// <summary>Score needed for title "Abductee"</summary>
-        private const int Abductee = 200;
+        public const int Abductee = 200;
         /// <summary>Score needed for title "MasterAbductee"</summary>
-        private const int MasterAbductee = 500;
+        public const int MasterAbductee = 500;
 
         Vector2 gameOverPosition;       // position to display strGameOver
         Vector2 rankPosition;           // position to display strRank

@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which implements the logic for the Timer (Score) display in the game
     /// </summary>
-    class Timer : ScoreDisplay
+    public class Timer : ScoreDisplay
     {
        /// <summary>Maximum score (time)</summary>
         public const int MaxTime = 99999;

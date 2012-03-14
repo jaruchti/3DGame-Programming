@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// 
     /// </summary>
-    class Enemies
+    public class Enemies
     {
         /// <summary>Number of enemies the player must avoid</summary>
         public const int NumEnemy = 4;

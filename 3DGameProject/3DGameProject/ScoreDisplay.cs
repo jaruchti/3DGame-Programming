@@ -20,7 +20,7 @@ namespace _3DGameProject
     /// Abstract class used to set up contants associated with 
     /// the player's score displays (e.g. Timer and HighScore).
     /// </summary>
-    abstract class ScoreDisplay : InGameDisplay
+    public abstract class ScoreDisplay : InGameDisplay
     {
         /// <summary>
         /// Provide wrapper for digits variable (score has more meaning

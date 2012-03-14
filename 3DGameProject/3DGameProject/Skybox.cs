@@ -23,7 +23,7 @@ namespace _3DGameProject
     /// This is a singleton in the game.  The code is slightly modified from the Reimer's example, and
     /// is put in a seperate class to abstract the details from the main game.
     /// </remarks>
-    class Skybox
+    public class Skybox
     {
         Texture2D[] skyboxTextures; // textures to display around the skybox
         Model skyboxModel;

@@ -20,7 +20,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which implements the logic for the High (Best) Score display in the game
     /// </summary>
-    class HighScore : ScoreDisplay
+    public class HighScore : ScoreDisplay
     {
         TextReader tr;
         TextWriter tw;

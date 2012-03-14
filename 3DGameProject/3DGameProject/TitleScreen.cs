@@ -21,7 +21,7 @@ namespace _3DGameProject
     /// game. The title screen included developer information.
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class TitleScreen
+    public class TitleScreen
     {
         private Texture2D background;
         private SpriteBatch spriteBatch;

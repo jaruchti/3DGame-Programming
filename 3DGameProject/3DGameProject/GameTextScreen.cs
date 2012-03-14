@@ -20,7 +20,7 @@ namespace _3DGameProject
     /// Abstract class which includes members and functionality common to all ingame
     /// text displays (e.g. GameOverScreen).
     /// </summary>
-    abstract class GameTextScreen
+    public abstract class GameTextScreen
     {
         protected SpriteBatch spriteBatch;  // used to draw the text
         protected SpriteFont largeFont;     // large size font

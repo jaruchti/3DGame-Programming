@@ -22,20 +22,20 @@ namespace _3DGameProject
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
     /// 
-    class MiniMap
+    public class MiniMap
     {
         private SpriteBatch spriteBatch;
         private Texture2D whiteRect;        // holds a white rectangle texture
         private Texture2D whiteCircle;      // holds a white circle texture
 
         /// <summary>percentage xOffset on display to the left side of the mini-map</summary>
-        private const float xOffset = 0.8f;
+        public const float xOffset = 0.8f;
         /// <summary>percentage yOffset on display to the top side of the mini-map</summary>
-        private const float yOffset = 0.1f;
+        public const float yOffset = 0.1f;
         /// <summary>width of each item in the mini-map as a percentage of the viewport</summary>
-        private const float rectWidth = 0.01f;
+        public const float rectWidth = 0.01f;
         /// <summary>height of each item in the mini-map as a percentage of the viewport</summary>
-        private const float rectHeight = 0.01f;
+        public const float rectHeight = 0.01f;
 
         /// <summary>
         /// Load the content required for the minimap.

@@ -20,7 +20,7 @@ namespace _3DGameProject
     /// Abstract class which implements functionality common to all of the in-game displays
     /// (e.g. Score, Fuel Gauge, etc.).
     /// </summary>
-    abstract class InGameDisplay
+    public abstract class InGameDisplay
     {
         /// <summary>x position of the left side of the first digit in the ingame texture</summary>
         public const int TextureDigitXPos = 0;

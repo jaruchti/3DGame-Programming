@@ -24,7 +24,7 @@ namespace _3DGameProject
     /// This class is modified from the Riemer's tuturial and placed in a seperate 
     /// file to aid in abstraction.
     /// </remarks>
-    class Map
+    public class Map
     {
         private Texture2D scenaryTexture;               // building textures
         private Effect effect;

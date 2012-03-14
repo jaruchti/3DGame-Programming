@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class with a number of common functions used thoughout the project.
     /// </summary>
-    static class Helpers
+    public static class Helpers
     {
         /// <summary>
         /// Efficient power function.

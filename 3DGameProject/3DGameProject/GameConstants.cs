@@ -19,7 +19,7 @@ namespace _3DGameProject
     /// <summary>
     /// Defines a number of constants that are used throughout the game.
     /// </summary>
-    static class GameConstants
+    public static class GameConstants
     {
         /// <summary>
         /// Enumeration which describes the current state the game is in.

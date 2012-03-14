@@ -20,7 +20,7 @@ namespace _3DGameProject
     /// Class which implements the logic for the camera.
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class Camera
+    public class Camera
     {
         private const float NearClip = 0.2f;
         private const float FarClip = 500.0f;

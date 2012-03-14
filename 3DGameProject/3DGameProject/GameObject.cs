@@ -23,7 +23,7 @@ namespace _3DGameProject
     /// Manages Models, Position, and BoundingSpheres
     /// Slightly modified from the Microsoft Fuel Cell example.
     /// </remarks>
-    class GameObject
+    public class GameObject
     {
         /// <summary>
         /// Property to allow the client access to the GameObject's model.

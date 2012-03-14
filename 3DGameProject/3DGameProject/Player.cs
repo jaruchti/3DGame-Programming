@@ -21,7 +21,7 @@ namespace _3DGameProject
     /// Class which defines a player in the game.
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class Player : GameObject
+    public class Player : GameObject
     {
         /// <summary>Maximim velocity for the player</summary>
         public const float MaxVelocity = 1.25f / 30.0f;

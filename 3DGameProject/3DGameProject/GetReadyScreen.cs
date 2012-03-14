@@ -21,10 +21,10 @@ namespace _3DGameProject
     /// the player is about to begin playing the game (e.g. countdown, instructions).
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class GetReadyScreen : GameTextScreen
+    public class GetReadyScreen : GameTextScreen
     {
         /// <summary>Time to display the GetReadyScreen</summary>
-        private const int SecondsOnScreen = 4; 
+        public const int SecondsOnScreen = 4; 
         private float seconds;                  // seconds elapsed since the first display
 
         private Vector2 countdownPosition;      // position of the countdown

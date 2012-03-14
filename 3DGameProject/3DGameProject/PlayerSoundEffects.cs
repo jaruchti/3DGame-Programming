@@ -22,7 +22,7 @@ namespace _3DGameProject
     /// the player's car makes.
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class PlayerSoundEffects
+    public class PlayerSoundEffects
     {
         private SoundEffect carCrashMinorEffect;
         private SoundEffect carCrashTotalEffect;

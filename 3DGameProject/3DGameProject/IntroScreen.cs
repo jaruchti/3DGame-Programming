@@ -21,7 +21,7 @@ namespace _3DGameProject
     /// the introduction (e.g. game name, instructions).
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    class IntroScreen : GameTextScreen
+    public class IntroScreen : GameTextScreen
     {
         Vector2 titlePosition;          // position to display game title
         Vector2 instructionsPosition;   // position to dislay instructions
