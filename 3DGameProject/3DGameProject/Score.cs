@@ -17,22 +17,22 @@ using Microsoft.Xna.Framework.Input;
 namespace _3DGameProject
 {
     /// <summary>
-    /// Class which implements the logic for the Timer (Score) display in the game
+    /// Class which implements the logic for the Score display in the game
     /// </summary>
-    public class Timer : ScoreDisplay
+    public class Score : ScoreDisplay
     {
-       /// <summary>Maximum score (time)</summary>
-        public const int MaxTime = 99999;
+       /// <summary>Maximum score</summary>
+        public const int MaxScore = 99999;
 
         /// <summary>
-        /// Create a new timer
+        /// Create a new Score display
         /// </summary>
         /// <remarks>This is a singleton in the game</remarks>
-        public Timer()
+        public Score()
         {
-            textureRect = new Rectangle(382, 2, 339, 60);   // position of the Timer background in ingame texture
+            textureRect = new Rectangle(382, 2, 339, 60);   // position of the current score background in ingame texture
 
-            // draw Timer background on top left of screen
+            // draw Score background on top left of screen
             displayDrawRect = new Rectangle(
                 0, 
                 0, 
@@ -46,19 +46,19 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Update the Timer with the new seconds elapsed since the last update.
+        /// Update the Scare with the new score since the last update.
         /// </summary>
-        /// <param name="elapsedSecs"></param>
-        public override void Update(float elapsedSecs)
+        /// <param name="newScore"></param>
+        public override void Update(float newScore)
         {
-            Score += elapsedSecs;
+            Score = newScore;
 
-            if (Score > MaxTime)
-                Score = MaxTime;
+            if (Score > MaxScore)
+                Score = MaxScore;
         }
 
         /// <summary>
-        /// Reset time to zero.
+        /// Reset score to zero.
         /// </summary>
         public void Reset()
         {
