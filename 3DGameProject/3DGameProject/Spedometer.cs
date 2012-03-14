@@ -51,7 +51,7 @@ namespace _3DGameProject
         {
             playerVelocity = Math.Abs(playerVelocity);  // show speed, not velocity
 
-            digits = (int)Math.Floor(playerVelocity / GameConstants.MaxVelocity * 100); // find % of max velocity
+            digits = (int)Math.Floor(playerVelocity / Player.MaxVelocity * 100); // find % of max velocity
 
             if (digits == 100) // force mph between 0 and 99
                 digits--;

@@ -61,7 +61,7 @@ namespace _3DGameProject
         {
             graphics.PreferredBackBufferWidth = 500;
             graphics.PreferredBackBufferHeight = 500;
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             GameConstants.ViewportHeight = graphics.GraphicsDevice.Viewport.Height;
