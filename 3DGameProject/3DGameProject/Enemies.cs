@@ -58,9 +58,15 @@ namespace _3DGameProject
             enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.1f, -10.5f));
         }
 
-        public Enemy[] getEnemiesArray(){
-            return enemies;
-        }   
+        /// <summary>
+        /// Allows the client to use a foreach construct to iterate through the enemies
+        /// </summary>
+        /// <returns>IEnumerator for the enemy object</returns>
+        public IEnumerator<Enemy> GetEnumerator()
+        {
+            foreach (Enemy e in enemies)
+                yield return e;
+        }
 
         /// <summary>
         /// Draw the enemies to the screen.
