@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -43,6 +44,7 @@ namespace _3DGameProject
         /// <summary>Ratio to scale bounding sphere for better fit</summary>
         public const float PlayerBoundingSphereRatio = 0.53f;
 
+        private PlayerSoundEffects soundEffects; // sound effects for the player class
         private Effect effect;  // effect to be used when drawing the car model
 
         private float velocity; // player velocity
@@ -76,6 +78,9 @@ namespace _3DGameProject
             // Create displays
             sped = new Spedometer();
             fuelGauge = new FuelGauge();
+
+            // Get sound effects
+            soundEffects = new PlayerSoundEffects();
         }
 
         /// <summary>
@@ -104,6 +109,9 @@ namespace _3DGameProject
             // Load displays for gauges
             sped.LoadContent(ref device, content);
             fuelGauge.LoadContent(ref device, content);
+
+            // Load sound effects
+            soundEffects.LoadContent(content);
 
             // Setup bounding sphere for player
             BoundingSphere = CalculateBoundingSphere();
@@ -140,6 +148,10 @@ namespace _3DGameProject
                 // undo the movement and set velocity to zero since we ran into building
                 // can cause "bounceback effect"
                 UpdatePositionAndBoundingSphere(Position - movement);
+
+                // Play crash sound effect (major or minor crash effect based on player velocity)
+                soundEffects.PlayCrash(velocity);
+
                 velocity = 0.0f;
             }
 
@@ -175,17 +187,35 @@ namespace _3DGameProject
         {
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                if (velocity < 0) // the player was reversing, now braking
+                if (velocity < 0)
+                {
+                    // the player was reversing, now braking
                     velocity += -Brake;
-                else              // the player is accelerating
+
+                    // play braking sound effect based on the player's velocity
+                    soundEffects.PlayBrake(velocity);
+                }
+                else
+                {
+                    // the player is accelerating
                     velocity += Accel;
+                }
             }
             else if (keyboardState.IsKeyDown(Keys.S))
             {
-                if (velocity > 0) // the player was moving forward, now braking
+                if (velocity > 0)
+                {
+                    // the player was moving forward, now braking
                     velocity += Brake;
-                else // the player is reversing
+
+                    // play braking sound effect based on the player's velocity
+                    soundEffects.PlayBrake(velocity);
+                }
+                else
+                {
+                    // the player is reversing
                     velocity += Rev;
+                }
             }
 
             // Add friction into the mix
@@ -199,6 +229,9 @@ namespace _3DGameProject
                 velocity = MaxVelocity;
             else if (velocity < -MaxVelocity)
                 velocity = -MaxVelocity;
+
+            // Play the steady drone of the engine (the volume is proportional to the velocity of the car)
+            PlayEngineNoise();
         }
 
         /// <summary>
@@ -271,6 +304,14 @@ namespace _3DGameProject
                 }
                 mesh.Draw();
             }
+        }
+
+        /// <summary>
+        /// Play the engine noise for the player's car.
+        /// </summary>
+        public void PlayEngineNoise()
+        {
+            soundEffects.PlayEngine(velocity);
         }
 
         /// <summary>
@@ -352,6 +393,9 @@ namespace _3DGameProject
             Vector3 movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
             movement *= velocity;
             UpdatePositionAndBoundingSphere(Position + movement);
+
+            // play the sound of the engine
+            soundEffects.PlayEngine(Player.MaxVelocity);
         }
     }
 }

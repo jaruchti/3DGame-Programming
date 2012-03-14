@@ -157,6 +157,7 @@ namespace _3DGameProject
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 readyScreen.Update((float) gameTime.ElapsedGameTime.TotalSeconds, ref gameState);
+                player.PlayEngineNoise();
             }
             else if (gameState == GameConstants.GameState.Playing)
             {
