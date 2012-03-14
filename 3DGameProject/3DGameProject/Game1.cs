@@ -112,8 +112,6 @@ namespace _3DGameProject
 
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
-
-            enemies.LoadFloorPlan(map.FloorPlan);
         }
 
         /// <summary>
