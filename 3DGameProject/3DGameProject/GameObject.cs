@@ -106,8 +106,7 @@ namespace _3DGameProject
         internal void DrawBoundingSphere(Camera gameCamera, GameObject boundingSphereModel)
         {
             Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
-            Matrix translateMatrix =
-            Matrix.CreateTranslation(BoundingSphere.Center);
+            Matrix translateMatrix = Matrix.CreateTranslation(BoundingSphere.Center); // translate drawing to correct position
             Matrix worldMatrix = scaleMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in boundingSphereModel.Model.Meshes)
