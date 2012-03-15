@@ -181,6 +181,7 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.End)
             {
+                enemies.Update(player, map.FloorPlan, ref gameState);
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Ready;

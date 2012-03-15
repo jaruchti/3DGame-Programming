@@ -410,6 +410,36 @@ namespace _3DGameProject
         }
 
         /// <summary>
+        /// Moves the enemy towards the player when the game is over
+        /// </summary>
+        /// <param name="player">For the position of the player</param>
+        /// <remarks>
+        /// This method is called when the game is over.  It is known that this
+        /// enemy and the player are in the same square.  Thus, no checks are
+        /// made to ensure the location is valid.
+        /// </remarks>
+        public void MoveTowardPlayerAtEnd(Player player)
+        {
+            Vector3 movement;
+            float distancePlayerToEnemy = (float)Math.Sqrt(
+                            (Position.X - player.Position.X) * (Position.X - player.Position.X) +
+                            (Position.Z - player.Position.Z) * (Position.Z - player.Position.Z));
+
+            if (distancePlayerToEnemy > speed)
+            {
+                // we are atleast one timestep away from the player, move toward the player
+
+                // find direction from this enemy's position to the player
+                ForwardDirection = (float) Math.Atan2(Position.X - player.Position.X, -player.Position.Z + Position.Z);
+
+                // Make the movement
+                movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
+                movement *= speed;
+                UpdatePositionAndBoundingSphere(Position + movement);
+            }
+        }
+
+        /// <summary>
         /// Reset the enemy to the state before play began
         /// </summary>
         public void Reset()
@@ -461,7 +491,7 @@ namespace _3DGameProject
         public float AngularPosition { get; set; }
         public const float IntroVelocity = 2.0f / 60.0f;
 
-        public void circle(Vector3 center, float radius)
+        public void Circle(Vector3 center, float radius)
         {
             // Change the angular position of the drone based on the elapsed time since last update
             // and the angular velocity
