@@ -237,22 +237,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Songs\GameOverSong.wav">
-      <Name>GameOverSong</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Songs\TitleSong.wav">
-      <Name>TitleSong</Name>
+    <Compile Include="Audio\LockingBeep.wav">
+      <Name>LockingBeep</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\LockingBeep.wav">
-      <Name>LockingBeep</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+    <Compile Include="Songs\BackgroundSong.mp3">
+      <Name>BackgroundSong</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Songs\GameOverSong.mp3">
+      <Name>GameOverSong</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

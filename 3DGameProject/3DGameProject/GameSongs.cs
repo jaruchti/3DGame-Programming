@@ -10,10 +10,10 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace _3DGameProject
 {
@@ -23,11 +23,8 @@ namespace _3DGameProject
     /// <remarks>This is a singleton in the game</remarks>
     public class GameSongs
     {
-        private SoundEffect titleSongEffect;
-        private SoundEffect gameOverSongEffect;
-
-        private SoundEffectInstance titleSong;
-        private SoundEffectInstance gameOverSong;
+        private Song backgroundSong;
+        private Song gameOverSong;
 
         /// <summary>
         /// Allows the client to load the game songs
@@ -35,49 +32,84 @@ namespace _3DGameProject
         /// <param name="content">Content Pipeline (for SoundEffects)</param>
         public void LoadContent(ContentManager content)
         {
-            titleSongEffect = content.Load<SoundEffect>("Songs/TitleSong");
-            gameOverSongEffect = content.Load<SoundEffect>("Songs/GameOverSong");
-
-            titleSong = titleSongEffect.CreateInstance();
-            gameOverSong = gameOverSongEffect.CreateInstance();
+            MediaPlayer.Volume = 0.75f;
+            
+            backgroundSong = content.Load<Song>("Songs/BackgroundSong");
+            gameOverSong = content.Load<Song>("Songs/GameOverSong");
         }
 
         /// <summary>
-        /// Allows the client to play the title song
+        /// Allows the client to play the appropriate background depending on the state of the game
         /// </summary>
-        /// <remarks>Wraps the titleSong variable to manage access</remarks>
-        public void PlayTitleSong()
+        /// <param name="gameState">State of the game</param>
+        public void PlayBackground(GameConstants.GameState gameState)
         {
-            if (!(titleSong.State == SoundState.Playing))
-                titleSong.Play();
+            if (gameState == GameConstants.GameState.End)
+            {
+                // Play the ending song
+                if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == backgroundSong)
+                {
+                    // Currently the main song is playing, stop it and play the game over song
+                    MediaPlayer.Stop();
+                    MediaPlayer.Volume = 1.0f;
+                    MediaPlayer.Play(gameOverSong);
+                }
+            }
+            else
+            {
+                // Play the background song
+
+                if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == gameOverSong)
+                {
+                    // currently the game over song is playing, stop it and play the background song
+                    MediaPlayer.Stop();
+                }
+
+                if (MediaPlayer.State != MediaState.Playing)
+                {
+                    // Play the background song if it is not playing
+                    MediaPlayer.Volume = 0.75f;
+                    MediaPlayer.Play(backgroundSong);
+                }
+            }
         }
 
-        /// <summary>
-        /// Allows the client to play the song when the player is captured
-        /// </summary>
-        /// <remarks>Wraps the gameOverSong variable to manage access</remarks>
-        public void PlayGameOverSong()
-        {
-            if (!(gameOverSong.State == SoundState.Playing))
-                gameOverSong.Play();
-        }
+        ///// <summary>
+        ///// Allows the client to play the theme song
+        ///// </summary>
+        ///// <remarks>Wraps the titleSong variable to manage access</remarks>
+        //private void PlayThemeSong()
+        //{
+        //    if (!(titleSong.State == SoundState.Playing))
+        //        titleSong.Play();
+        //}
 
-        /// <summary>
-        /// Allows the client to stop the title song
-        /// </summary>
-        /// <remarks>Wraps the titleSong variable to manage access</remarks>
-        public void StopTitleSong()
-        {
-            titleSong.Stop();
-        }
+        ///// <summary>
+        ///// Allows the client to play the song when the player is captured
+        ///// </summary>
+        ///// <remarks>Wraps the gameOverSong variable to manage access</remarks>
+        //private void PlayGameOverSong()
+        //{
+        //    if (!(gameOverSong.State == SoundState.Playing))
+        //        gameOverSong.Play();
+        //}
 
-        /// <summary>
-        /// Allows the client to stop the game over song
-        /// </summary>
-        /// <remarks>Wraps the gameOverSong variable to manage access</remarks>
-        public void StopGameOverSong()
-        {
-            gameOverSong.Stop();
-        }
+        ///// <summary>
+        ///// Allows the client to stop the title song
+        ///// </summary>
+        ///// <remarks>Wraps the titleSong variable to manage access</remarks>
+        //public void StopTitleSong()
+        //{
+        //    titleSong.Stop();
+        //}
+
+        ///// <summary>
+        ///// Allows the client to stop the game over song
+        ///// </summary>
+        ///// <remarks>Wraps the gameOverSong variable to manage access</remarks>
+        //public void StopGameOverSong()
+        //{
+        //    gameOverSong.Stop();
+        //}
     }
 }

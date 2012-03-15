@@ -433,7 +433,7 @@ namespace _3DGameProject
             UpdatePositionAndBoundingSphere(Position + movement);
 
             // play the sound of the engine
-            soundEffects.PlayEngine(Player.MaxVelocity);
+            soundEffects.PlayEngine(0);
         }
     }
 }

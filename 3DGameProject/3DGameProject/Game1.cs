@@ -140,13 +140,10 @@ namespace _3DGameProject
 
             if (gameState == GameConstants.GameState.Title)
             {
-                gameSongs.PlayTitleSong();
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Intro;
-
-                    gameSongs.StopTitleSong();
                     enemies.SetUpIntroPositions(player.Position);
                 }
             }
@@ -184,13 +181,9 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.End)
             {
-                gameSongs.PlayGameOverSong();
-
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Ready;
-
-                    gameSongs.StopGameOverSong();
                     Reset();
                 }
             }
@@ -236,6 +229,8 @@ namespace _3DGameProject
                         readyScreen.Draw();
                 }
             }
+
+            gameSongs.PlayBackground(gameState);    // play the appropriate background music
 
             base.Draw(gameTime);
         }
