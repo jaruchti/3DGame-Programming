@@ -54,6 +54,7 @@ namespace _3DGameProject
         /// <summary>
         /// Draw the minimap to the screen
         /// </summary>
+        /// <param name="gameTime">Gives information on elapsed time for flashing enemies</param>
         /// <param name="player">The position of player is needed for minimap</param>
         /// <param name="enemies">The position of enemies is needed for minimap</param>
         /// <param name="map">The position of the fuel barrels and building is needed for minimap</param>

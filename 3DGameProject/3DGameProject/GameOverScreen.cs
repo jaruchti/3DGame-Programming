@@ -49,10 +49,6 @@ namespace _3DGameProject
         {
             base.LoadContent(ref device, content);
 
-            spriteBatch = new SpriteBatch(device);
-            largeFont = content.Load<SpriteFont>("Fonts/LargeFont");
-            mediumFont = content.Load<SpriteFont>("Fonts/MediumFont");
-
             textSize = largeFont.MeasureString(strGameOver);
 
             // position gameOver slightly below center of screen

@@ -112,7 +112,7 @@ namespace _3DGameProject
             map.LoadContent(ref device, Content);
             miniMap.LoadContent(ref device, Content);
             skybox.LoadContent(Content);
-            enemies.LoadContent(Content);
+            enemies.LoadContent(ref device, Content);
 
             timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
@@ -228,6 +228,7 @@ namespace _3DGameProject
                     miniMap.Draw(gameTime, player, enemies, map);
                     timer.Draw();
                     highScore.Draw();
+                    enemies.WarningScreen.Draw(gameTime);
 
                     if (gameState == GameConstants.GameState.End)
                         gameOverScreen.Draw();
