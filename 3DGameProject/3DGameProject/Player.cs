@@ -277,7 +277,8 @@ namespace _3DGameProject
         /// <summary>
         /// Update the player's score based on the amount of movement the player has made
         /// </summary>
-        /// <param name="movement"></param>
+        /// <param name="oldPosition">Player's position before last update</param>
+        /// <param name="newPosition">Player's new position after last update</param>
         private void UpdateScore(Vector3 oldPosition, Vector3 newPosition)
         {
             double xMovement = oldPosition.X - newPosition.X;

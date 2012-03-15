@@ -172,6 +172,7 @@ namespace _3DGameProject
             else if (gameState == GameConstants.GameState.Playing)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
+                enemies.Update(player, map.FloorPlan, ref gameState);
                 player.Update(Keyboard.GetState(), gameTime, ref map, ref gameState);
                 scoreDisplay.Update(player.Score);
 

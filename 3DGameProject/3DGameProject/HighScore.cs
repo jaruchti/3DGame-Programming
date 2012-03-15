@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -22,9 +21,6 @@ namespace _3DGameProject
     /// </summary>
     public class HighScore : ScoreDisplay
     {
-        TextReader tr;
-        TextWriter tw;
-
         /// <summary>
         /// Create a new HighScore display.
         /// </summary>
@@ -44,7 +40,7 @@ namespace _3DGameProject
             SetUpDigitContants();
             SetUpDigitPositions();
 
-            Score = ReadHighScore();
+            Score = 50.0f;
         }
 
         /// <summary>
@@ -56,33 +52,7 @@ namespace _3DGameProject
             if (newHighScore > Score)
             {
                 Score = newHighScore;
-                WriteHighScore();
             }
-        }
-
-        /// <summary>
-        /// Reads in the current highscore from the highscores file
-        /// </summary>
-        /// <returns>Current best highscore</returns>
-        private float ReadHighScore()
-        {
-            float r = 0.0f;
-
-            tr = new StreamReader("Scores/scores.txt");
-            r = (float) Convert.ToDouble(tr.ReadLine());
-            tr.Close();
-
-            return r;
-        }
-
-        /// <summary>
-        /// Write new highscore to highscores file.
-        /// </summary>
-        private void WriteHighScore()
-        {
-            tw = new StreamWriter("Scores/scores.txt");
-            tw.WriteLine(Score);
-            tr.Close();
         }
     }
 }

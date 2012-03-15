@@ -107,6 +107,14 @@ namespace _3DGameProject
                 spriteBatch.Draw(whiteRect, rect, Color.Red);
             }
 
+            //draw enemies next positions (for debugging)
+            //foreach (Enemy e in enemies)
+            //{
+            //    rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)e.nextPosition.Z;
+            //    rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)e.nextPosition.X;
+            //    spriteBatch.Draw(whiteRect, rect, Color.Purple);
+            //}
+
             spriteBatch.End();
         }
     }
