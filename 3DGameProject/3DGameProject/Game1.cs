@@ -225,7 +225,7 @@ namespace _3DGameProject
                 else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.Ready ||
                     gameState == GameConstants.GameState.End)
                 {
-                    miniMap.Draw(player, enemies, map);
+                    miniMap.Draw(gameTime, player, enemies, map);
                     timer.Draw();
                     highScore.Draw();
 

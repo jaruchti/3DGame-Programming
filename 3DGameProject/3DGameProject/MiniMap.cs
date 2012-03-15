@@ -57,7 +57,7 @@ namespace _3DGameProject
         /// <param name="player">The position of player is needed for minimap</param>
         /// <param name="enemies">The position of enemies is needed for minimap</param>
         /// <param name="map">The position of the fuel barrels and building is needed for minimap</param>
-        public void Draw(Player player, Enemies enemies, Map map)
+        public void Draw(GameTime gameTime, Player player, Enemies enemies, Map map)
         {
             // this rectangle describes the position on screen where an object will be drawn
             Rectangle rect = new Rectangle();   
@@ -102,9 +102,22 @@ namespace _3DGameProject
             // draw enemies
             foreach (Enemy e in enemies)
             {
-                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)e.Position.Z;
-                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)e.Position.X;
-                spriteBatch.Draw(whiteRect, rect, Color.Red);
+                if (e.Chasing == true)
+                {
+                    // flash twice per second if chasing
+                    if (gameTime.TotalGameTime.TotalMilliseconds % 500 < 250)
+                    {
+                        rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)e.Position.Z;
+                        rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)e.Position.X;
+                        spriteBatch.Draw(whiteRect, rect, Color.Red);
+                    }
+                }
+                else
+                {
+                    rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)e.Position.Z;
+                    rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)e.Position.X;
+                    spriteBatch.Draw(whiteRect, rect, Color.Red);
+                }
             }
 
             //draw enemies next positions (for debugging)
