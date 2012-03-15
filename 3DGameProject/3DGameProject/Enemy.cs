@@ -21,8 +21,8 @@ namespace _3DGameProject
     /// </summary>
     public class Enemy : GameObject
     {
-        /// <summary>Cruising velocity of the enemy</summary>
-        public const float EnemyVelocity = 0.75f / 60.0f;
+        /// <summary>Cruising speed of the enemy</summary>
+        public const float EnemySpeed = 0.75f / 60.0f;
         /// <summary>Ratio to scale bounding sphere for better fit</summary>
         public const float EnemyBoundingSphereRatio = 10.0f;
 
@@ -31,7 +31,7 @@ namespace _3DGameProject
         /// </summary>
         public float ForwardDirection { get; set; }
 
-        private float velocity; // current velocity of the enemy craft (either EnemyVelocity or 0)        
+        private float speed; // current speed of the enemy craft (either EnemyVelocity or 0)        
         Rectangle positionOfLastMove = new Rectangle(0, 0, 1, 1); // rectangle where the enemy made the last move decision
         bool chasing = false;   // status as to whether the enemy is chasing the player
         private Rectangle nextPosition = new Rectangle(0, 0, 1, 1); // rectangle the enemy decided to head towards on the last move decision
@@ -59,7 +59,7 @@ namespace _3DGameProject
         /// </summary>
         public Enemy() : base()
         {
-            velocity = 0.0f;
+            speed = 0.0f;
             ForwardDirection = 45.0f;
         }
 
@@ -133,7 +133,7 @@ namespace _3DGameProject
                 {
                     // the enemy is surrounded and cannot make a move
                     // set velocity to zero and stay put for this move
-                    velocity = 0.0f;
+                    speed = 0.0f;
                 }
                 else
                 {
@@ -146,13 +146,13 @@ namespace _3DGameProject
                         (int)(Position.X - Math.Sin(ForwardDirection)),
                         (int)(Position.Z - Math.Cos(ForwardDirection)), 1, 1);
 
-                    velocity = EnemyVelocity;
+                    speed = EnemySpeed;
                 }
             }
 
             // Make the movement
             movement = Vector3.Transform(new Vector3(0.0f, 0.0f, -1.0f), Matrix.CreateRotationY(ForwardDirection));
-            movement *= velocity;
+            movement *= speed;
             UpdatePositionAndBoundingSphere(Position + movement);
         }
 
@@ -300,25 +300,25 @@ namespace _3DGameProject
             // check if the gridspace to the right is open
             // the second part of the condition makes sure that we are not moving backwards
             if (floorPlan[(int)Position.X + 1, (int)-Position.Z] == 0 && 
-                (Math.Abs(ForwardDirection - MathHelper.PiOver2) > 0.01f || velocity == 0.0f))
+                (Math.Abs(ForwardDirection - MathHelper.PiOver2) > 0.01f || speed == 0.0f))
                 canMoveInDirection[0] = true;
 
             // check if the gridspace to the left is open
             // the second part of the condition makes sure that we are not moving backwards
             if (floorPlan[(int)Position.X - 1, (int)-Position.Z] == 0 && 
-                (Math.Abs(ForwardDirection - 3 * MathHelper.PiOver2) > 0.01f || velocity == 0.0f))
+                (Math.Abs(ForwardDirection - 3 * MathHelper.PiOver2) > 0.01f || speed == 0.0f))
                 canMoveInDirection[1] = true;
 
             // check if the gridspace above is open
             // the second part of the condition makes sure that we are not moving backwards
             if (floorPlan[(int)Position.X, (int)-Position.Z + 1] == 0 && 
-                (Math.Abs(ForwardDirection - MathHelper.Pi) > 0.01f || velocity == 0.0f))
+                (Math.Abs(ForwardDirection - MathHelper.Pi) > 0.01f || speed == 0.0f))
                 canMoveInDirection[2] = true;
 
             // check if the gridspace below is open
             // the second part of the condition makes sure that we are not moving backwards
             if (floorPlan[(int)Position.X, (int)-Position.Z - 1] == 0 && 
-                (Math.Abs(ForwardDirection - 0.0f) > 0.01f || velocity == 0.0f))
+                (Math.Abs(ForwardDirection - 0.0f) > 0.01f || speed == 0.0f))
                 canMoveInDirection[3] = true;
 
             // update whether or not we are surrounded
@@ -398,6 +398,18 @@ namespace _3DGameProject
                         floorPlan[(int)e.nextPosition.X, (int)-e.nextPosition.Y] = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Reset the enemy to the state before play began
+        /// </summary>
+        public void Reset()
+        {
+            positionOfLastMove = new Rectangle(0, 0, 1, 1); 
+            chasing = false; 
+            nextPosition = new Rectangle(0, 0, 1, 1);
+            speed = 0.0f;
+            ForwardDirection = 45.0f;
         }
 
         /// <summary>

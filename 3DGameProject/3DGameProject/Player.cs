@@ -351,6 +351,9 @@ namespace _3DGameProject
             velocity = 0.0f;
             score = 0.0f;
             fuel = MaxFuel;
+
+            fuelGauge.Update(fuel);
+            sped.Update(velocity);
         }
 
 

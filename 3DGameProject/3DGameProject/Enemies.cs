@@ -102,6 +102,8 @@ namespace _3DGameProject
         /// </summary>
         public void Reset()
         {
+            foreach (Enemy e in enemies)
+                e.Reset();
             SetUpEnemyPositions();
         }
 
