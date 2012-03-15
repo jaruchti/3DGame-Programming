@@ -107,6 +107,15 @@ namespace _3DGameProject
         }
 
         /// <summary>
+        /// Stops all of the braking sounds for the player
+        /// </summary>
+        public void StopBrakingSounds()
+        {
+            brakeMajor.Stop();
+            brakeMinor.Stop();
+        }
+
+        /// <summary>
         /// Play the sound of the player's engine
         /// </summary>
         /// <param name="velocity">Player's velocity</param>

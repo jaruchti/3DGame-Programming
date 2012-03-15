@@ -195,17 +195,20 @@ namespace _3DGameProject
         /// Update the velocity of the player based on user input
         /// </summary>
         /// <param name="keyboardState">For keyboard input</param>
+        /// <remarks>
+        /// As a side effect, braking sounds are played if the player is slowing down
+        /// </remarks>
         private void UpdateVelocity(KeyboardState keyboardState)
         {
+            bool braking = false; // is the player braking?
+
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 if (velocity < 0)
                 {
                     // the player was reversing, now braking
                     velocity += -Brake;
-
-                    // play braking sound effect based on the player's velocity
-                    soundEffects.PlayBrake(velocity);
+                    braking = true;
                 }
                 else
                 {
@@ -219,9 +222,7 @@ namespace _3DGameProject
                 {
                     // the player was moving forward, now braking
                     velocity += Brake;
-
-                    // play braking sound effect based on the player's velocity
-                    soundEffects.PlayBrake(velocity);
+                    braking = true;
                 }
                 else
                 {
@@ -229,6 +230,14 @@ namespace _3DGameProject
                     velocity += Rev;
                 }
             }
+
+            if (braking == true)
+            {
+                // play braking sound effect based on the player's velocity
+                soundEffects.PlayBrake(velocity);
+            }
+            else
+                soundEffects.StopBrakingSounds();
 
             // Add friction into the mix
             if (velocity < 0)

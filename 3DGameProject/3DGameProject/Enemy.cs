@@ -32,9 +32,10 @@ namespace _3DGameProject
         public float ForwardDirection { get; set; }
 
         private float speed; // current speed of the enemy craft (either EnemyVelocity or 0)        
-        Rectangle positionOfLastMove = new Rectangle(0, 0, 1, 1); // rectangle where the enemy made the last move decision
-        bool chasing = false;   // status as to whether the enemy is chasing the player
+        private Rectangle positionOfLastMove = new Rectangle(0, 0, 1, 1); // rectangle where the enemy made the last move decision
+        private bool chasing = false;   // status as to whether the enemy is chasing the player
         private Rectangle nextPosition = new Rectangle(0, 0, 1, 1); // rectangle the enemy decided to head towards on the last move decision
+        private EnemySoundEffects soundEffects; // sound effects for the enemy
 
         /// <summary>
         /// Allows the client to client to query the status of the enemy 
@@ -61,6 +62,8 @@ namespace _3DGameProject
         {
             speed = 0.0f;
             ForwardDirection = 45.0f;
+
+            soundEffects = new EnemySoundEffects();
         }
 
         /// <summary>
@@ -71,6 +74,9 @@ namespace _3DGameProject
         {
             // Load model
             Model = content.Load<Model>("Models/sphere1uR");
+
+            // Load sound effects
+            soundEffects.LoadContent(content);
 
             // Setup bounding sphere (scale for best fit)
             BoundingSphere = CalculateBoundingSphere();
@@ -118,7 +124,10 @@ namespace _3DGameProject
                     SetDirectionTowardPlayer(player);
 
                     // we can make a movement since nothing is obstructing between player and this enemy
-                    canMakeMovement = true; 
+                    canMakeMovement = true;
+
+                    // play sound effect so player knows we are chasing
+                    soundEffects.PlayLockingBeep();
                 }
                 else
                 {
@@ -410,6 +419,8 @@ namespace _3DGameProject
             nextPosition = new Rectangle(0, 0, 1, 1);
             speed = 0.0f;
             ForwardDirection = 45.0f;
+
+            soundEffects.StopAllSounds();
         }
 
         /// <summary>
