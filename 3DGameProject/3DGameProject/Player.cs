@@ -60,12 +60,12 @@ namespace _3DGameProject
         /// <remarks>This is the direction the car is moving</remarks>
         public float ForwardDirection { get; set; }
 
-        /// <summary>
-        /// Property to allow the client to get the player's score
-        /// </summary>
-        public float Score {
-            get { return score; }
-        }
+        ///// <summary>
+        ///// Property to allow the client to get the player's score
+        ///// </summary>
+        //public float Score {
+        //    get { return score; }
+        //}
 
         Texture2D[] textures;   // textures for the car model
 
@@ -81,7 +81,7 @@ namespace _3DGameProject
             // Setup player fields
             ForwardDirection = PlayerStartDirection;
             velocity = 0.0f;
-            score = 0.0f;
+            //score = 0.0f;
             fuel = MaxFuel;
 
             // Create displays
@@ -139,7 +139,6 @@ namespace _3DGameProject
         /// <remarks>If the player runs out of fuel, the gamestate will be changed to end</remarks>
         public void Update(KeyboardState keyboardState, GameTime gameTime, ref Map map, ref GameConstants.GameState gameState)
         {
-            Vector3 oldPosition = Position; // the position we were before the update
             Vector3 movement;
 
             float turnAmount = DetermineTurnAmount(keyboardState); // determine if the user wants to turn
@@ -157,7 +156,7 @@ namespace _3DGameProject
             {
                 // undo the movement and set velocity to zero since we ran into building
                 // can cause "bounceback effect"
-                UpdatePositionAndBoundingSphere(oldPosition);
+                UpdatePositionAndBoundingSphere(Position - movement);
 
                 // Play crash sound effect (major or minor crash effect based on player velocity)
                 soundEffects.PlayCrash(velocity);
@@ -169,8 +168,8 @@ namespace _3DGameProject
             sped.Update(velocity);
             UpdateFuel(gameTime, collision, ref gameState);
 
-            // Update the player's score based on the movement that has been made
-            UpdateScore(oldPosition, Position);
+            //// Update the player's score based on the movement that has been made
+            //UpdateScore(oldPosition, Position);
         }
 
         /// <summary>
@@ -274,18 +273,18 @@ namespace _3DGameProject
             fuelGauge.Update(fuel);
         }
 
-        /// <summary>
-        /// Update the player's score based on the amount of movement the player has made
-        /// </summary>
-        /// <param name="oldPosition">Player's position before last update</param>
-        /// <param name="newPosition">Player's new position after last update</param>
-        private void UpdateScore(Vector3 oldPosition, Vector3 newPosition)
-        {
-            double xMovement = oldPosition.X - newPosition.X;
-            double zMovement = oldPosition.Z - newPosition.Z;
+        ///// <summary>
+        ///// Update the player's score based on the amount of movement the player has made
+        ///// </summary>
+        ///// <param name="oldPosition">Player's position before last update</param>
+        ///// <param name="newPosition">Player's new position after last update</param>
+        //private void UpdateScore(Vector3 oldPosition, Vector3 newPosition)
+        //{
+        //    double xMovement = oldPosition.X - newPosition.X;
+        //    double zMovement = oldPosition.Z - newPosition.Z;
 
-            score += (float) Math.Sqrt(xMovement * xMovement + zMovement * zMovement);
-        }
+        //    score += (float) Math.Sqrt(xMovement * xMovement + zMovement * zMovement);
+        //}
 
         /// <summary>
         /// Draw the player model and the player's gauges (if applicable)

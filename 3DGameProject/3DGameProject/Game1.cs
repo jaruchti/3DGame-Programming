@@ -42,7 +42,7 @@ namespace _3DGameProject
         MiniMap miniMap;
         Skybox skybox;
 
-        Score scoreDisplay;
+        Timer timer;
         HighScore highScore;
 
         GameSongs gameSongs;
@@ -87,7 +87,7 @@ namespace _3DGameProject
             miniMap = new MiniMap();
             skybox = new Skybox();
 
-            scoreDisplay = new Score();
+            timer = new Timer();
             highScore = new HighScore();
 
             gameSongs = new GameSongs();
@@ -114,7 +114,7 @@ namespace _3DGameProject
             skybox.LoadContent(Content);
             enemies.LoadContent(Content);
 
-            scoreDisplay.LoadContent(ref device, Content);
+            timer.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
 
             gameSongs.LoadContent(Content);
@@ -174,12 +174,12 @@ namespace _3DGameProject
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.Update(player, map.FloorPlan, ref gameState);
                 player.Update(Keyboard.GetState(), gameTime, ref map, ref gameState);
-                scoreDisplay.Update(player.Score);
+                timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
                 if (gameState == GameConstants.GameState.End)
                 {
-                    highScore.Update(scoreDisplay.Score);
-                    gameOverScreen.Update(scoreDisplay.Score);
+                    highScore.Update(timer.Score);
+                    gameOverScreen.Update(timer.Score);
                 }
             }
             else if (gameState == GameConstants.GameState.End)
@@ -226,7 +226,7 @@ namespace _3DGameProject
                     gameState == GameConstants.GameState.End)
                 {
                     miniMap.Draw(player, enemies, map);
-                    scoreDisplay.Draw();
+                    timer.Draw();
                     highScore.Draw();
 
                     if (gameState == GameConstants.GameState.End)
@@ -241,7 +241,7 @@ namespace _3DGameProject
 
         private void Reset()
         {
-            scoreDisplay.Reset();
+            timer.Reset();
             player.Reset();
             enemies.Reset();
         }
