@@ -9,6 +9,9 @@ using System;
 namespace _3DGameProject
 {
 #if WINDOWS || XBOX
+    /// <summary>
+    /// The main entry point for the application.
+    /// </summary>
     public static class Program
     {
         /// <summary>

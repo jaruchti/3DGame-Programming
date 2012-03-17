@@ -45,6 +45,11 @@ namespace _3DGameProject
         /// </summary>
         public Fuel[] FuelBarrels { get { return fuelBarrels; } }
       
+        /// <summary>
+        /// Load the content necessary to create the map
+        /// </summary>
+        /// <param name="device">Graphics card</param>
+        /// <param name="content">Content pipeline</param>
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             effect = content.Load<Effect>("Effects/effects");

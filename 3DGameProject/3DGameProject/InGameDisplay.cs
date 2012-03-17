@@ -31,23 +31,35 @@ namespace _3DGameProject
         /// <summary>height of the digits in the ingame texture</summary>
         public const int TextureDigitHeight = 129;
 
-        protected int DisplayNumDigits;     // number of digits to display
-        protected int DisplayDigitXPos;     // x position of left side of the first digit to display
-        protected int DisplayDigitYPos;     // y position of the top of the digits in the display
-        protected float DisplayDigitScale;  // scale to use in displaying digits
-        protected int DisplayDigitWidth;    // width between left and right side of a single digit in display
+        /// <summary>Number of digits to display</summary>
+        protected int DisplayNumDigits;
+        /// <summary>x position of left side of the first digit to display</summary>
+        protected int DisplayDigitXPos;
+        /// <summary>y position of the top of the digits in the display</summary>
+        protected int DisplayDigitYPos;
+        /// <summary>Scale to use in displaying digits</summary>
+        protected float DisplayDigitScale;
+        /// <summary>Width between left and right side of a single digit in display</summary>
+        protected int DisplayDigitWidth;
 
-        protected float digits;             // digits to display
+        /// <summary>Digits to display</summary>
+        protected float digits;
 
         private SpriteBatch spriteBatch;    // used to draw the digits
         private Texture2D ingameTextures;   // holds the texture with the images to display
 
-        protected Rectangle textureRect;    // holds the section of ingameTexture to display 
-        protected Rectangle displayDrawRect;// holds the position in the display to draw textureRect
+        /// <summary>Holds the section of ingameTexture to display </summary>
+        protected Rectangle textureRect;
+        /// <summary>Holds the position in the display to draw textureRect</summary>
+        protected Rectangle displayDrawRect;
 
-        protected Vector2[] digitPositions; // positions to draw the numbers in the digits variable
-                                            // this field is calculated from the information provided
-                                            // by the above variables
+        /// <summary>
+        /// Positions to draw the individual digits in the digits variable
+        /// </summary>
+        /// <remarks>
+        /// This field is calculated from the information provided by the above variables
+        /// </remarks>
+        protected Vector2[] digitPositions; 
 
         /// <summary>
         /// Load the content required for an InGameDisplay (namely the ingame texture)

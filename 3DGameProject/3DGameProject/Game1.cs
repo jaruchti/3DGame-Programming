@@ -47,6 +47,10 @@ namespace _3DGameProject
 
         GameSongs gameSongs;
 
+        /// <summary>
+        /// Constructor for the game object
+        /// </summary>
+        /// <remarks>Used by Program.cs</remarks>
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);

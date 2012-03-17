@@ -22,10 +22,14 @@ namespace _3DGameProject
     /// </summary>
     public abstract class GameTextScreen
     {
-        protected SpriteBatch spriteBatch;  // used to draw the text
-        protected SpriteFont largeFont;     // large size font
-        protected SpriteFont mediumFont;    // medium size font
-        protected Vector2 textSize;         // used to measure sizes of text
+        /// <summary>Used to draw the text</summary>
+        protected SpriteBatch spriteBatch;
+        /// <summary>Large size font</summary>
+        protected SpriteFont largeFont;
+        /// <summary>Medium size font</summary>
+        protected SpriteFont mediumFont;
+        /// <summary>Used to measure sizes of text</summary>
+        protected Vector2 textSize; 
 
         /// <summary>
         /// Load the content required for a GameTextScreen

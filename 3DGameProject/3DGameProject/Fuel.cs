@@ -21,6 +21,9 @@ namespace _3DGameProject
     /// </summary>
     public class Fuel : GameObject
     {
+        /// <summary>
+        /// Construct a new fuel object
+        /// </summary>
         public Fuel() : base()
         {
             // nothing to do here

@@ -48,7 +48,7 @@ namespace _3DGameProject
         /// <summary>
         /// Update the Timer with the elapsed time since the last update.
         /// </summary>
-        /// <param name="newScore"></param>
+        /// <param name="elapsedSec">Total seconds elapsed since last update</param>
         public override void Update(float elapsedSec)
         {
             Score += elapsedSec;

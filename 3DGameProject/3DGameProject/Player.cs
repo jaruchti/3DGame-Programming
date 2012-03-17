@@ -49,7 +49,7 @@ namespace _3DGameProject
 
         private float velocity; // player velocity
         private float fuel;     // player fuel remaining
-        private float score;    // player score
+        //private float score;    // player score
 
         private Spedometer sped;        // to display speed to screen
         private FuelGauge fuelGauge;    // to display fuel usage to screening
@@ -358,7 +358,6 @@ namespace _3DGameProject
 
             ForwardDirection = PlayerStartDirection;
             velocity = 0.0f;
-            score = 0.0f;
             fuel = MaxFuel;
 
             fuelGauge.Update(fuel);
@@ -389,6 +388,12 @@ namespace _3DGameProject
                                                 MathHelper.TwoPi,
                                                 MathHelper.PiOver2 };
 
+
+        /// <summary>Velocity during intro (greater than game)</summary>
+        public const float IntroVelocity = 2.0f / 60.0f;
+        /// <summary>Speed of turning during intro (greater than game)</summary>
+        public const float IntroTurnAmount = 2.90f;
+
         /// <summary>
         /// Moves the player around the map during the introduction without user input.
         /// </summary>
@@ -397,10 +402,6 @@ namespace _3DGameProject
         /// If the player makes a complete revolution of the map, the gameState transitions
         /// to ready.
         /// </remarks>
-
-        public const float IntroVelocity = 2.0f / 60.0f; // velocity during intro (greater than game)
-        public const float IntroTurnAmount = 2.90f;      // used to determine speed of turning during into (greater than game)
-
         public void AutoPilot(ref GameConstants.GameState gameState)
         {
             float turnAmount = 0.0f;
