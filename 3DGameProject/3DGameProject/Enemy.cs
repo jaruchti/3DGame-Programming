@@ -36,14 +36,25 @@ namespace _3DGameProject
         private bool chasing = false;   // status as to whether the enemy is chasing the player
         private Rectangle nextPosition = new Rectangle(0, 0, 1, 1); // rectangle the enemy decided to head towards on the last move decision
         private EnemySoundEffects soundEffects; // sound effects for the enemy
+        private Missiles missiles;    // missiles the enemy has fired at the player
+        private double timeOfChase;   // total time the enemy has been chasing the player
 
         /// <summary>
-        /// Allows the client to client to query the status of the enemy 
+        /// Allows the client to query the status of the enemy 
         /// craft in regards to whether or not it is chasing the player
         /// </summary>
         public bool Chasing
         {
             get { return chasing; }
+        }
+
+        /// <summary>
+        /// Allows the client to query the status of the enemy 
+        /// craft in regards to whether or not it is firing at the player
+        /// </summary>
+        public bool LockedOn
+        {
+            get { return (timeOfChase > 1.5f); }
         }
 
         /// <summary>
@@ -62,21 +73,27 @@ namespace _3DGameProject
         {
             speed = EnemySpeed;
             ForwardDirection = 45.0f;
+            timeOfChase = 0;
 
             soundEffects = new EnemySoundEffects();
+            missiles = new Missiles();
         }
 
         /// <summary>
         /// Used to load the model to represent the enemy on screen and set up enemy's bounding sphere.
         /// </summary>
+        /// <param name="device">For the missile texture</param>
         /// <param name="content">Content pipeline</param>
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             // Load model
             Model = content.Load<Model>("Models/sphere1uR");
 
             // Load sound effects
             soundEffects.LoadContent(content);
+
+            // Load missile effects
+            missiles.LoadContent(ref device, content);
 
             // Setup bounding sphere (scale for best fit)
             BoundingSphere = CalculateBoundingSphere();
@@ -91,21 +108,33 @@ namespace _3DGameProject
         /// <param name="enemies">All of the other enemies in the game</param>
         /// <param name="player">Allows queries for attributes of the player</param>
         /// <param name="floorPlan">Gives the arrangement of the building in the city</param>
+        ///<param name="gameTime">Information on the time since last update for missiles</param>
         /// <param name="gameState">Gives the current state of the game</param>
-        /// <remarks>If the player is caught, the gamestate will transition to end</remarks>
-        public void Update(Enemy[] enemies, Player player, int[,] floorPlan, ref GameConstants.GameState gameState)
+        /// <remarks>
+        /// If the player is caught or the player is hit by a missile and runs
+        /// out of health, the gamestate will transition to end
+        /// </remarks>
+        public void Update(Enemy[] enemies, Player player, int[,] floorPlan, GameTime gameTime, 
+                           ref GameConstants.GameState gameState)
         {
             bool canMakeMovement = false;   // boolean for status if the player was able to make a move on this update
             Vector3 movement;               // the movement to be applied to the enemy
 
             // check if the player has been caught, that is the enemy craft and player are in the same 
-            // grid unit and if so transition to game ending state
+            // grid unit, and if so transition to game ending state
             if (((int)Position.X - (int)player.Position.X) == 0 && ((int)Position.Z - (int)player.Position.Z) == 0)
             {
                 gameState = GameConstants.GameState.End;
                 return;
             }
 
+            // Update the missiles and time during chase
+            missiles.Update(player, ref gameState);
+            if (chasing)
+            {
+                // Update the timeOfChase with the elapsed time since the last update
+                timeOfChase += gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
             if (ReadyForNextMove())
             {
@@ -128,9 +157,16 @@ namespace _3DGameProject
 
                     // play sound effect so player knows we are chasing
                     soundEffects.PlayLockingBeep();
+
+                    // Check if we are locked on to the player, and if so, attempt to fire
+                    if (this.LockedOn)
+                        missiles.FireAt(this, player, gameTime);
                 }
                 else
                 {
+                    // reset the time of chase to zero since we are not chasing
+                    timeOfChase = 0.0;
+
                     // we are not chasing, move randomly around the grid until we spot the player next
                     canMakeMovement = MoveRandomly(floorPlan); // returns true if a move was able to be made
                 }
@@ -449,16 +485,20 @@ namespace _3DGameProject
             nextPosition = new Rectangle(0, 0, 1, 1);
             speed = EnemySpeed;
             ForwardDirection = 45.0f;
+            timeOfChase = 0;
 
             soundEffects.StopAllSounds();
+            missiles.Reset();
         }
 
         /// <summary>
-        /// Draw the enemy model
+        /// Draw the enemy model and missiles
         /// </summary>
+        /// <param name="device">Graphics card to draw the missiles</param>
         /// <param name="gameCamera">For view and projection matrices</param>
-        public void Draw(Camera gameCamera)
+        public void Draw(ref GraphicsDevice device, Camera gameCamera)
         {
+            // Draw the enemy model
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);    // move the model to the correct position
@@ -479,6 +519,9 @@ namespace _3DGameProject
                 }
                 mesh.Draw();
             }
+
+            // Draw the missiles
+            missiles.Draw(ref device, gameCamera);
         }
 
 

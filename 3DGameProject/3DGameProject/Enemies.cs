@@ -58,7 +58,7 @@ namespace _3DGameProject
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             for (int i = 0; i < enemies.Length; i++)
-                enemies[i].LoadContent(content);
+                enemies[i].LoadContent(ref device, content);
 
             warningScreen.LoadContent(ref device, content);
         }
@@ -92,18 +92,19 @@ namespace _3DGameProject
         /// <param name="player">For the position of the player</param>
         /// <param name="floorPlan">For the arrangment of the obstacles</param>
         /// <param name="gameState">Current state of the game</param>
+        /// <param name="gameTime">Information on the time since last update for missiles</param>
         /// <remarks>
         /// The enemies are intelligent and will chase the player when they spot the car.
         /// Also, the enemies will not run into each other when moving
         /// If the player is caught, the gameState will transition to end
         /// </remarks>
-        public void Update(Player player, int[,] floorPlan, ref GameConstants.GameState gameState)
+        public void Update(Player player, int[,] floorPlan, GameTime gameTime, ref GameConstants.GameState gameState)
         {
             if (gameState != GameConstants.GameState.End) // the game is not over
             {
                 // Update the positions of the enemies
                 foreach (Enemy e in enemies)
-                    e.Update(enemies, player, floorPlan, ref gameState);
+                    e.Update(enemies, player, floorPlan, gameTime, ref gameState);
 
                 // Update the warning screen if we haven't transitioned to the end of the game
                 // during this update
@@ -151,6 +152,16 @@ namespace _3DGameProject
                 }
             }
 
+            // If an enemy is firing at the player, display "Locked On" in red
+            foreach (Enemy e in enemies)
+            {
+                if (e.LockedOn == true)
+                {
+                    warningScreen.Update("Locked On", Color.Red, false);
+                    return;
+                }
+            }
+
             // If an enemy is chasing, display "Locking" in flashing red
             foreach (Enemy e in enemies)
             {
@@ -182,11 +193,12 @@ namespace _3DGameProject
         /// <summary>
         /// Draw the enemies to the screen.
         /// </summary>
+        /// <param name="device">Graphics card (to draw enemy missiles)</param>
         /// <param name="gameCamera">For view and projection matrices</param>
-        public void Draw(Camera gameCamera)
+        public void Draw(ref GraphicsDevice device, Camera gameCamera)
         {
             foreach (Enemy e in enemies)
-                e.Draw(gameCamera);
+                e.Draw(ref device, gameCamera);
         }
 
         /// <summary>

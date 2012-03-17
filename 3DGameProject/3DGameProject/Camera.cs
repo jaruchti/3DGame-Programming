@@ -34,6 +34,7 @@ namespace _3DGameProject
         private Vector3 avatarHeadOffset;       // offset of the camera from the player's position
         private Vector3 targetOffset;           // offset from the player's position of the camera's target
         private float cameraRotation = 0.0f;    // camera rotation about y axis
+        private Vector3 cameraPosition;         // position of the camera
 
         /// <summary>
         /// Offset of the camera from the player's position.
@@ -59,6 +60,14 @@ namespace _3DGameProject
         {
             get { return targetOffset; }
             set { avatarHeadOffset = value; }
+        }
+
+        /// <summary>
+        /// Allows client read-only access to the position of the Camera in the game
+        /// </summary>
+        public Vector3 CameraPosition
+        {
+            get { return cameraPosition; }
         }
 
         /// <summary>
@@ -94,7 +103,6 @@ namespace _3DGameProject
             Matrix rotationMatrix;              // matrix with the camera rotation
             Vector3 transformedheadOffset;      // headOffset with camera rotation
             Vector3 transformedReference;       // targetOffset with camera rotation
-            Vector3 cameraPosition;             // position of the camera
             Vector3 cameraTarget;               // camera target
 
             // delay the camera rotation

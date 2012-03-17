@@ -171,7 +171,7 @@ namespace _3DGameProject
 
                 // Update the player's health based on the velocity the player was at during the crash
                 // If player's health moves below zero, transition to ending gamestate
-                healthMeter.UpdateDamage(velocity, ref gameState);
+                healthMeter.HitBarrier(velocity, ref gameState);
 
                 // Play crash sound effect (major or minor crash effect based on player velocity)
                 soundEffects.PlayCrash(velocity);
@@ -295,6 +295,20 @@ namespace _3DGameProject
             }
 
             fuelGauge.Update(fuel);
+        }
+
+        /// <summary>
+        /// Updates the player's health when the player is hit by a missile
+        /// </summary>
+        /// <param name="gameState">The current state of the game</param>
+        /// <remarks>
+        /// This method should only be called when a missile hits the player.
+        /// If the player's health drops below zero, the game will transition
+        /// to the end state.
+        /// </remarks>
+        public void HitByMissile(ref GameConstants.GameState gameState)
+        {
+            healthMeter.HitByMissile(ref gameState);
         }
 
         ///// <summary>

@@ -52,10 +52,10 @@ namespace _3DGameProject
         /// <param name="velocity">Velocity of the player</param>
         /// <param name="gameState">The state of the game</param>
         /// <remarks>
-        /// This method should be called when a collision occurs
+        /// This method should be called when a collision occurs.
         /// If the player runs out of health, the game will transition to the end state
         /// </remarks>
-        public void UpdateDamage(float velocity, ref GameConstants.GameState gameState)
+        public void HitBarrier(float velocity, ref GameConstants.GameState gameState)
         {
             float speed = Math.Abs(velocity);
 
@@ -67,6 +67,25 @@ namespace _3DGameProject
             {
                 digits -= 5;
             }
+
+            if (digits <= 0)
+            {
+                digits = 0;
+                gameState = GameConstants.GameState.End;
+            }
+        }
+
+        /// <summary>
+        /// Update the player's heatlh when the player has been hit by a missile
+        /// </summary>
+        /// <param name="gameState">The current state of the game</param>
+        /// <remarks>
+        /// If the player's health drop's below zero, the game will transition to the 
+        /// end state.
+        /// </remarks>
+        public void HitByMissile(ref GameConstants.GameState gameState)
+        {
+            digits -= 10;
 
             if (digits <= 0)
             {

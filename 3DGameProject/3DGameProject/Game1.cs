@@ -173,7 +173,7 @@ namespace _3DGameProject
             else if (gameState == GameConstants.GameState.Playing)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
-                enemies.Update(player, map.FloorPlan, ref gameState);
+                enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
                 player.Update(Keyboard.GetState(), gameTime, ref map, ref gameState);
                 timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -185,7 +185,7 @@ namespace _3DGameProject
             }
             else if (gameState == GameConstants.GameState.End)
             {
-                enemies.Update(player, map.FloorPlan, ref gameState);
+                enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
                 if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 {
                     gameState = GameConstants.GameState.Ready;
@@ -214,7 +214,7 @@ namespace _3DGameProject
             else
             {
                 skybox.Draw(ref device, gameCamera, player);
-                enemies.Draw(gameCamera);
+                enemies.Draw(ref device, gameCamera);
                 map.Draw(ref device, gameCamera);
                 player.Draw(gameCamera, gameState);
 
