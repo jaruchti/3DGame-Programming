@@ -47,7 +47,7 @@ namespace _3DGameProject
         /// Update display with new HighScore.
         /// </summary>
         /// <param name="newHighScore">Potential highscore</param>
-        public override void Update(float newHighScore)
+        public void Update(float newHighScore)
         {
             if (newHighScore > Score)
             {

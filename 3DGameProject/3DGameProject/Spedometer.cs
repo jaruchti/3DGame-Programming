@@ -47,11 +47,11 @@ namespace _3DGameProject
         /// Update the mph shown on the spedometer based on the player's new velocity.
         /// </summary>
         /// <param name="playerVelocity">Player's velocity</param>
-        public override void Update(float playerVelocity)
+        public void Update(float playerVelocity)
         {
             playerVelocity = Math.Abs(playerVelocity);  // show speed, not velocity
 
-            digits = (int)Math.Floor(playerVelocity / Player.MaxVelocity * 100); // find % of max velocity
+            digits = (int)Math.Floor(playerVelocity / Player.MaxSpeed * 100); // find % of max speed
 
             if (digits == 100) // force mph between 0 and 99
                 digits--;

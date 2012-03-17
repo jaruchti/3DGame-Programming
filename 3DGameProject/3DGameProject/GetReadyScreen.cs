@@ -42,11 +42,11 @@ namespace _3DGameProject
         {
             base.LoadContent(ref device, content);
 
-            // Place instructions at bottom of screen
+            // Place instructions at bottom of screen just above health meter
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPosition = new Vector2(
                 (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
-                GameConstants.ViewportHeight - largeFont.LineSpacing);
+                GameConstants.ViewportHeight - 2 * largeFont.LineSpacing);
         }
 
         /// <summary>

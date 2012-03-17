@@ -86,13 +86,6 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// All non-abstract classes should implement an Update function to make modifications
-        /// to the digits they are displaying.
-        /// </summary>
-        /// <param name="newDigitVal">New digit to display</param>
-        abstract public void Update(float newDigitVal);
-
-        /// <summary>
         /// Draw the InGameDisplay to the screen.
         /// </summary>
         public void Draw()

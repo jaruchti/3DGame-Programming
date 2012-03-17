@@ -23,8 +23,8 @@ namespace _3DGameProject
     /// <remarks>This is a singleton in the game</remarks>
     public class Player : GameObject
     {
-        /// <summary>Maximim velocity for the player</summary>
-        public const float MaxVelocity = 1.25f / 30.0f;
+        /// <summary>Maximim speed for the player</summary>
+        public const float MaxSpeed = 1.25f / 30.0f;
         /// <summary>Turn speed for the player</summary>
         public const float TurnSpeed = 0.9f;
         /// <summary>Braking velocity for the player</summary>
@@ -43,16 +43,24 @@ namespace _3DGameProject
         public const float PlayerStartDirection = 0.0f;
         /// <summary>Ratio to scale bounding sphere for better fit</summary>
         public const float PlayerBoundingSphereRatio = 0.53f;
+        /// <summary>Player health at the start of a round</summary>
+        public const int StartingHealth = 99;
+        /// <summary>Percentage of the maximum player speed during collision for a major crash to occur</summary>
+        public const float MajorCrashPercentMaxSpeed = 0.5f;
+        /// <summary>Percentage of the maximum player speed during collision for a minor crash to occur</summary>
+        public const float MinorCrashPercentMaxSpeed = 0.1f;
 
         private PlayerSoundEffects soundEffects; // sound effects for the player class
         private Effect effect;  // effect to be used when drawing the car model
 
         private float velocity; // player velocity
         private float fuel;     // player fuel remaining
+
         //private float score;    // player score
 
         private Spedometer sped;        // to display speed to screen
         private FuelGauge fuelGauge;    // to display fuel usage to screening
+        private HealthMeter healthMeter;// to keep track of and display player health
 
         /// <summary>
         /// Property to allow the client to set and retreive the forward direction of the player.
@@ -81,12 +89,14 @@ namespace _3DGameProject
             // Setup player fields
             ForwardDirection = PlayerStartDirection;
             velocity = 0.0f;
+
             //score = 0.0f;
             fuel = MaxFuel;
 
             // Create displays
             sped = new Spedometer();
             fuelGauge = new FuelGauge();
+            healthMeter = new HealthMeter();
 
             // Get sound effects
             soundEffects = new PlayerSoundEffects();
@@ -118,6 +128,7 @@ namespace _3DGameProject
             // Load displays for gauges
             sped.LoadContent(ref device, content);
             fuelGauge.LoadContent(ref device, content);
+            healthMeter.LoadContent(ref device, content);
 
             // Load sound effects
             soundEffects.LoadContent(content);
@@ -136,7 +147,7 @@ namespace _3DGameProject
         /// <param name="gameTime">Information about time elapsed since last update</param>
         /// <param name="map">The map the player is within</param>
         /// <param name="gameState">The state of the game</param>
-        /// <remarks>If the player runs out of fuel, the gamestate will be changed to end</remarks>
+        /// <remarks>If the player runs out of fuel or is out of health, the gamestate will be changed to end</remarks>
         public void Update(KeyboardState keyboardState, GameTime gameTime, ref Map map, ref GameConstants.GameState gameState)
         {
             Vector3 movement;
@@ -157,6 +168,10 @@ namespace _3DGameProject
                 // undo the movement and set velocity to zero since we ran into building
                 // can cause "bounceback effect"
                 UpdatePositionAndBoundingSphere(Position - movement);
+
+                // Update the player's health based on the velocity the player was at during the crash
+                // If player's health moves below zero, transition to ending gamestate
+                healthMeter.UpdateDamage(velocity, ref gameState);
 
                 // Play crash sound effect (major or minor crash effect based on player velocity)
                 soundEffects.PlayCrash(velocity);
@@ -246,10 +261,10 @@ namespace _3DGameProject
                 velocity -= Friction;
 
             // keep velocity within valid range
-            if (velocity > MaxVelocity)
-                velocity = MaxVelocity;
-            else if (velocity < -MaxVelocity)
-                velocity = -MaxVelocity;
+            if (velocity > MaxSpeed)
+                velocity = MaxSpeed;
+            else if (velocity < -MaxSpeed)
+                velocity = -MaxSpeed;
 
             // Play the steady drone of the engine (the volume is proportional to the velocity of the car)
             PlayEngineNoise();
@@ -309,6 +324,7 @@ namespace _3DGameProject
             {
                 sped.Draw();
                 fuelGauge.Draw();
+                healthMeter.Draw();
             }
         }
 
@@ -362,6 +378,7 @@ namespace _3DGameProject
 
             fuelGauge.Update(fuel);
             sped.Update(velocity);
+            healthMeter.Reset();
         }
 
 

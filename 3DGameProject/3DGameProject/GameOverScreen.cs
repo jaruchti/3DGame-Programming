@@ -58,11 +58,11 @@ namespace _3DGameProject
 
             rankPosition = new Vector2(0, 0);
 
-            // position instructions at bottom of screen
+            // position instructions at bottom of screen just above health meter
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPosition = new Vector2(
                 (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
-                GameConstants.ViewportHeight - largeFont.LineSpacing);  
+                GameConstants.ViewportHeight - 2 * largeFont.LineSpacing);  
         }
 
         /// <summary>

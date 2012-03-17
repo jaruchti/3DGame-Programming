@@ -69,12 +69,12 @@ namespace _3DGameProject
         {
             float speed = Math.Abs(velocity);
 
-            if (speed > (Player.MaxVelocity / 2) && !(carCrashTotal.State == SoundState.Playing))
+            if (speed > (Player.MaxSpeed * Player.MajorCrashPercentMaxSpeed) && !(carCrashTotal.State == SoundState.Playing))
             {
                 stopAllNonEngineSounds();
                 carCrashTotal.Play();
             }
-            else if (speed > (Player.MaxVelocity / 10) && !(carCrashMinor.State == SoundState.Playing))
+            else if (speed > (Player.MaxSpeed * Player.MinorCrashPercentMaxSpeed) && !(carCrashMinor.State == SoundState.Playing))
             {
                 stopAllNonEngineSounds();
                 carCrashMinor.Play();
@@ -92,12 +92,12 @@ namespace _3DGameProject
         {
             float speed = Math.Abs(velocity);
 
-            if (speed > (3 * Player.MaxVelocity / 4) && (brakeMajor.State != SoundState.Playing))
+            if (speed > (3 * Player.MaxSpeed / 4) && (brakeMajor.State != SoundState.Playing))
             {
                 stopAllNonEngineSounds();
                 brakeMajor.Play();
             }
-            else if (speed > (Player.MaxVelocity / 5) &&
+            else if (speed > (Player.MaxSpeed / 5) &&
                 (brakeMinor.State != SoundState.Playing) &&
                 (brakeMajor.State != SoundState.Playing))
             {
@@ -131,8 +131,8 @@ namespace _3DGameProject
                 engine.Play();
             }
 
-            // Scale sound volume based on the player's velocity
-            engine.Volume = 0.33f + (0.67f) * Math.Abs(velocity / Player.MaxVelocity);
+            // Scale sound volume based on the player's speed
+            engine.Volume = 0.33f + (0.67f) * Math.Abs(velocity / Player.MaxSpeed);
 
             ////if (!(brakeMajor.State == SoundState.Playing) && !(brakeMinor.State == SoundState.Playing)
             ////    && !(carCrashMinor.State == SoundState.Playing) && !(carCrashTotal.State == SoundState.Playing))

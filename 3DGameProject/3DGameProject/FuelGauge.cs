@@ -45,7 +45,7 @@ namespace _3DGameProject
         /// Update the fuel gauge with the new amount of fuel.
         /// </summary>
         /// <param name="playerFuel">Fuel amount</param>
-        public override void Update(float playerFuel)
+        public void Update(float playerFuel)
         {
             digits = (int)Math.Floor(playerFuel);
         }
