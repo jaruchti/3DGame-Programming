@@ -121,7 +121,7 @@ namespace _3DGameProject
                     if (((int)e.Position.X - (int)player.Position.X) == 0 &&
                         ((int)e.Position.Z - (int)player.Position.Z) == 0)
                     {
-                        e.MoveTowardPlayerAtEnd(player);
+                        e.MoveTowardPlayer(player);
                     }
                 }
 
@@ -206,14 +206,49 @@ namespace _3DGameProject
         * --------------------------------------------------------------------------- 
         */
 
+        /// <summary>
+        /// Sets up the position of an enemy for the introduction
+        /// </summary>
+        /// <param name="playerPosition">Position of the player at the beginning of the introduction</param>
         public void SetUpIntroPositions(Vector3 playerPosition)
         {
-            enemies[0].Position = playerPosition + new Vector3(0.0f, 0.2f, 0.0f);
+            enemies[4].Position = playerPosition + new Vector3(0.0f, 0.5f, 0.1f); // fly above and slightly behind player
+            enemies[4].AngularPosition = 3 * MathHelper.PiOver2; // start circle behind player
+            enemies[4].SetIntroSpeed(); // move as fast a player
         }
 
-        public void PlayIntro(Vector3 playerPosition)
+        /// <summary>
+        /// Method to play the enemy motions during the introduction
+        /// </summary>
+        /// <param name="player">For the position of the player</param>
+        /// <remarks>
+        /// The enemy will descent to the player and then circle
+        /// </remarks>
+        public void PlayIntro(Player player)
         {
-            enemies[0].Circle(playerPosition, 0.1f);
+            if (enemies[4].Position.Y > 0.18f)
+            {
+                // Move with the player during the beginning of the introduction while descending
+                enemies[4].MoveTowardPlayer(player);
+                enemies[4].Position = new Vector3(enemies[4].Position.X, enemies[4].Position.Y - 0.005f, enemies[4].Position.Z);
+            }
+            else
+            {
+                // we have descended enough, now circle the player
+                enemies[4].Circle(player.Position, 0.1f);
+            }
+        }
+
+        /// <summary>
+        /// Property to allow the client to get the position of the enemy following the player
+        /// during the introduction
+        /// </summary>
+        /// <remarks>
+        /// This is used by the camera class to set-up the camera following the enemy
+        /// </remarks>
+        public Vector3 EnemyIntroPosition
+        {
+            get { return enemies[4].Position; }
         }
     }
 }

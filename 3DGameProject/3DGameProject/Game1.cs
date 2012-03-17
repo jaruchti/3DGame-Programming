@@ -150,8 +150,8 @@ namespace _3DGameProject
             else if (gameState == GameConstants.GameState.Intro)
             {
                 player.AutoPilot(ref gameState);
-                gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
-                enemies.PlayIntro(player.Position);
+                gameCamera.Update(player.ForwardDirection, enemies.EnemyIntroPosition, map.FloorPlan, device.Viewport.AspectRatio);
+                enemies.PlayIntro(player);
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space) ||
                     gameState == GameConstants.GameState.Ready)
@@ -231,7 +231,7 @@ namespace _3DGameProject
                 }
             }
 
-            gameSongs.PlayBackground(gameState);    // play the appropriate background music
+            //gameSongs.PlayBackground(gameState);    // play the appropriate background music
 
             base.Draw(gameTime);
         }

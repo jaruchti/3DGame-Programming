@@ -60,7 +60,7 @@ namespace _3DGameProject
         /// </summary>
         public Enemy() : base()
         {
-            speed = 0.0f;
+            speed = EnemySpeed;
             ForwardDirection = 45.0f;
 
             soundEffects = new EnemySoundEffects();
@@ -410,15 +410,15 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Moves the enemy towards the player when the game is over
+        /// Moves the enemy towards the player when the game is over or during the introduction
         /// </summary>
         /// <param name="player">For the position of the player</param>
         /// <remarks>
-        /// This method is called when the game is over.  It is known that this
-        /// enemy and the player are in the same square.  Thus, no checks are
+        /// This method is called when the game is over or during the intrdocution.  
+        /// It is known that this enemy and the player are in valid positions.  Thus, no checks are
         /// made to ensure the location is valid.
         /// </remarks>
-        public void MoveTowardPlayerAtEnd(Player player)
+        public void MoveTowardPlayer(Player player)
         {
             Vector3 movement;
             float distancePlayerToEnemy = (float)Math.Sqrt(
@@ -447,7 +447,7 @@ namespace _3DGameProject
             positionOfLastMove = new Rectangle(0, 0, 1, 1); 
             chasing = false; 
             nextPosition = new Rectangle(0, 0, 1, 1);
-            speed = 0.0f;
+            speed = EnemySpeed;
             ForwardDirection = 45.0f;
 
             soundEffects.StopAllSounds();
@@ -488,14 +488,27 @@ namespace _3DGameProject
         * --------------------------------------------------------------------------- 
         */
 
+        /// <summary>
+        /// Property to allow retreival/setting of the angular position of the enemy
+        /// when it is circling a position
+        /// </summary>
+        /// <remarks>
+        /// This property is used during the introduction to allow the enemy to circle the
+        /// player
+        /// </remarks>
         public float AngularPosition { get; set; }
-        public const float IntroVelocity = 2.0f / 60.0f;
 
+        /// <summary>
+        /// This method should be called during each update to allow the enemy to circle
+        /// a given position
+        /// </summary>
+        /// <param name="center">Position to circle around</param>
+        /// <param name="radius">Radius of the circle</param>
         public void Circle(Vector3 center, float radius)
         {
             // Change the angular position of the drone based on the elapsed time since last update
             // and the angular velocity
-            AngularPosition += IntroVelocity;
+            AngularPosition += Player.IntroVelocity;
 
             // Normalize angularPosition so it is between 0 and 2 pi.
             if (AngularPosition > 2 * MathHelper.Pi)
@@ -506,12 +519,20 @@ namespace _3DGameProject
             // The futurePosition vector holds the position the drone will be.
             Vector3 futurePosition = new Vector3(0, Position.Y, radius);
             futurePosition.X = radius * (float)Math.Cos(AngularPosition) + center.X;
-            futurePosition.Z = radius * (float)Math.Sin(AngularPosition) + center.Z;
+            futurePosition.Z = -radius * (float)Math.Sin(AngularPosition) + center.Z;
 
             // Now, update the Position and ForwardDirection after the calculations for the update
             // have completed.
             Position = futurePosition;
             ForwardDirection = -AngularPosition;
+        }
+
+        /// <summary>
+        /// Sets the enemy speed to that of the player during the introduction
+        /// </summary>
+        public void SetIntroSpeed()
+        {
+            speed = Player.IntroVelocity;
         }
     }
 }
