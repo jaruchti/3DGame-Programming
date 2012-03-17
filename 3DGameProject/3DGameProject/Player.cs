@@ -26,7 +26,7 @@ namespace _3DGameProject
         /// <summary>Maximim velocity for the player</summary>
         public const float MaxVelocity = 1.25f / 30.0f;
         /// <summary>Turn speed for the player</summary>
-        public const float TurnSpeed = 0.7f;
+        public const float TurnSpeed = 0.9f;
         /// <summary>Braking velocity for the player</summary>
         public const float Brake = -0.04f / 60f;
         /// <summary>Acceleration for the player</summary>

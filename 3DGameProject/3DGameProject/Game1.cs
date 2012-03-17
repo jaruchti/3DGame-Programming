@@ -235,7 +235,7 @@ namespace _3DGameProject
                 }
             }
 
-            //gameSongs.PlayBackground(gameState);    // play the appropriate background music
+            gameSongs.PlayBackground(gameState);    // play the appropriate background music
 
             base.Draw(gameTime);
         }
