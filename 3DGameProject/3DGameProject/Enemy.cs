@@ -125,6 +125,9 @@ namespace _3DGameProject
             if (((int)Position.X - (int)player.Position.X) == 0 && ((int)Position.Z - (int)player.Position.Z) == 0)
             {
                 gameState = GameConstants.GameState.End;
+
+                // stop all sound effects
+                soundEffects.StopAllSounds();
                 return;
             }
 
