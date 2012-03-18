@@ -155,17 +155,29 @@ namespace _3DGameProject
                     // we can make a movement since nothing is obstructing between player and this enemy
                     canMakeMovement = true;
 
-                    // play sound effect so player knows we are chasing
-                    soundEffects.PlayLockingBeep();
+
 
                     // Check if we are locked on to the player, and if so, attempt to fire
                     if (this.LockedOn)
+                    {
                         missiles.FireAt(this, player, gameTime);
+
+                        // play sound effect so player knows we are locked on
+                        soundEffects.PlayLockedOnBeep();
+                    }
+                    else
+                    {
+                        // play sound effect so player knows we are chasing
+                        soundEffects.PlayLockingBeep();
+                    }
                 }
                 else
                 {
                     // reset the time of chase to zero since we are not chasing
                     timeOfChase = 0.0;
+
+                    // stop all sound effects
+                    soundEffects.StopAllSounds();
 
                     // we are not chasing, move randomly around the grid until we spot the player next
                     canMakeMovement = MoveRandomly(floorPlan); // returns true if a move was able to be made

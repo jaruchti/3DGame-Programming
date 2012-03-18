@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -26,6 +27,8 @@ namespace _3DGameProject
         private SpriteBatch spriteBatch;    // to draw the missiles
         private Texture2D missileTexture;   // texture for the missiles
         private Effect effect;              // effect to use when drawing the missile (point sprites)
+        
+        private SoundEffect explosionEffect;// sound effect to use when a missile strikes the player
 
         private List<Missile> missileList;  // list of the missiles that have been fired
 
@@ -45,13 +48,14 @@ namespace _3DGameProject
         /// Load the content required to represent the missiles
         /// </summary>
         /// <param name="device">Graphics card (to initialize sprite batch)</param>
-        /// <param name="content">Content pipeline (for effects and missile texture)</param>
+        /// <param name="content">Content pipeline (for effects, sounds, and missile texture)</param>
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             spriteBatch = new SpriteBatch(device);
 
             missileTexture = content.Load<Texture2D>("Textures/missile");
             effect = content.Load<Effect>("Effects/effects");
+            explosionEffect = content.Load<SoundEffect>("Audio/Explosion");
         }
         
         /// <summary>
@@ -102,6 +106,7 @@ namespace _3DGameProject
                     // the player was hit
                     missileList.Remove(missileList[i]);
                     player.HitByMissile(ref gameState);
+                    explosionEffect.Play();
                 }
             }
         }

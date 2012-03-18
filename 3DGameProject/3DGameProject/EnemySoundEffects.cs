@@ -24,7 +24,10 @@ namespace _3DGameProject
     class EnemySoundEffects
     {
         private SoundEffect lockingBeepEffect;
+        private SoundEffect lockedOnBeepEffect;
+
         private SoundEffectInstance lockingBeep;
+        private SoundEffectInstance lockedOnBeep;
 
         /// <summary>
         /// Load the sound effects for the enemy
@@ -33,7 +36,12 @@ namespace _3DGameProject
         public void LoadContent(ContentManager content)
         {
             lockingBeepEffect = content.Load<SoundEffect>("Audio/LockingBeep");
+            lockedOnBeepEffect = content.Load<SoundEffect>("Audio/LockOnBeep");
+
             lockingBeep = lockingBeepEffect.CreateInstance();
+            lockedOnBeep = lockedOnBeepEffect.CreateInstance();
+
+            lockedOnBeep.Volume = 0.20f;
         }
 
         /// <summary>
@@ -42,7 +50,22 @@ namespace _3DGameProject
         public void PlayLockingBeep()
         {
             if (lockingBeep.State != SoundState.Playing)
+            {
+                StopAllSounds();
                 lockingBeep.Play();
+            }
+        }
+
+        /// <summary>
+        /// Play the sound of the enemy locked onto the player
+        /// </summary>
+        public void PlayLockedOnBeep()
+        {
+            if (lockedOnBeep.State != SoundState.Playing)
+            {
+                StopAllSounds();
+                lockedOnBeep.Play();
+            }
         }
 
         /// <summary>
@@ -51,6 +74,7 @@ namespace _3DGameProject
         public void StopAllSounds()
         {
             lockingBeep.Stop();
+            lockedOnBeep.Stop();
         }
     }
 }
