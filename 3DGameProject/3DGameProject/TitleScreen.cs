@@ -35,7 +35,12 @@ namespace _3DGameProject
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             spriteBatch = new SpriteBatch(device);
+
+#if !XBOX
             background = content.Load<Texture2D>("Textures/background");
+#else
+            background = content.Load<Texture2D>("Textures/backgroundXBOX");
+#endif
 
             viewportRect = new Rectangle(0, 0, 
                 device.Viewport.Width, 

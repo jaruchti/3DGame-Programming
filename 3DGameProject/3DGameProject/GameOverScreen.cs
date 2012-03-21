@@ -41,6 +41,19 @@ namespace _3DGameProject
         String strInstructions = "Press Space to Continue";
 
         /// <summary>
+        /// Create the game over screen and give instructions based on the platform the player
+        /// is using
+        /// </summary>
+        public GameOverScreen()
+        {
+            strInstructions = "Press A to Continue";
+
+#if !XBOX
+            strInstructions = "Press Space to Continue";
+#endif
+        }
+
+        /// <summary>
         /// Load the content required for the screen.
         /// </summary>
         /// <param name="device">Graphics card (to initialize spritebatch)</param>

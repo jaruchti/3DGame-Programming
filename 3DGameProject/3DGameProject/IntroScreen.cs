@@ -27,7 +27,19 @@ namespace _3DGameProject
         Vector2 instructionsPosition;   // position to dislay instructions
 
         String strTitle = "Alien Attack";
-        String strInstructions = "Press Space to Continue";
+        String strInstructions;
+
+        /// <summary>
+        /// Create the intro screen and give instructions based on what platform
+        /// the player is using
+        /// </summary>
+        public IntroScreen()
+        {
+            strInstructions = "Press A to Continue";
+#if !XBOX
+            strInstructions = "Press Space to Continue";
+#endif
+        }
 
         /// <summary>
         /// Load the content required for the screen.

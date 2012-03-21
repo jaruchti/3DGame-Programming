@@ -29,6 +29,8 @@ namespace _3DGameProject
         GameConstants.GameState gameState;
         KeyboardState currentKeyboardState;
         KeyboardState prevKeyBoardState;
+        GamePadState currentGamePadState;
+        GamePadState prevGamePadState;
 
         TitleScreen titleScreen;
         IntroScreen introScreen;
@@ -141,11 +143,12 @@ namespace _3DGameProject
         protected override void Update(GameTime gameTime)
         {
             currentKeyboardState = Keyboard.GetState();
+            currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (gameState == GameConstants.GameState.Title)
             {
 
-                if (currentKeyboardState.IsKeyDown(Keys.Space))
+                if (currentKeyboardState.IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
                     gameState = GameConstants.GameState.Intro;
                     enemies.SetUpIntroPositions(player.Position);
@@ -157,7 +160,8 @@ namespace _3DGameProject
                 gameCamera.Update(player.ForwardDirection, enemies.EnemyIntroPosition, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.PlayIntro(player);
 
-                if (currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space) ||
+                if (((currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space)) ||
+                    (prevGamePadState.Buttons.A == ButtonState.Pressed && currentGamePadState.Buttons.A == ButtonState.Released)) ||
                     gameState == GameConstants.GameState.Ready)
                 {
                     Reset();
@@ -174,7 +178,7 @@ namespace _3DGameProject
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
-                player.Update(Keyboard.GetState(), gameTime, ref map, ref gameState);
+                player.Update(currentKeyboardState, currentGamePadState, gameTime, ref map, ref gameState);
                 timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
 
                 if (gameState == GameConstants.GameState.End)
@@ -186,7 +190,7 @@ namespace _3DGameProject
             else if (gameState == GameConstants.GameState.End)
             {
                 enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
                     gameState = GameConstants.GameState.Ready;
                     Reset();
@@ -194,6 +198,7 @@ namespace _3DGameProject
             }
 
             prevKeyBoardState = currentKeyboardState;
+            prevGamePadState = currentGamePadState;
 
             base.Update(gameTime);
         }

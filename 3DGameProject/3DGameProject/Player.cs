@@ -143,17 +143,19 @@ namespace _3DGameProject
         /// <summary>
         /// Update the player's attributes (called 60 times sec).
         /// </summary>
-        /// <param name="keyboardState">Information about user input</param>
+        /// <param name="keyboardState">Information about user keyboard input</param>
+        /// <param name="gamePadState">Information about user gamepad input</param>
         /// <param name="gameTime">Information about time elapsed since last update</param>
         /// <param name="map">The map the player is within</param>
         /// <param name="gameState">The state of the game</param>
         /// <remarks>If the player runs out of fuel or is out of health, the gamestate will be changed to end</remarks>
-        public void Update(KeyboardState keyboardState, GameTime gameTime, ref Map map, ref GameConstants.GameState gameState)
+        public void Update(KeyboardState keyboardState, GamePadState gamePadState, GameTime gameTime, 
+                           ref Map map, ref GameConstants.GameState gameState)
         {
             Vector3 movement;
 
-            float turnAmount = DetermineTurnAmount(keyboardState); // determine if the user wants to turn
-            UpdateVelocity(keyboardState);                         // update the velocity of the player based on user input
+            float turnAmount = DetermineTurnAmount(keyboardState, gamePadState); // determine if the user wants to turn
+            UpdateVelocity(keyboardState, gamePadState);                         // update the velocity of the player based on user input
 
             // Move the player to the next position based on the current position and movement amount
             ForwardDirection += turnAmount * velocity * TurnSpeed;  // note: the final turn amount takes velocity into account
@@ -182,26 +184,28 @@ namespace _3DGameProject
             // Update the gauges
             sped.Update(velocity);
             UpdateFuel(gameTime, collision, ref gameState);
-
-            //// Update the player's score based on the movement that has been made
-            //UpdateScore(oldPosition, Position);
         }
 
         /// <summary>
         /// Determine if the user wants to turn
         /// </summary>
         /// <param name="keyboardState">For keyboard input</param>
+        /// <param name="gamePadState">For XBox 360 gamepad input</param>
         /// <returns>
         /// Float representing the amount the user wants to turn (positive for left, negative for right)
         /// </returns>
-        private float DetermineTurnAmount(KeyboardState keyboardState)
+        private float DetermineTurnAmount(KeyboardState keyboardState, GamePadState gamePadState)
         {
             float turnAmount = 0;
 
+            turnAmount = -gamePadState.ThumbSticks.Left.X; // gets the horizontal direction the gamepad thumbstick is pushed
+
+#if !XBOX
             if (keyboardState.IsKeyDown(Keys.A))
                 turnAmount = 1;
             else if (keyboardState.IsKeyDown(Keys.D))
                 turnAmount = -1;
+#endif
 
             return turnAmount;
         }
@@ -210,14 +214,15 @@ namespace _3DGameProject
         /// Update the velocity of the player based on user input
         /// </summary>
         /// <param name="keyboardState">For keyboard input</param>
+        /// <param name="gamePadState">For XBox 360 gamepad input</param>
         /// <remarks>
         /// As a side effect, braking sounds are played if the player is slowing down
         /// </remarks>
-        private void UpdateVelocity(KeyboardState keyboardState)
+        private void UpdateVelocity(KeyboardState keyboardState, GamePadState gamePadState)
         {
             bool braking = false; // is the player braking?
 
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (keyboardState.IsKeyDown(Keys.W) || gamePadState.Buttons.A == ButtonState.Pressed)
             {
                 if (velocity < 0)
                 {
@@ -231,7 +236,7 @@ namespace _3DGameProject
                     velocity += Accel;
                 }
             }
-            else if (keyboardState.IsKeyDown(Keys.S))
+            else if (keyboardState.IsKeyDown(Keys.S) || gamePadState.Buttons.B == ButtonState.Pressed)
             {
                 if (velocity > 0)
                 {
