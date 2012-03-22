@@ -61,20 +61,20 @@ namespace _3DGameProject
         /// <summary>
         /// Allows an enemy to fire a missile at the player
         /// </summary>
-        /// <param name="enemy">For the enemy position</param>
-        /// <param name="player">For the player's position</param>
+        /// <param name="position">Position to fire a missile from</param>
+        /// <param name="target">Position missile is being fired at</param>
         /// <param name="gameTime">To determine the time since the last missile was fired</param>
         /// <remarks>
-        /// A missile can only be fired once every half second
+        /// A missile can only be fired once every quarter second
         /// </remarks>
-        public void FireAt(Enemy enemy, Player player, GameTime gameTime)
+        public void FireAt(Vector3 position, Vector3 target, GameTime gameTime)
         {
-            if ((gameTime.TotalGameTime.TotalMilliseconds - timeOfLastShot) > 500)
+            if ((gameTime.TotalGameTime.TotalMilliseconds - timeOfLastShot) > 250)
             {
                 // atleast a half second has passed since the last missile was fired
 
                 timeOfLastShot = gameTime.TotalGameTime.TotalMilliseconds;
-                missileList.Add(new Missile(enemy.Position, player.Position)); // fire a missile
+                missileList.Add(new Missile(position, target)); // fire a missile
             }
         }
 
@@ -83,20 +83,22 @@ namespace _3DGameProject
         /// health if the player has been hit by a missile
         /// </summary>
         /// <param name="player">To update the player's health, if applicable</param>
+        /// <param name="floorPlan">To determine if a missile is no longer in the map</param>
         /// <param name="gameState">The current state of the game</param>
         /// <remarks>
         /// If the player has lost all health, the game will transition to the end state
         /// </remarks>
-        public void Update(Player player, ref GameConstants.GameState gameState)
+        public void Update(Player player, int[,] floorPlan, ref GameConstants.GameState gameState)
         {
             // update each missile
             for (int i = 0; i < missileList.Count; i++)
             {
                 missileList[i].Update();
 
-                if (missileList[i].Position.Y < 0.0f)
+                if (missileList[i].Position.Y < 0.0f || 
+                    floorPlan[(int)missileList[i].Position.X, (int)-missileList[i].Position.Z] != 0)
                 {
-                    // this missile is off of the map
+                    // this missile is off of the map (either ran into a building or under the map)
                     missileList.Remove(missileList[i]);
                     continue;
                 }
@@ -175,9 +177,10 @@ namespace _3DGameProject
     /// <summary>
     /// Helper class which represents an individual missile to be fired at the player
     /// </summary>
-    class Missile
+    public class Missile
     {
-        public float MissileSpeed = 2 * Player.MaxSpeed;    // speed the missile travels at
+        /// <summary>Speed the missile travels at</summary>
+        public const float MissileSpeed = 2 * Player.MaxSpeed;
         private Vector3 position;   // position of the missile
         private Vector3 target;     // where the missile is heading
         private Matrix rotation;    // matrix describing the direction from the current position to the target

@@ -132,7 +132,7 @@ namespace _3DGameProject
             }
 
             // Update the missiles and time during chase
-            missiles.Update(player, ref gameState);
+            missiles.Update(player, floorPlan, ref gameState);
             if (chasing)
             {
                 // Update the timeOfChase with the elapsed time since the last update
@@ -163,7 +163,7 @@ namespace _3DGameProject
                     // Check if we are locked on to the player, and if so, attempt to fire
                     if (this.LockedOn)
                     {
-                        missiles.FireAt(this, player, gameTime);
+                        missiles.FireAt(this.Position, FindTargetPosition(player), gameTime);
 
                         // play sound effect so player knows we are locked on
                         soundEffects.PlayLockedOnBeep();
@@ -309,14 +309,14 @@ namespace _3DGameProject
         /// <param name="player">For the player's position</param>
         private void SetDirectionTowardPlayer(Player player)
         {
-            int xOffsetToPlayer = (int)player.Position.X - (int)Position.X; // x displacement from player to enemy
-            int zOffsetToPlayer = (int)-player.Position.Z + (int)Position.Z;// z displacement from player to enemy
+            int xOffsetPToE = (int)player.Position.X - (int)Position.X; // x displacement from player to enemy
+            int zOffsetPToE = (int)-player.Position.Z + (int)Position.Z;// z displacement from player to enemy
 
-            if (zOffsetToPlayer != 0)
+            if (zOffsetPToE != 0)
             {
                 // Must move left or right
 
-                if (zOffsetToPlayer > 0)
+                if (zOffsetPToE > 0)
                 {
                     // Move right
                     ForwardDirection = 0;
@@ -331,7 +331,7 @@ namespace _3DGameProject
             {
                 // Must move up or down
 
-                if (xOffsetToPlayer > 0)
+                if (xOffsetPToE > 0)
                 {
                     // Move down, player below
                     ForwardDirection = 3 * MathHelper.PiOver2;
@@ -458,6 +458,34 @@ namespace _3DGameProject
                         floorPlan[(int)e.nextPosition.X, (int)-e.nextPosition.Y] = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// This method implements dead reckoning.  Based on the position of the player, the velocity
+        /// of the player, and the velocity of the missile, the target position
+        /// where the missile should be fired to strike the enemy is calculated.
+        /// </summary>
+        /// <param name="player">For the player position</param>
+        /// <returns>
+        /// A vector representing the target position the enemy should fire
+        /// a missile.
+        /// </returns>
+        private Vector3 FindTargetPosition(Player player)
+        {
+            Vector3 target = new Vector3(0.0f, player.Position.Y, 0.0f);
+            float xOffsetPToE = player.Position.X - Position.X; // x displacement from player to enemy
+            float zOffsetPToE = -player.Position.Z + Position.Z;// z displacement from player to enemy
+
+            // Uses an approximation to determine where to fire the misile
+            // 1) Calculate the distance between user and the missile
+            // 2) Calculate the time (t) for the missile to travel to the user given the speed of the missile
+            // 3) Calculate the position of the player at time (t)
+
+            float d_enemyToPlayer = (float) Math.Sqrt(xOffsetPToE * xOffsetPToE + zOffsetPToE * zOffsetPToE) + 0.5f; // 1
+            float t_missiletoplayer = d_enemyToPlayer / Missile.MissileSpeed; // 2
+            target.X = player.Position.X - player.Velocity * (float)Math.Sin(player.ForwardDirection) * t_missiletoplayer; // 3
+            target.Z = player.Position.Z - player.Velocity * (float)Math.Cos(player.ForwardDirection) * t_missiletoplayer; // 3
+            return target;
         }
 
         /// <summary>

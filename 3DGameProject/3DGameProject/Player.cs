@@ -63,10 +63,17 @@ namespace _3DGameProject
         private HealthMeter healthMeter;// to keep track of and display player health
 
         /// <summary>
-        /// Property to allow the client to set and retreive the forward direction of the player.
+        /// Property to allow the client to set and retrieve the forward direction of the player.
         /// </summary>
         /// <remarks>This is the direction the car is moving</remarks>
         public float ForwardDirection { get; set; }
+
+        /// <summary>
+        /// Property to allow the client to retrieve the current velocity of the player.
+        /// </summary>
+        public float Velocity {
+            get { return velocity; }
+        }
 
         ///// <summary>
         ///// Property to allow the client to get the player's score
