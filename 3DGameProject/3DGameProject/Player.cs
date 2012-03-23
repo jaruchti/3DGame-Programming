@@ -55,8 +55,7 @@ namespace _3DGameProject
 
         private float velocity; // player velocity
         private float fuel;     // player fuel remaining
-
-        //private float score;    // player score
+        private float bonusScore;    // player bonus score
 
         private Spedometer sped;        // to display speed to screen
         private FuelGauge fuelGauge;    // to display fuel usage to screening
@@ -75,12 +74,13 @@ namespace _3DGameProject
             get { return velocity; }
         }
 
-        ///// <summary>
-        ///// Property to allow the client to get the player's score
-        ///// </summary>
-        //public float Score {
-        //    get { return score; }
-        //}
+        /// <summary>
+        /// Property to allow the client to get points the player has acquired through bonuses
+        /// </summary>
+        public float BonusScore
+        {
+            get { return bonusScore; }
+        }
 
         Texture2D[] textures;   // textures for the car model
 
@@ -96,8 +96,7 @@ namespace _3DGameProject
             // Setup player fields
             ForwardDirection = PlayerStartDirection;
             velocity = 0.0f;
-
-            //score = 0.0f;
+            bonusScore = 0;
             fuel = MaxFuel;
 
             // Create displays
@@ -186,6 +185,11 @@ namespace _3DGameProject
                 soundEffects.PlayCrash(velocity);
 
                 velocity = 0.0f;
+            }
+            else if (collision == GameConstants.CollisionType.Bonus)
+            {
+                // update the player's bonus score with the bonus amount
+                bonusScore += 25;
             }
 
             // Update the gauges
@@ -323,19 +327,6 @@ namespace _3DGameProject
             healthMeter.HitByMissile(ref gameState);
         }
 
-        ///// <summary>
-        ///// Update the player's score based on the amount of movement the player has made
-        ///// </summary>
-        ///// <param name="oldPosition">Player's position before last update</param>
-        ///// <param name="newPosition">Player's new position after last update</param>
-        //private void UpdateScore(Vector3 oldPosition, Vector3 newPosition)
-        //{
-        //    double xMovement = oldPosition.X - newPosition.X;
-        //    double zMovement = oldPosition.Z - newPosition.Z;
-
-        //    score += (float) Math.Sqrt(xMovement * xMovement + zMovement * zMovement);
-        //}
-
         /// <summary>
         /// Draw the player model and the player's gauges (if applicable)
         /// </summary>
@@ -400,6 +391,7 @@ namespace _3DGameProject
 
             ForwardDirection = PlayerStartDirection;
             velocity = 0.0f;
+            bonusScore = 0;
             fuel = MaxFuel;
 
             fuelGauge.Update(fuel);

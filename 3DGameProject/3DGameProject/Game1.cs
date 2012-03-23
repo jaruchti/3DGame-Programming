@@ -44,7 +44,7 @@ namespace _3DGameProject
         MiniMap miniMap;
         Skybox skybox;
 
-        Timer timer;
+        Score score;
         HighScore highScore;
 
         GameSongs gameSongs;
@@ -93,7 +93,7 @@ namespace _3DGameProject
             miniMap = new MiniMap();
             skybox = new Skybox();
 
-            timer = new Timer();
+            score = new Score();
             highScore = new HighScore();
 
             gameSongs = new GameSongs();
@@ -120,7 +120,7 @@ namespace _3DGameProject
             skybox.LoadContent(Content);
             enemies.LoadContent(ref device, Content);
 
-            timer.LoadContent(ref device, Content);
+            score.LoadContent(ref device, Content);
             highScore.LoadContent(ref device, Content);
 
             gameSongs.LoadContent(Content);
@@ -179,12 +179,12 @@ namespace _3DGameProject
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
                 player.Update(currentKeyboardState, currentGamePadState, gameTime, ref map, ref gameState);
-                timer.Update((float) gameTime.ElapsedGameTime.TotalSeconds);
+                score.Update((float) gameTime.ElapsedGameTime.TotalSeconds, player);
 
                 if (gameState == GameConstants.GameState.End)
                 {
-                    highScore.Update(timer.Score);
-                    gameOverScreen.Update(timer.Score);
+                    highScore.Update(score.Score);
+                    gameOverScreen.Update(score.Score);
                 }
             }
             else if (gameState == GameConstants.GameState.End)
@@ -220,7 +220,7 @@ namespace _3DGameProject
             {
                 skybox.Draw(ref device, gameCamera, player);
                 enemies.Draw(ref device, gameCamera);
-                map.Draw(ref device, gameCamera);
+                map.Draw(ref device, gameCamera, gameState);
                 player.Draw(gameCamera, gameState);
 
                 if (gameState == GameConstants.GameState.Intro)
@@ -229,7 +229,7 @@ namespace _3DGameProject
                     gameState == GameConstants.GameState.End)
                 {
                     miniMap.Draw(gameTime, player, enemies, map);
-                    timer.Draw();
+                    score.Draw();
                     highScore.Draw();
                     enemies.WarningScreen.Draw(gameTime);
 
@@ -247,7 +247,7 @@ namespace _3DGameProject
 
         private void Reset()
         {
-            timer.Reset();
+            score.Reset();
             player.Reset();
             enemies.Reset();
         }

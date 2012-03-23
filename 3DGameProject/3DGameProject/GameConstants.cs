@@ -33,7 +33,7 @@ namespace _3DGameProject
         /// <summary>
         /// Enemeration which defines the type of collision that has occured.
         /// </summary>
-        public enum CollisionType { None, Building, Fuel };
+        public enum CollisionType { None, Building, Fuel, Bonus };
 
         /// <summary>
         /// Direction the light comes from on the map.
