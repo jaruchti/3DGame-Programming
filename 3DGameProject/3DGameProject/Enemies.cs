@@ -78,7 +78,7 @@ namespace _3DGameProject
         /// <summary>
         /// Allows the client to use a foreach construct to iterate through the enemies
         /// </summary>
-        /// <returns>IEnumerator for the enemy object</returns>
+        /// <returns>IEnumerator for the enemy objects</returns>
         public IEnumerator<Enemy> GetEnumerator()
         {
             foreach (Enemy e in enemies)

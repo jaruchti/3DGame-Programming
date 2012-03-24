@@ -68,7 +68,7 @@ namespace _3DGameProject
             // get items to display
             int[,] floorPlan = map.FloorPlan;
             Fuel[] fuelBarrels = map.FuelBarrels;
-            Bonus[] bonuses = map.Bonuses;
+            Bonuses bonuses = map.Bonuses;
 
             spriteBatch.Begin();
 
@@ -97,10 +97,10 @@ namespace _3DGameProject
             }
 
             // draw bonuses
-            for (int i = 0; i < bonuses.Length; i++)
+            foreach (Bonus b in bonuses)
             {
-                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)bonuses[i].Position.Z;
-                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)bonuses[i].Position.X;
+                rect.X = (int)(xOffset * GameConstants.ViewportWidth) - rect.Width * (int)b.Position.Z;
+                rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)b.Position.X;
                 spriteBatch.Draw(whiteCircle, rect, Color.Purple);
             }
 

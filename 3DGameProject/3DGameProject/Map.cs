@@ -31,7 +31,7 @@ namespace _3DGameProject
 
         private int[,] floorPlan;                       // arrangement for the buildings
         private Fuel[] fuelBarrels;                     // fuel for the player to pick up
-        private Bonus[] bonuses;                        // bonuses for the player to pick up
+        private Bonuses bonuses = new Bonuses();        // bonuses for the player to pick up
         private VertexBuffer cityVertexBuffer;          // holds the vertices to draw the city
         private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 }; 
         private BoundingBox[] buildingBoundingBoxes;    // bounding boxes for the building in the map
@@ -47,9 +47,9 @@ namespace _3DGameProject
         public Fuel[] FuelBarrels { get { return fuelBarrels; } }
 
         /// <summary>
-        /// Property to allow the client to get read-only access to the bonus objects in the map.
+        /// Property to allow the client to get read-only access to the bonuses object
         /// </summary>
-        public Bonus[] Bonuses { get { return bonuses; } }
+        public Bonuses Bonuses { get { return bonuses; } }
       
         /// <summary>
         /// Load the content necessary to create the map
@@ -63,7 +63,7 @@ namespace _3DGameProject
 
             LoadFloorPlan();
             LoadFuel(content);
-            LoadBonuses(content);
+            bonuses.LoadContent(ref device, content, this);
             SetUpVertices(ref device);
             SetUpBoundingBoxes();
         }
@@ -138,26 +138,6 @@ namespace _3DGameProject
             fuelBarrels[1].UpdatePositionAndBoundingSphere(new Vector3(15.5f, 0, -1.5f));
             fuelBarrels[2].UpdatePositionAndBoundingSphere(new Vector3(2.5f, 0, -17.5f));
             fuelBarrels[3].UpdatePositionAndBoundingSphere(new Vector3(15.5f, 0, -17.5f));
-        }
-
-        /// <summary>
-        /// Load the bonus models and place the bonuses in random locations
-        /// </summary>
-        /// <param name="content">Content pipeline (for models)</param>
-        private void LoadBonuses(ContentManager content)
-        {
-            bonuses = new Bonus[5];
-
-            // load models
-            for (int i = 0; i < bonuses.Length; i++)
-            {
-                bonuses[i] = new Bonus();
-                bonuses[i].LoadContent(content);
-            }
-
-            // place the bonuses in random locations
-            foreach (Bonus b in bonuses)
-                b.PlaceRandomly(this);
         }
 
         /// <summary>
@@ -293,11 +273,11 @@ namespace _3DGameProject
             }
 
             // Check for collision with the bonuses
-            for (int i = 0; i < bonuses.Length; i++)
-            {
-                if (bonuses[i].BoundingSphere.Contains(sphere) != ContainmentType.Disjoint)
+            foreach (Bonus b in bonuses){
+                if (b.BoundingSphere.Contains(sphere) != ContainmentType.Disjoint)
                 {
-                    bonuses[i].PlaceRandomly(this); // place the barrier in a new random location
+                    bonuses.BonusPickedUp();
+                    b.PlaceRandomly(this); // place the barrier in a new random location
                     return GameConstants.CollisionType.Bonus;
                 }
             }
@@ -310,15 +290,10 @@ namespace _3DGameProject
         /// </summary>
         /// <param name="device">Graphics card (to draw the vertices)</param>
         /// <param name="gameCamera">For view and projection martices</param>
-        /// <param name="gameState">For the state of the game</param>
-        /// <remarks>The bonuses are not drawn if the game is still in the intro state</remarks>
-        public void Draw(ref GraphicsDevice device, Camera gameCamera, GameConstants.GameState gameState)
+        public void Draw(ref GraphicsDevice device, Camera gameCamera)
         {
             DrawCity(ref device, gameCamera);
             DrawFuelBarrels(gameCamera);
-
-            if (gameState != GameConstants.GameState.Intro)
-                DrawBonuses(gameCamera);
         }
 
         /// <summary>
@@ -357,16 +332,6 @@ namespace _3DGameProject
         {
             foreach (Fuel f in fuelBarrels)
                 f.Draw(gameCamera);
-        }
-
-        /// <summary>
-        /// Draw the bonus models
-        /// </summary>
-        /// <param name="gameCamera">For view and projection matrices</param>
-        private void DrawBonuses(Camera gameCamera)
-        {
-            foreach (Bonus b in bonuses)
-                b.Draw(gameCamera);
         }
     }
 }

@@ -25,8 +25,9 @@ namespace _3DGameProject
         /// <summary>
         /// Load the bonus model and calculate the bounding sphere
         /// </summary>
+        /// <param name="device">Graphics card (to initialize spritebatch)</param>
         /// <param name="content">Content pipeline (for models)</param>
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             Model = content.Load<Model>("Models/cube10uR");
 
@@ -35,6 +36,8 @@ namespace _3DGameProject
             BoundingSphere scaledSphere = BoundingSphere;
             scaledSphere.Radius = BoundingSphere.Radius * 0.7f;
             BoundingSphere = scaledSphere;
+
+
         }
 
         /// <summary>
@@ -109,8 +112,7 @@ namespace _3DGameProject
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.World =
-                        worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = gameCamera.ViewMatrix;
                     effect.Projection = gameCamera.ProjectionMatrix;
 

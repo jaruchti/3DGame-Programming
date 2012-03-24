@@ -180,6 +180,7 @@ namespace _3DGameProject
                 enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
                 player.Update(currentKeyboardState, currentGamePadState, gameTime, ref map, ref gameState);
                 score.Update((float) gameTime.ElapsedGameTime.TotalSeconds, player);
+                map.Bonuses.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
                 if (gameState == GameConstants.GameState.End)
                 {
@@ -220,7 +221,8 @@ namespace _3DGameProject
             {
                 skybox.Draw(ref device, gameCamera, player);
                 enemies.Draw(ref device, gameCamera);
-                map.Draw(ref device, gameCamera, gameState);
+                map.Bonuses.DrawBonuses(gameCamera);
+                map.Draw(ref device, gameCamera);
                 player.Draw(gameCamera, gameState);
 
                 if (gameState == GameConstants.GameState.Intro)
@@ -232,6 +234,7 @@ namespace _3DGameProject
                     score.Draw();
                     highScore.Draw();
                     enemies.WarningScreen.Draw(gameTime);
+                    map.Bonuses.DrawBonusScreen();
 
                     if (gameState == GameConstants.GameState.End)
                         gameOverScreen.Draw();
@@ -250,6 +253,7 @@ namespace _3DGameProject
             score.Reset();
             player.Reset();
             enemies.Reset();
+            map.Bonuses.Reset(map);
         }
     }
 }
