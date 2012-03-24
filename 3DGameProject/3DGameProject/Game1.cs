@@ -234,6 +234,8 @@ namespace _3DGameProject
                     score.Draw();
                     highScore.Draw();
                     enemies.WarningScreen.Draw(gameTime);
+
+                    if (gameState == GameConstants.GameState.Playing)
                     map.Bonuses.DrawBonusScreen();
 
                     if (gameState == GameConstants.GameState.End)
@@ -253,7 +255,7 @@ namespace _3DGameProject
             score.Reset();
             player.Reset();
             enemies.Reset();
-            map.Bonuses.Reset(map);
+            map.Bonuses.Reset();
         }
     }
 }
