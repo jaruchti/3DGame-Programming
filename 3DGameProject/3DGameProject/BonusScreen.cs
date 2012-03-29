@@ -68,13 +68,16 @@ namespace _3DGameProject
         /// </remarks>
         public void Update(float elapsedSeconds)
         {
-            seconds += elapsedSeconds;
-
-            // check if the display has been shown for long enough
-            if (seconds > SecondsOnScreen)
+            if (isDisplayed == true)
             {
-                seconds = 0.0f;
-                isDisplayed = false;
+                seconds += elapsedSeconds;
+
+                // check if the display has been shown for long enough
+                if (seconds > SecondsOnScreen)
+                {
+                    seconds = 0.0f;
+                    isDisplayed = false;
+                }
             }
         }
 

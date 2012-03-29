@@ -119,17 +119,10 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Reset to the state before gameplay began.  
+        /// Reset to the state before gameplay began - namely, reset the bonus screen to off.
         /// </summary>
-        /// <param name="m">Map to place the bonuses randomly into</param>
-        /// <remarks>
-        /// Reposition all of the bonuses and reset the bonus screeen so it is no longer showing
-        /// </remarks>
-        public void Reset(Map m)
+        public void Reset()
         {
-            foreach (Bonus b in bonuses)
-                b.PlaceRandomly(m);
-
             bonusScreen.Reset();
         }
     }

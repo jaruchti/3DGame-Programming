@@ -35,7 +35,6 @@ namespace _3DGameProject
         private Rectangle positionOfLastMove = new Rectangle(0, 0, 1, 1); // rectangle where the enemy made the last move decision
         private bool chasing = false;   // status as to whether the enemy is chasing the player
         private Rectangle nextPosition = new Rectangle(0, 0, 1, 1); // rectangle the enemy decided to head towards on the last move decision
-        private EnemySoundEffects soundEffects; // sound effects for the enemy
         private Missiles missiles;    // missiles the enemy has fired at the player
         private double timeOfChase;   // total time the enemy has been chasing the player
 
@@ -75,7 +74,6 @@ namespace _3DGameProject
             ForwardDirection = 45.0f;
             timeOfChase = 0;
 
-            soundEffects = new EnemySoundEffects();
             missiles = new Missiles();
         }
 
@@ -88,9 +86,6 @@ namespace _3DGameProject
         {
             // Load model
             Model = content.Load<Model>("Models/sphere1uR");
-
-            // Load sound effects
-            soundEffects.LoadContent(content);
 
             // Load missile effects
             missiles.LoadContent(ref device, content);
@@ -114,7 +109,7 @@ namespace _3DGameProject
         /// If the player is caught or the player is hit by a missile and runs
         /// out of health, the gamestate will transition to end
         /// </remarks>
-        public void Update(Enemy[] enemies, Player player, int[,] floorPlan, GameTime gameTime, 
+        public void Update(Enemies enemies, Player player, int[,] floorPlan, GameTime gameTime, 
                            ref GameConstants.GameState gameState)
         {
             bool canMakeMovement = false;   // boolean for status if the player was able to make a move on this update
@@ -125,9 +120,6 @@ namespace _3DGameProject
             if (((int)Position.X - (int)player.Position.X) == 0 && ((int)Position.Z - (int)player.Position.Z) == 0)
             {
                 gameState = GameConstants.GameState.End;
-
-                // stop all sound effects
-                soundEffects.StopAllSounds();
                 return;
             }
 
@@ -142,7 +134,7 @@ namespace _3DGameProject
             if (ReadyForNextMove())
             {
                 // mark the spots on the grid where the enemies are and where they are headed in the next move
-                MarkEnemySquares(enemies, floorPlan);   
+                MarkEnemySquares(enemies, floorPlan);
 
                 // the player is in the center of a grid square, and can decide on the next direction to face
                 // now, check if the player is in the enemy's line of sight (no buildings or enemies obstructing view
@@ -164,23 +156,12 @@ namespace _3DGameProject
                     if (this.LockedOn)
                     {
                         missiles.FireAt(this.Position, FindTargetPosition(player), gameTime);
-
-                        // play sound effect so player knows we are locked on
-                        soundEffects.PlayLockedOnBeep();
-                    }
-                    else
-                    {
-                        // play sound effect so player knows we are chasing
-                        soundEffects.PlayLockingBeep();
                     }
                 }
                 else
                 {
                     // reset the time of chase to zero since we are not chasing
                     timeOfChase = 0.0;
-
-                    // stop all sound effects
-                    soundEffects.StopAllSounds();
 
                     // we are not chasing, move randomly around the grid until we spot the player next
                     canMakeMovement = MoveRandomly(floorPlan); // returns true if a move was able to be made
@@ -422,7 +403,7 @@ namespace _3DGameProject
         /// </summary>
         /// <param name="enemies">All of the enemies in the game</param>
         /// <param name="floorPlan">Layout of the map</param>
-        private void MarkEnemySquares(Enemy[] enemies, int[,] floorPlan)
+        private void MarkEnemySquares(Enemies enemies, int[,] floorPlan)
         {
             foreach (Enemy e in enemies)
             {
@@ -445,7 +426,7 @@ namespace _3DGameProject
         /// </summary>
         /// <param name="enemies">All of the enemies in the game</param>
         /// <param name="floorPlan">Layout of the map</param>
-        private void UnmarkEnemySquares(Enemy[] enemies, int[,] floorPlan)
+        private void UnmarkEnemySquares(Enemies enemies, int[,] floorPlan)
         {
             foreach (Enemy e in enemies)
             {
@@ -473,15 +454,13 @@ namespace _3DGameProject
         private Vector3 FindTargetPosition(Player player)
         {
             Vector3 target = new Vector3(0.0f, player.Position.Y, 0.0f);
-            float xOffsetPToE = player.Position.X - Position.X; // x displacement from player to enemy
-            float zOffsetPToE = -player.Position.Z + Position.Z;// z displacement from player to enemy
 
             // Uses an approximation to determine where to fire the misile
             // 1) Calculate the distance between user and the missile
             // 2) Calculate the time (t) for the missile to travel to the user given the speed of the missile
             // 3) Calculate the position of the player at time (t)
 
-            float d_enemyToPlayer = (float) Math.Sqrt(xOffsetPToE * xOffsetPToE + zOffsetPToE * zOffsetPToE) + 0.5f; // 1
+            float d_enemyToPlayer = Helpers.LinearDistance2D(player.Position, this.Position); // 1
             float t_missiletoplayer = d_enemyToPlayer / Missile.MissileSpeed; // 2
             target.X = player.Position.X - player.Velocity * (float)Math.Sin(player.ForwardDirection) * t_missiletoplayer; // 3
             target.Z = player.Position.Z - player.Velocity * (float)Math.Cos(player.ForwardDirection) * t_missiletoplayer; // 3
@@ -500,9 +479,7 @@ namespace _3DGameProject
         public void MoveTowardPlayer(Player player)
         {
             Vector3 movement;
-            float distancePlayerToEnemy = (float)Math.Sqrt(
-                            (Position.X - player.Position.X) * (Position.X - player.Position.X) +
-                            (Position.Z - player.Position.Z) * (Position.Z - player.Position.Z));
+            float distancePlayerToEnemy = Helpers.LinearDistance2D(this.Position, player.Position);
 
             if (distancePlayerToEnemy > speed)
             {
@@ -530,7 +507,6 @@ namespace _3DGameProject
             ForwardDirection = 45.0f;
             timeOfChase = 0;
 
-            soundEffects.StopAllSounds();
             missiles.Reset();
         }
 
@@ -539,7 +515,8 @@ namespace _3DGameProject
         /// </summary>
         /// <param name="device">Graphics card to draw the missiles</param>
         /// <param name="gameCamera">For view and projection matrices</param>
-        public void Draw(ref GraphicsDevice device, Camera gameCamera)
+        /// <param name="gameState">For the state of the game (do not draw missiles once game over)</param>
+        public void Draw(ref GraphicsDevice device, Camera gameCamera, GameConstants.GameState gameState)
         {
             // Draw the enemy model
             Matrix[] transforms = new Matrix[Model.Bones.Count];
@@ -563,8 +540,9 @@ namespace _3DGameProject
                 mesh.Draw();
             }
 
-            // Draw the missiles
-            missiles.Draw(ref device, gameCamera);
+            // Draw the missiles if we are still playing
+            if (gameState == GameConstants.GameState.Playing)
+                missiles.Draw(ref device, gameCamera);
         }
 
 

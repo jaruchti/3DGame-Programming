@@ -48,5 +48,21 @@ namespace _3DGameProject
 
             return r;
         }
+
+        /// <summary>
+        /// Function to get the distance between two Vector3 objects.
+        /// </summary>
+        /// <param name="v1">Vector 1</param>
+        /// <param name="v2">Vector 2</param>
+        /// <returns>Returns the linear 2D distance between two points</returns>
+        /// <remarks>The distance is calculated by comparing x and z coordinates</remarks>
+        public static float LinearDistance2D(Vector3 v1, Vector3 v2)
+        {
+            float xOffset = v1.X - v2.X;
+            float zOffset = -v1.Z + v2.Z;
+            float r = (float) Math.Sqrt(xOffset * xOffset + zOffset * zOffset);
+
+            return r;
+        }
     }
 }

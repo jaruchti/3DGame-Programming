@@ -21,7 +21,10 @@ namespace _3DGameProject
     /// Class which contains the sound effects for the enemy, namely the sounds
     /// for the lock on.
     /// </summary>
-    class EnemySoundEffects
+    /// <remarks>
+    /// This is a singleton in the game to manage sound resources across multiple enemies.
+    /// </remarks>
+    public class EnemySoundEffects
     {
         private SoundEffect lockingBeepEffect;
         private SoundEffect lockedOnBeepEffect;
@@ -41,15 +44,19 @@ namespace _3DGameProject
             lockingBeep = lockingBeepEffect.CreateInstance();
             lockedOnBeep = lockedOnBeepEffect.CreateInstance();
 
-            lockedOnBeep.Volume = 0.20f;
+            lockedOnBeep.Volume = 0.20f; // to avoid it being obnoxious
         }
 
         /// <summary>
         /// Play the sound of the enemy locking onto the player
         /// </summary>
+        /// <remarks>
+        /// If the locked on beep is already playing, the locking beep is not played
+        /// since the locked on beep has higher priority.
+        /// </remarks>
         public void PlayLockingBeep()
         {
-            if (lockingBeep.State != SoundState.Playing)
+            if (lockingBeep.State != SoundState.Playing && lockedOnBeep.State != SoundState.Playing)
             {
                 StopAllSounds();
                 lockingBeep.Play();

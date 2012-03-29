@@ -27,9 +27,10 @@ namespace _3DGameProject
 
         private Enemy[] enemies;
         private EnemyWarningScreen warningScreen;   // screen with information for the player on enemy activity
+        private EnemySoundEffects soundEffects;     // sound effects for the enemy
 
         /// <summary>
-        /// Property allow the client of this class to access the warning screen for drawing
+        /// Property to allow the client of this class to access the warning screen for drawing
         /// </summary>
         public EnemyWarningScreen WarningScreen
         {
@@ -37,7 +38,8 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Create the enemies in the game
+        /// Create the enemies in the game and the singletons to manage resources common 
+        /// to all enemies (such as the warning screen and sound effects).
         /// </summary>
         public Enemies()
         {
@@ -46,12 +48,14 @@ namespace _3DGameProject
                 enemies[i] = new Enemy();
 
             warningScreen = new EnemyWarningScreen();
+            soundEffects = new EnemySoundEffects();
 
             SetUpEnemyPositions();
         }
 
         /// <summary>
-        /// Load the enemies
+        /// Load content required for the enemies and the content for resources common
+        /// to all enemies (such as the warning screen and sound effects).
         /// </summary>
         /// <param name="device">To load the enemy warning screen</param>
         /// <param name="content">Content pipeline (for models)</param>
@@ -61,6 +65,7 @@ namespace _3DGameProject
                 enemies[i].LoadContent(ref device, content);
 
             warningScreen.LoadContent(ref device, content);
+            soundEffects.LoadContent(content);
         }
 
         /// <summary>
@@ -104,13 +109,18 @@ namespace _3DGameProject
             {
                 // Update the positions of the enemies
                 foreach (Enemy e in enemies)
-                    e.Update(enemies, player, floorPlan, gameTime, ref gameState);
+                    e.Update(this, player, floorPlan, gameTime, ref gameState);
 
                 // Update the warning screen if we haven't transitioned to the end of the game
-                // during this update
+                // during this update.  If we have transitioned to the end of the game, reset the enemy alerts
+                // to the state before play began
                 if (gameState != GameConstants.GameState.End)
                 {
-                    UpdateWarningScreen(player);
+                    UpdateEnemyAlerts(player);
+                }
+                else
+                {
+                    ResetEnemyAlerts();
                 }
             }
             else
@@ -131,24 +141,30 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Updates the warning screen with a message to player if enemies are close or following
+        /// Updates the alerts to the user about the enemies
         /// </summary>
         /// <param name="player">For the position of the player</param>
-        private void UpdateWarningScreen(Player player)
+        /// <remarks>
+        /// The enemy warning screen is used to display info to the the player if an enemy is close,
+        /// if an enemy is locking on, and if an enemy is firing at the player.  Additionally, sounds are
+        /// played if the enemy is locked on or the enemy is locking.
+        /// </remarks>
+        private void UpdateEnemyAlerts(Player player)
         {
             float distancePlayerToEnemy = 0.0f;
+            bool isChasing = false;         // boolean to hold whether an enemy is chasing or not
+            bool isFiring = false;          // boolean to hold whether an enemy is firing or not
+            bool screenUpdated = false;     // boolean to hold whether the warning screen has been updated
 
             // If an enemy is very close, display "Enemy Close" in red
             foreach (Enemy e in enemies)
             {
-                distancePlayerToEnemy = (float)Math.Sqrt(
-                    (e.Position.X - player.Position.X) * (e.Position.X - player.Position.X) +
-                    (e.Position.Z - player.Position.Z) * (e.Position.Z - player.Position.Z));
+                distancePlayerToEnemy = Helpers.LinearDistance2D(e.Position, player.Position);
 
                 if (distancePlayerToEnemy < 2.0f)
                 {
                     warningScreen.Update("Enemy Close", Color.Red, false);
-                    return;
+                    screenUpdated = true;
                 }
             }
 
@@ -157,8 +173,12 @@ namespace _3DGameProject
             {
                 if (e.LockedOn == true)
                 {
-                    warningScreen.Update("Locked On", Color.Red, false);
-                    return;
+                    if (!screenUpdated) // the screen has not been updated yet, update it
+                    {
+                        warningScreen.Update("Locked On", Color.Red, false);
+                        screenUpdated = true;
+                    }
+                    isFiring = true;
                 }
             }
 
@@ -167,27 +187,38 @@ namespace _3DGameProject
             {
                 if (e.Chasing == true)
                 {
-                    warningScreen.Update("Locking", Color.Red, true);
-                    return;
+                    if (!screenUpdated) // the screen has not been updated yet, update it
+                    {
+                        warningScreen.Update("Locking", Color.Red, true);
+                        screenUpdated = true;
+                    }
+                    isChasing = true;
                 }
             }
 
             // If an enemy is fairly close, display "Warning" in yellow
-            foreach (Enemy e in enemies)
+            if (!screenUpdated) // the screen has not been updated yet, check to see if we should display "Warning"
             {
-                distancePlayerToEnemy = (float)Math.Sqrt(
-                    (e.Position.X - player.Position.X) * (e.Position.X - player.Position.X) +
-                    (e.Position.Z - player.Position.Z) * (e.Position.Z - player.Position.Z));
-
-                if (distancePlayerToEnemy < 5.0f)
+                foreach (Enemy e in enemies)
                 {
-                    warningScreen.Update("Warning", Color.Yellow, false);
-                    return;
+                    distancePlayerToEnemy = Helpers.LinearDistance2D(e.Position, player.Position);
+
+                    if (distancePlayerToEnemy < 5.0f)
+                    {
+                        warningScreen.Update("Warning", Color.Yellow, false);
+                    }
                 }
             }
 
-            // If we reached here, there is no need for a warning so reset the warning screen
-            warningScreen.Reset();
+            if (!isChasing && !isFiring)
+                soundEffects.StopAllSounds();
+            else if (isFiring)
+                soundEffects.PlayLockedOnBeep();
+            else if (isChasing)
+                soundEffects.PlayLockingBeep();
+
+            if (!screenUpdated)
+                warningScreen.Reset();
         }
 
         /// <summary>
@@ -195,10 +226,11 @@ namespace _3DGameProject
         /// </summary>
         /// <param name="device">Graphics card (to draw enemy missiles)</param>
         /// <param name="gameCamera">For view and projection matrices</param>
-        public void Draw(ref GraphicsDevice device, Camera gameCamera)
+        /// /// <param name="gameState">For the state of the game (do not draw missiles once game over)</param>
+        public void Draw(ref GraphicsDevice device, Camera gameCamera, GameConstants.GameState gameState)
         {
             foreach (Enemy e in enemies)
-                e.Draw(ref device, gameCamera);
+                e.Draw(ref device, gameCamera, gameState);
         }
 
         /// <summary>
@@ -208,10 +240,19 @@ namespace _3DGameProject
         {
             foreach (Enemy e in enemies)
                 e.Reset();
-            warningScreen.Reset();
             SetUpEnemyPositions();
+            ResetEnemyAlerts();
         }
 
+        /// <summary>
+        /// Reset the enemy alerts to the user (e.g. the warning screen and sound) to the state
+        /// they were at before play began.
+        /// </summary>
+        private void ResetEnemyAlerts()
+        {
+            warningScreen.Reset();
+            soundEffects.StopAllSounds();
+        }
         /* 
         * ----------------------------------------------------------------------------
         * The following section is for the introduction 

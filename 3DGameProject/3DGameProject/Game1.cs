@@ -220,8 +220,9 @@ namespace _3DGameProject
             else
             {
                 skybox.Draw(ref device, gameCamera, player);
-                enemies.Draw(ref device, gameCamera);
-                map.Bonuses.DrawBonuses(gameCamera);
+                enemies.Draw(ref device, gameCamera, gameState);
+                if (gameState == GameConstants.GameState.Playing) 
+                    map.Bonuses.DrawBonuses(gameCamera);
                 map.Draw(ref device, gameCamera);
                 player.Draw(gameCamera, gameState);
 
@@ -236,7 +237,7 @@ namespace _3DGameProject
                     enemies.WarningScreen.Draw(gameTime);
 
                     if (gameState == GameConstants.GameState.Playing)
-                    map.Bonuses.DrawBonusScreen();
+                        map.Bonuses.DrawBonusScreen();
 
                     if (gameState == GameConstants.GameState.End)
                         gameOverScreen.Draw();
