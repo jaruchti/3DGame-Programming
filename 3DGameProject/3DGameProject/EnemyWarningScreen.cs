@@ -40,6 +40,20 @@ namespace _3DGameProject
         }
 
         /// <summary>
+        /// Set the position of the elements of the EnemyWarningScreen based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
+            textSize = largeFont.MeasureString(strWarning);
+
+            // position warning slightly below center of screen
+            warningPosition = new Vector2(
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                (int)(0.6f * GameConstants.ViewportHeight));
+        }
+
+        /// <summary>
         /// Update the warning string with new state information
         /// </summary>
         /// <param name="strWarning">New warning message</param>
@@ -51,12 +65,7 @@ namespace _3DGameProject
             this.displayColor = displayColor;
             this.flashing = flashing;
 
-            textSize = largeFont.MeasureString(strWarning);
-
-            // position warning slightly below center of screen
-            warningPosition = new Vector2(
-                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                (int)(0.6f * GameConstants.ViewportHeight));  
+            SetPosition();
         }
 
         /// <summary>

@@ -25,7 +25,15 @@ namespace _3DGameProject
         /// <summary>Number of bonuses for the player to pick up</summary>
         public const int NumBonuses = 5;
         private Bonus[] bonuses; // array with bonuses for the player to pick up
-        BonusScreen bonusScreen; // screen to display to the user when they pick up a bonus
+        private BonusScreen bonusScreen; // screen to display to the user when they pick up a bonus
+
+        /// <summary>
+        /// Property to allow the client to retreive the bonus screen (mainly to resize)
+        /// </summary>
+        public BonusScreen BonusScreen
+        { 
+            get { return bonusScreen; }
+        }
 
         /// <summary>
         /// Constructor to initialize the fields of the bonuses class

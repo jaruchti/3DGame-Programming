@@ -145,6 +145,12 @@ namespace _3DGameProject
             currentKeyboardState = Keyboard.GetState();
             currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
+            if (currentKeyboardState.IsKeyDown(Keys.LeftControl) && currentKeyboardState.IsKeyDown(Keys.F) &&
+                (prevKeyBoardState.IsKeyUp(Keys.LeftControl) || prevKeyBoardState.IsKeyUp(Keys.F)))
+            {
+                ToggleFullScreen();
+            }
+
             if (gameState == GameConstants.GameState.Title)
             {
 
@@ -257,6 +263,31 @@ namespace _3DGameProject
             player.Reset();
             enemies.Reset();
             map.Bonuses.Reset();
+        }
+
+        private void ToggleFullScreen()
+        {
+            graphics.ToggleFullScreen();
+
+            if (!graphics.IsFullScreen)
+            {
+                graphics.PreferredBackBufferHeight = 500;
+                graphics.PreferredBackBufferWidth = 500;
+            }
+
+            GameConstants.ViewportHeight = graphics.GraphicsDevice.Viewport.Height;
+            GameConstants.ViewportWidth = graphics.GraphicsDevice.Viewport.Width;
+
+            titleScreen.SetPosition();
+            introScreen.SetPosition();
+            readyScreen.SetPosition();
+            gameOverScreen.SetPosition();
+
+            map.Bonuses.BonusScreen.SetPosition();
+
+            player.SetGuagePosition();
+            score.SetPosition();
+            highScore.SetPosition();
         }
     }
 }

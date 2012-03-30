@@ -42,11 +42,18 @@ namespace _3DGameProject
             background = content.Load<Texture2D>("Textures/backgroundXBOX");
 #endif
 
-            viewportRect = new Rectangle(0, 0, 
-                device.Viewport.Width, 
-                device.Viewport.Height);
+            SetPosition();
         }
 
+        /// <summary>
+        /// Set the position of the TitleScreen so that it fills the entire viewport
+        /// </summary>
+        public void SetPosition()
+        {
+            viewportRect = new Rectangle(0, 0, 
+                GameConstants.ViewportWidth, 
+                GameConstants.ViewportHeight);
+        }
         /// <summary>
         /// Draw the title screen.
         /// </summary>

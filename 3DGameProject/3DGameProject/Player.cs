@@ -399,6 +399,16 @@ namespace _3DGameProject
             healthMeter.Reset();
         }
 
+        /// <summary>
+        /// Set the position of the player's gauges based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public void SetGuagePosition()
+        {
+            fuelGauge.SetPosition();
+            sped.SetPosition();
+            healthMeter.SetPosition();
+        }
 
         /* 
          * ----------------------------------------------------------------------------

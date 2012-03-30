@@ -33,16 +33,24 @@ namespace _3DGameProject
         public Score()
         {
             textureRect = new Rectangle(382, 2, 339, 60);   // position of the current score background in ingame texture
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position of the elements of the Score display based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             // draw Score background on top left of screen
             displayDrawRect = new Rectangle(
-                0, 
-                0, 
-                (int) (0.36f * GameConstants.ViewportWidth), 
-                (int) (0.06f * GameConstants.ViewportHeight)); 
+                0,
+                0,
+                (int)(0.36f * GameConstants.ViewportWidth),
+                (int)(0.06f * GameConstants.ViewportHeight));
 
 
-            DisplayDigitXPos = (int) (0.14f * GameConstants.ViewportWidth);
+            DisplayDigitXPos = (int)(0.14f * GameConstants.ViewportWidth);
             SetUpDigitContants();
             SetUpDigitPositions();
         }

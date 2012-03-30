@@ -73,6 +73,13 @@ namespace _3DGameProject
         }
 
         /// <summary>
+        /// This is an abstract method that all subclasses must implement to 
+        /// set the position of their elements  based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public abstract void SetPosition();
+
+        /// <summary>
         /// Determine where to draw the digits on the screen and store in digitPositions array. 
         /// </summary>
         protected void SetUpDigitPositions()

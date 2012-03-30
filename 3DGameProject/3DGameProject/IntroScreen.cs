@@ -49,17 +49,25 @@ namespace _3DGameProject
         public override void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             base.LoadContent(ref device, content);
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position of the elements of the IntroScreen based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             // place title slightly below center of screen
             textSize = largeFont.MeasureString(strTitle);
             titlePosition = new Vector2(
-                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                (int) (0.6f * GameConstants.ViewportHeight));
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                (int)(0.6f * GameConstants.ViewportHeight));
 
             // place instructions at bottom of screen
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPosition = new Vector2(
-                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
                 GameConstants.ViewportHeight - largeFont.LineSpacing);  
         }
 

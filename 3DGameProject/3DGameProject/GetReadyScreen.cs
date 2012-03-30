@@ -41,11 +41,20 @@ namespace _3DGameProject
         public override void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             base.LoadContent(ref device, content);
+            SetPosition();
+        }
+
+        /// <summary>
+        /// Set the position of the elements of the GameReadyScreen based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
 
             // Place instructions at bottom of screen just above health meter
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPosition = new Vector2(
-                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
                 GameConstants.ViewportHeight - 2 * largeFont.LineSpacing);
         }
 

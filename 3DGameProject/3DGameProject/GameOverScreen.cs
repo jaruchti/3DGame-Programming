@@ -61,21 +61,33 @@ namespace _3DGameProject
         public override void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             base.LoadContent(ref device, content);
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position of the elements of the GameOver display based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             textSize = largeFont.MeasureString(strGameOver);
 
             // position gameOver slightly below center of screen
             gameOverPosition = new Vector2(
-                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                (int) (0.6f * GameConstants.ViewportHeight));  
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                (int)(0.6f * GameConstants.ViewportHeight));
 
-            rankPosition = new Vector2(0, 0);
+            // position rank directly below strGameOver
+            textSize = mediumFont.MeasureString(strRank);
+            rankPosition = new Vector2(
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                gameOverPosition.Y + largeFont.LineSpacing);
 
             // position instructions at bottom of screen just above health meter
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPosition = new Vector2(
-                (int) (GameConstants.ViewportWidth / 2) - textSize.X / 2, 
-                GameConstants.ViewportHeight - 2 * largeFont.LineSpacing);  
+                (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
+                GameConstants.ViewportHeight - 2 * largeFont.LineSpacing);
         }
 
         /// <summary>

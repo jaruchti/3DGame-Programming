@@ -32,7 +32,15 @@ namespace _3DGameProject
             digits = Player.StartingHealth; 
 
             textureRect = new Rectangle(727, 0, 280, 62); // position of the Health Meter in ingame texture
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position of the HealthMeter based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             // draw Health Meter background on bottom center of screen
             displayDrawRect = new Rectangle(
                 (int)(0.3f * GameConstants.ViewportWidth),
@@ -40,7 +48,7 @@ namespace _3DGameProject
                 (int)(0.4f * GameConstants.ViewportWidth),
                 (int)(0.125f * GameConstants.ViewportHeight));
 
-            DisplayDigitXPos = (int) (0.5f * GameConstants.ViewportWidth);   // display digits in center of screen
+            DisplayDigitXPos = (int)(0.5f * GameConstants.ViewportWidth);   // display digits in center of screen
             SetUpDigitContants();
             SetUpDigitPositions();
         }

@@ -48,7 +48,15 @@ namespace _3DGameProject
         public override void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             base.LoadContent(ref device, content);
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position of the elements of the BonusScreen based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             textSize = largeFont.MeasureString(strBonus);
 
             // position bonus at 20% from top of screen

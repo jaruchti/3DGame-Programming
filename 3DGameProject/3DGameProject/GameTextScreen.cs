@@ -43,5 +43,12 @@ namespace _3DGameProject
             largeFont = content.Load<SpriteFont>("Fonts/LargeFont");
             mediumFont = content.Load<SpriteFont>("Fonts/MediumFont");
         }
+
+        /// <summary>
+        /// This is an abstract method that all subclasses must implement to 
+        /// set the position of their elements  based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public abstract void SetPosition();
     }
 }

@@ -28,17 +28,25 @@ namespace _3DGameProject
         public Spedometer()
         {
             textureRect = new Rectangle(0, 0, 243, 102);  // position of the Spedometer in ingame texture
+            SetPosition();
+        }
 
+        /// <summary>
+        /// Set the position the Spedometer based on the characteristics
+        /// of the viewport
+        /// </summary>
+        public override void SetPosition()
+        {
             // draw Spedometer background on bottom right of screen
             displayDrawRect = new Rectangle(
-                (int) (0.750f * GameConstants.ViewportWidth), 
-                (int) (0.885f * GameConstants.ViewportHeight), 
-                (int) (0.250f * GameConstants.ViewportWidth), 
-                (int) (0.125f * GameConstants.ViewportHeight));
+                (int)(0.750f * GameConstants.ViewportWidth),
+                (int)(0.885f * GameConstants.ViewportHeight),
+                (int)(0.250f * GameConstants.ViewportWidth),
+                (int)(0.125f * GameConstants.ViewportHeight));
 
             // display digits on right side of screen
-            DisplayDigitXPos = (int) (0.87f * GameConstants.ViewportWidth); 
- 
+            DisplayDigitXPos = (int)(0.87f * GameConstants.ViewportWidth);
+
             SetUpDigitContants();
             SetUpDigitPositions();
         }
