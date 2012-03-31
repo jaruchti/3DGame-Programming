@@ -4,6 +4,8 @@
  * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
  */
 
+using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 
 namespace _3DGameProject
@@ -14,6 +16,12 @@ namespace _3DGameProject
     public class HighScore : ScoreDisplay
     {
         /// <summary>
+        /// The default highscore when the player first begins playing and no scores
+        /// have been saved yet.
+        /// </summary>
+        public int DefaultHighScore = 50;
+
+        /// <summary>
         /// Create a new HighScore display.
         /// </summary>
         /// <remarks>This is a singleton in the game</remarks>
@@ -22,7 +30,7 @@ namespace _3DGameProject
             textureRect = new Rectangle(382, 68, 339, 60); // position of the HighScore background in ingame texture
             SetPosition();
 
-            Score = 50.0f;
+            Score = ReadHighScore();
         }
 
         /// <summary>
@@ -46,13 +54,44 @@ namespace _3DGameProject
         /// <summary>
         /// Update display with new HighScore.
         /// </summary>
-        /// <param name="newHighScore">Potential highscore</param>
-        public void Update(float newHighScore)
+        /// <param name="potentialNewHighScore">Potential highscore</param>
+        public void Update(float potentialNewHighScore)
         {
-            if (newHighScore > Score)
+            if (potentialNewHighScore > Score)
             {
-                Score = newHighScore;
+                Score = potentialNewHighScore;
+                WriteHighScore();
             }
+        }
+
+        /// <summary>
+        /// Reads in the current highscore from the highscores file or the default
+        /// highscore if no highscore has yet been attained.
+        /// </summary>
+        /// <returns>Current best highscore</returns>
+        private float ReadHighScore()
+        {
+            float r = DefaultHighScore;
+            StreamReader sr;
+
+            if (File.Exists("Scores/scores.txt"))
+            {
+                sr = new StreamReader("Scores/scores.txt");
+                r = (float)Convert.ToDouble(sr.ReadLine());
+                sr.Close();
+            }
+
+            return r;
+        }
+
+        /// <summary>
+        /// Write new highscore to highscores file.
+        /// </summary>
+        private void WriteHighScore()
+        {
+            StreamWriter sw = new StreamWriter("Scores/scores.txt");
+            sw.WriteLine(Score);
+            sw.Close();
         }
     }
 }
