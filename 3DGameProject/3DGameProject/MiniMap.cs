@@ -138,6 +138,16 @@ namespace _3DGameProject
             //    spriteBatch.Draw(whiteRect, rect, Color.Purple);
             //}
 
+            if (Helpers.AStarDebugList != null)
+            {
+                for (int i = 1; i < Helpers.AStarDebugList.Count - 1; i++)
+                {
+                    rect.X = (int)(xOffset * GameConstants.ViewportWidth) + rect.Width * (int)Helpers.AStarDebugList[i].Y;
+                    rect.Y = (int)(yOffset * GameConstants.ViewportHeight) + rect.Height * (int)Helpers.AStarDebugList[i].X;
+                    spriteBatch.Draw(whiteRect, rect, Color.Pink);
+                }
+            }
+
             spriteBatch.End();
         }
     }
