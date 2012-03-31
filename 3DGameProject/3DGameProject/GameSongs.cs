@@ -4,15 +4,7 @@
  * Zach Bates, Lauren Buss, Corey Darr, Jason Ruchti, Jared Tittle
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace _3DGameProject
@@ -73,43 +65,5 @@ namespace _3DGameProject
                 }
             }
         }
-
-        ///// <summary>
-        ///// Allows the client to play the theme song
-        ///// </summary>
-        ///// <remarks>Wraps the titleSong variable to manage access</remarks>
-        //private void PlayThemeSong()
-        //{
-        //    if (!(titleSong.State == SoundState.Playing))
-        //        titleSong.Play();
-        //}
-
-        ///// <summary>
-        ///// Allows the client to play the song when the player is captured
-        ///// </summary>
-        ///// <remarks>Wraps the gameOverSong variable to manage access</remarks>
-        //private void PlayGameOverSong()
-        //{
-        //    if (!(gameOverSong.State == SoundState.Playing))
-        //        gameOverSong.Play();
-        //}
-
-        ///// <summary>
-        ///// Allows the client to stop the title song
-        ///// </summary>
-        ///// <remarks>Wraps the titleSong variable to manage access</remarks>
-        //public void StopTitleSong()
-        //{
-        //    titleSong.Stop();
-        //}
-
-        ///// <summary>
-        ///// Allows the client to stop the game over song
-        ///// </summary>
-        ///// <remarks>Wraps the gameOverSong variable to manage access</remarks>
-        //public void StopGameOverSong()
-        //{
-        //    gameOverSong.Stop();
-        //}
     }
 }
