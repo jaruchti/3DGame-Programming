@@ -65,7 +65,7 @@ namespace _3DGameProject
             textSize = largeFont.MeasureString(strTitle);
             titlePos = new Vector2(
                 (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                (int)(0.1f * GameConstants.ViewportHeight));
+                (int)(0.62f * GameConstants.ViewportHeight));
 
             // set up position for scores
             scorePositions.Clear();
@@ -74,14 +74,14 @@ namespace _3DGameProject
                 textSize = highScoreFont.MeasureString("#" + (i + 1).ToString() + ": " + scores[i].ToString().PadLeft(4));
                 scorePositions.Add(new Vector2(
                     (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                    (int)((0.3 + 0.1 * i) * GameConstants.ViewportHeight)));
+                    (int)((0.75 + 0.03 * i) * GameConstants.ViewportHeight)));
             }
 
             // set up position for instruction
             textSize = mediumFont.MeasureString(strInstructions);
             instructionsPos = new Vector2(
                 (int)(GameConstants.ViewportWidth / 2) - textSize.X / 2,
-                (int)(0.85f * GameConstants.ViewportHeight));
+                (int)(0.95f * GameConstants.ViewportHeight));
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace _3DGameProject
             spriteBatch.Begin();
 
             spriteBatch.Draw(highScoreBackground, viewportRect, Color.White); // draw background
-            spriteBatch.DrawString(largeFont, strTitle, titlePos, Color.Orange); // draw HighScores title
+            spriteBatch.DrawString(largeFont, strTitle, titlePos, Color.Black); // draw HighScores title
 
             // Draw the scores
             for (int i = 0; i < MAX_SCORES_TO_DISPLAY && i < scores.Count; i++)
@@ -155,7 +155,7 @@ namespace _3DGameProject
             }
 
             // draw the instructions
-            spriteBatch.DrawString(mediumFont, strInstructions, instructionsPos, Color.White);
+            spriteBatch.DrawString(mediumFont, strInstructions, instructionsPos, Color.Black);
 
             spriteBatch.End();
         }
