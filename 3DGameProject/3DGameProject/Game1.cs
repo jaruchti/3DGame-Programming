@@ -158,6 +158,11 @@ namespace _3DGameProject
                     currentGameState = GameConstants.GameState.HighScoreScreen;
                     highScoreScreen.Update();
                 }
+                else if (currentKeyboardState.IsKeyDown(Keys.I) && prevKeyBoardState.IsKeyUp(Keys.I))
+                {
+                    prevGameState = currentGameState;
+                    currentGameState = GameConstants.GameState.InstructionScreen;
+                }
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
@@ -215,10 +220,20 @@ namespace _3DGameProject
                     currentGameState = GameConstants.GameState.HighScoreScreen;
                     highScoreScreen.Update();
                 }
+                else if (currentKeyboardState.IsKeyDown(Keys.I) && prevKeyBoardState.IsKeyUp(Keys.I))
+                {
+                    prevGameState = currentGameState;
+                    currentGameState = GameConstants.GameState.InstructionScreen;
+                }
             }
             else if (currentGameState == GameConstants.GameState.HighScoreScreen)
             {
                 if (currentKeyboardState.IsKeyDown(Keys.H) && prevKeyBoardState.IsKeyUp(Keys.H))
+                    currentGameState = prevGameState;
+            }
+            else if (currentGameState == GameConstants.GameState.InstructionScreen)
+            {
+                if (currentKeyboardState.IsKeyDown(Keys.I) && prevKeyBoardState.IsKeyUp(Keys.I))
                     currentGameState = prevGameState;
             }
 
@@ -251,7 +266,7 @@ namespace _3DGameProject
                 player.Draw(gameCamera, currentGameState);
 
                 if (currentGameState == GameConstants.GameState.Intro)
-                {}//introScreen.Draw();
+                    introScreen.Draw();
                 else if (currentGameState == GameConstants.GameState.Playing || currentGameState == GameConstants.GameState.Ready ||
                     currentGameState == GameConstants.GameState.End)
                 {
