@@ -13,6 +13,7 @@ namespace _3DGameProject
     /// <summary>
     /// Class which implements the logic for the High (Best) Score display in the game
     /// </summary>
+    /// <remarks>This is a singleton in the game</remarks>
     public class HighScore : ScoreDisplay
     {
         /// <summary>

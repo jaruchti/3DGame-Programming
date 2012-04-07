@@ -29,6 +29,7 @@ namespace _3DGameProject
         GamePadState prevGamePadState;
 
         TitleScreen titleScreen;
+        InstructionScreen instructionScreen;
         HighScoreScreen highScoreScreen;
         IntroScreen introScreen;
         GetReadyScreen readyScreen;
@@ -79,6 +80,7 @@ namespace _3DGameProject
             prevKeyBoardState = currentKeyboardState;
 
             titleScreen = new TitleScreen();
+            instructionScreen = new InstructionScreen();
             highScoreScreen = new HighScoreScreen();
             introScreen = new IntroScreen();
             readyScreen = new GetReadyScreen();
@@ -108,6 +110,7 @@ namespace _3DGameProject
             device = graphics.GraphicsDevice;
 
             titleScreen.LoadContent(ref device, Content);
+            instructionScreen.LoadContent(ref device, Content);
             highScoreScreen.LoadContent(ref device, Content);
             introScreen.LoadContent(ref device, Content);
             readyScreen.LoadContent(ref device, Content);
@@ -255,7 +258,9 @@ namespace _3DGameProject
             if (currentGameState == GameConstants.GameState.Title)
                 titleScreen.Draw();
             else if (currentGameState == GameConstants.GameState.HighScoreScreen)
-                highScoreScreen.Draw();   
+                highScoreScreen.Draw();
+            else if (currentGameState == GameConstants.GameState.InstructionScreen)
+                instructionScreen.Draw();
             else
             {
                 skybox.Draw(ref device, gameCamera, player);
@@ -312,6 +317,7 @@ namespace _3DGameProject
             GameConstants.ViewportWidth = graphics.GraphicsDevice.Viewport.Width;
 
             titleScreen.SetPosition();
+            instructionScreen.SetPosition();
             highScoreScreen.SetPosition();
             introScreen.SetPosition();
             readyScreen.SetPosition();

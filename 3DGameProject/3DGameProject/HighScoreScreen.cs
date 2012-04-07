@@ -18,6 +18,7 @@ namespace _3DGameProject
     /// to the screen when the user selects that he or she wishes to see
     /// the highscores.
     /// </summary>
+    /// <remarks>This is a singleton in the game</remarks>
     class HighScoreScreen : GameTextScreen
     {
         /// <summary>Maximum number of scores to display on the highscore screen</summary>
@@ -93,6 +94,7 @@ namespace _3DGameProject
             StreamReader sr;
             float t;
 
+            scores.Clear();
             if (File.Exists("Scores/scores.txt"))
             {
                 // file exists, open and read a line at a time from it
@@ -109,7 +111,6 @@ namespace _3DGameProject
             else
             {
                 // could not open file, add default highscore to the display
-                scores.Clear();
                 scores.Add(HighScore.DefaultHighScore);
             }
 
