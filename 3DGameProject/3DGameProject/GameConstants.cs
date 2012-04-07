@@ -20,7 +20,7 @@ namespace _3DGameProject
         /// There should only be a single instance of GameState at one time.
         /// Use carefully, with great power comes great responbibility.
         /// </remarks>
-        public enum GameState { Title, Intro, Ready, Playing, End };
+        public enum GameState { Title, Intro, Ready, Playing, End, HighScoreScreen };
 
         /// <summary>
         /// Enemeration which defines the type of collision that has occured.

@@ -5,16 +5,11 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace _3DGameProject
 {
@@ -26,13 +21,15 @@ namespace _3DGameProject
         GraphicsDeviceManager graphics;
         GraphicsDevice device;
 
-        GameConstants.GameState gameState;
+        GameConstants.GameState currentGameState;
+        GameConstants.GameState prevGameState;
         KeyboardState currentKeyboardState;
         KeyboardState prevKeyBoardState;
         GamePadState currentGamePadState;
         GamePadState prevGamePadState;
 
         TitleScreen titleScreen;
+        HighScoreScreen highScoreScreen;
         IntroScreen introScreen;
         GetReadyScreen readyScreen;
         GameOverScreen gameOverScreen;
@@ -77,11 +74,12 @@ namespace _3DGameProject
 
             Window.Title = "Alien Attack";
 
-            gameState = GameConstants.GameState.Title;
+            currentGameState = GameConstants.GameState.Title;
             currentKeyboardState = Keyboard.GetState();
             prevKeyBoardState = currentKeyboardState;
 
             titleScreen = new TitleScreen();
+            highScoreScreen = new HighScoreScreen();
             introScreen = new IntroScreen();
             readyScreen = new GetReadyScreen();
             gameOverScreen = new GameOverScreen();
@@ -110,6 +108,7 @@ namespace _3DGameProject
             device = graphics.GraphicsDevice;
 
             titleScreen.LoadContent(ref device, Content);
+            highScoreScreen.LoadContent(ref device, Content);
             introScreen.LoadContent(ref device, Content);
             readyScreen.LoadContent(ref device, Content);
             gameOverScreen.LoadContent(ref device, Content);
@@ -151,57 +150,76 @@ namespace _3DGameProject
                 ToggleFullScreen();
             }
 
-            if (gameState == GameConstants.GameState.Title)
+            if (currentGameState == GameConstants.GameState.Title)
             {
+                if (currentKeyboardState.IsKeyDown(Keys.H) && prevKeyBoardState.IsKeyUp(Keys.H))
+                {
+                    prevGameState = currentGameState;
+                    currentGameState = GameConstants.GameState.HighScoreScreen;
+                    highScoreScreen.Update();
+                }
 
                 if (currentKeyboardState.IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
-                    gameState = GameConstants.GameState.Intro;
+                    currentGameState = GameConstants.GameState.Intro;
                     enemies.SetUpIntroPositions(player.Position);
                 }
             }
-            else if (gameState == GameConstants.GameState.Intro)
+            else if (currentGameState == GameConstants.GameState.Intro)
             {
-                player.AutoPilot(ref gameState);
+                player.AutoPilot(ref currentGameState);
                 gameCamera.Update(player.ForwardDirection, enemies.EnemyIntroPosition, map.FloorPlan, device.Viewport.AspectRatio);
                 enemies.PlayIntro(player);
 
                 if (((currentKeyboardState.IsKeyDown(Keys.Space) && prevKeyBoardState.IsKeyUp(Keys.Space)) ||
                     (prevGamePadState.Buttons.A == ButtonState.Pressed && currentGamePadState.Buttons.A == ButtonState.Released)) ||
-                    gameState == GameConstants.GameState.Ready)
+                    currentGameState == GameConstants.GameState.Ready)
                 {
                     Reset();
-                    gameState = GameConstants.GameState.Ready;
+                    currentGameState = GameConstants.GameState.Ready;
                 }
             }
-            else if (gameState == GameConstants.GameState.Ready)
+            else if (currentGameState == GameConstants.GameState.Ready)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
-                readyScreen.Update((float) gameTime.ElapsedGameTime.TotalSeconds, ref gameState);
+                readyScreen.Update((float) gameTime.ElapsedGameTime.TotalSeconds, ref currentGameState);
                 player.PlayEngineNoise();
             }
-            else if (gameState == GameConstants.GameState.Playing)
+            else if (currentGameState == GameConstants.GameState.Playing)
             {
                 gameCamera.Update(player.ForwardDirection, player.Position, map.FloorPlan, device.Viewport.AspectRatio);
-                enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
-                player.Update(currentKeyboardState, currentGamePadState, gameTime, ref map, ref gameState);
+                enemies.Update(player, map.FloorPlan, gameTime, ref currentGameState);
+                player.Update(currentKeyboardState, currentGamePadState, gameTime, ref map, ref currentGameState);
                 score.Update((float) gameTime.ElapsedGameTime.TotalSeconds, player);
                 map.Bonuses.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-                if (gameState == GameConstants.GameState.End)
+                if (currentGameState == GameConstants.GameState.End)
                 {
                     highScore.Update(score.Score);
                     gameOverScreen.Update(score.Score);
                 }
             }
-            else if (gameState == GameConstants.GameState.End)
+            else if (currentGameState == GameConstants.GameState.End)
             {
-                enemies.Update(player, map.FloorPlan, gameTime, ref gameState);
+                enemies.Update(player, map.FloorPlan, gameTime, ref currentGameState);
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
-                    gameState = GameConstants.GameState.Ready;
+                    currentGameState = GameConstants.GameState.Ready;
                     Reset();
                 }
+
+                if (currentKeyboardState.IsKeyDown(Keys.H) && prevKeyBoardState.IsKeyUp(Keys.H))
+                {
+                    prevGameState = currentGameState;
+                    currentGameState = GameConstants.GameState.HighScoreScreen;
+                    highScoreScreen.Update();
+                }
+            }
+            else if (currentGameState == GameConstants.GameState.HighScoreScreen)
+            {
+                if (currentKeyboardState.IsKeyDown(Keys.H) && prevKeyBoardState.IsKeyUp(Keys.H))
+                    currentGameState = prevGameState;
             }
 
             prevKeyBoardState = currentKeyboardState;
@@ -219,40 +237,40 @@ namespace _3DGameProject
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            if (gameState == GameConstants.GameState.Title)
-            {
+            if (currentGameState == GameConstants.GameState.Title)
                 titleScreen.Draw();
-            }
+            else if (currentGameState == GameConstants.GameState.HighScoreScreen)
+                highScoreScreen.Draw();   
             else
             {
                 skybox.Draw(ref device, gameCamera, player);
-                enemies.Draw(ref device, gameCamera, gameState);
-                if (gameState == GameConstants.GameState.Playing) 
+                enemies.Draw(ref device, gameCamera, currentGameState);
+                if (currentGameState == GameConstants.GameState.Playing)
                     map.Bonuses.DrawBonuses(gameCamera);
                 map.Draw(ref device, gameCamera);
-                player.Draw(gameCamera, gameState);
+                player.Draw(gameCamera, currentGameState);
 
-                if (gameState == GameConstants.GameState.Intro)
-                    introScreen.Draw();
-                else if (gameState == GameConstants.GameState.Playing || gameState == GameConstants.GameState.Ready ||
-                    gameState == GameConstants.GameState.End)
+                if (currentGameState == GameConstants.GameState.Intro)
+                {}//introScreen.Draw();
+                else if (currentGameState == GameConstants.GameState.Playing || currentGameState == GameConstants.GameState.Ready ||
+                    currentGameState == GameConstants.GameState.End)
                 {
                     miniMap.Draw(gameTime, player, enemies, map);
                     score.Draw();
                     highScore.Draw();
                     enemies.WarningScreen.Draw(gameTime);
 
-                    if (gameState == GameConstants.GameState.Playing)
+                    if (currentGameState == GameConstants.GameState.Playing)
                         map.Bonuses.DrawBonusScreen();
 
-                    if (gameState == GameConstants.GameState.End)
+                    if (currentGameState == GameConstants.GameState.End)
                         gameOverScreen.Draw();
-                    else if (gameState == GameConstants.GameState.Ready)
+                    else if (currentGameState == GameConstants.GameState.Ready)
                         readyScreen.Draw();
                 }
             }
 
-            gameSongs.PlayBackground(gameState);    // play the appropriate background music
+            gameSongs.PlayBackground(currentGameState);    // play the appropriate background music
 
             base.Draw(gameTime);
         }
@@ -279,6 +297,7 @@ namespace _3DGameProject
             GameConstants.ViewportWidth = graphics.GraphicsDevice.Viewport.Width;
 
             titleScreen.SetPosition();
+            highScoreScreen.SetPosition();
             introScreen.SetPosition();
             readyScreen.SetPosition();
             gameOverScreen.SetPosition();

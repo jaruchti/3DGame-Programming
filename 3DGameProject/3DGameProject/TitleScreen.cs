@@ -48,6 +48,7 @@ namespace _3DGameProject
                 GameConstants.ViewportWidth, 
                 GameConstants.ViewportHeight);
         }
+
         /// <summary>
         /// Draw the title screen.
         /// </summary>

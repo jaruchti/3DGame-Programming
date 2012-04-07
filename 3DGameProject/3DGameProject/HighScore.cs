@@ -19,7 +19,7 @@ namespace _3DGameProject
         /// The default highscore when the player first begins playing and no scores
         /// have been saved yet.
         /// </summary>
-        public int DefaultHighScore = 50;
+        public const int DefaultHighScore = 50;
 
         /// <summary>
         /// Create a new HighScore display.
@@ -52,7 +52,8 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Update display with new HighScore.
+        /// Update display with new HighScore and update the highscores file
+        /// with the new score.
         /// </summary>
         /// <param name="potentialNewHighScore">Potential highscore</param>
         public void Update(float potentialNewHighScore)
@@ -60,8 +61,9 @@ namespace _3DGameProject
             if (potentialNewHighScore > Score)
             {
                 Score = potentialNewHighScore;
-                WriteHighScore();
             }
+
+            WriteScore(potentialNewHighScore);
         }
 
         /// <summary>
@@ -72,12 +74,20 @@ namespace _3DGameProject
         private float ReadHighScore()
         {
             float r = DefaultHighScore;
+            float t;
             StreamReader sr;
 
             if (File.Exists("Scores/scores.txt"))
             {
                 sr = new StreamReader("Scores/scores.txt");
-                r = (float)Convert.ToDouble(sr.ReadLine());
+
+                while (!sr.EndOfStream)
+                {
+                    t = (float)Convert.ToDouble(sr.ReadLine());
+                    if (t > r)
+                        r = t;
+                }
+
                 sr.Close();
             }
 
@@ -85,12 +95,12 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Write new highscore to highscores file.
+        /// Write new score to highscores file.
         /// </summary>
-        private void WriteHighScore()
+        private void WriteScore(float newScore)
         {
-            StreamWriter sw = new StreamWriter("Scores/scores.txt");
-            sw.WriteLine(Score);
+            StreamWriter sw = new StreamWriter("Scores/scores.txt", true);
+            sw.WriteLine(newScore);
             sw.Close();
         }
     }
