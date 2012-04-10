@@ -32,6 +32,13 @@ namespace _3DGameProject
         private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 }; 
         private BoundingBox[] buildingBoundingBoxes;    // bounding boxes for the building in the map
 
+        private SamplerState clampTextureAddressMode = new SamplerState
+        {
+            AddressU = TextureAddressMode.Clamp,
+            AddressV = TextureAddressMode.Clamp,
+            AddressW = TextureAddressMode.Clamp
+        }; // to draw the city since non-power of two textures are used
+
         /// <summary>
         /// Property to allow the client to get read-only access to the map's floor plan.
         /// </summary>
@@ -312,6 +319,7 @@ namespace _3DGameProject
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
+                device.SamplerStates[0] = clampTextureAddressMode;
 
                 // Draw the triangles.  Each triangle has three vertices (hence cityVertexBuffer.VertexCount / 3)
                 // as last parameter to device.DrawPrimities(...).

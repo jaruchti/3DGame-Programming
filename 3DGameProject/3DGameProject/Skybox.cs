@@ -22,6 +22,11 @@ namespace _3DGameProject
         Texture2D[] skyboxTextures; // textures to display around the skybox
         Model skyboxModel;
         Effect effect;
+        SamplerState clampTextureAddressMode = new SamplerState
+        {
+            AddressU = TextureAddressMode.Clamp,
+            AddressV = TextureAddressMode.Clamp
+        }; // to draw the skybox since some non-power of two textures are used
 
         /// <summary>
         /// Load the content required to display the skybox.
@@ -55,10 +60,7 @@ namespace _3DGameProject
         /// <param name="player">The player's position governs where the skybox is drawn</param>
         public void Draw(ref GraphicsDevice device, Camera gameCamera, Player player)
         {
-            SamplerState ss = new SamplerState();
-            ss.AddressU = TextureAddressMode.Clamp;
-            ss.AddressV = TextureAddressMode.Clamp;
-            device.SamplerStates[0] = ss;
+            device.SamplerStates[0] = clampTextureAddressMode;
 
             DepthStencilState dss = new DepthStencilState();
             dss.DepthBufferEnable = false;
