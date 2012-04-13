@@ -11,40 +11,40 @@ using Microsoft.Xna.Framework.Graphics;
 namespace _3DGameProject
 {
     /// <summary>
-    /// Class which allows the client to display the title screen for the Alien Attack
+    /// Class which allows the client to display the credits screen for the Alien Attack
     /// game.
     /// </summary>
     /// <remarks>This is a singleton in the game</remarks>
-    public class TitleScreen
+    public class CreditsScreen
     {
         private Texture2D background;
         private SpriteBatch spriteBatch;
         private Rectangle viewportRect;
 
         /// <summary>
-        /// Load the content required for the TitleScreen
+        /// Load the content required for the CreditsScreen
         /// </summary>
         /// <param name="device">Graphics card (to initialize spritebatch)</param>
         /// <param name="content">Content pipeline (for texture)</param>
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             spriteBatch = new SpriteBatch(device);
-            background = content.Load<Texture2D>("Textures/background");
+            background = content.Load<Texture2D>("Textures/backgroundCredits");
             SetPosition();
         }
 
         /// <summary>
-        /// Set the position of the TitleScreen so that it fills the entire viewport
+        /// Set the position of the Credits screen so that it fills the entire viewport
         /// </summary>
         public void SetPosition()
         {
-            viewportRect = new Rectangle(0, 0, 
-                GameConstants.ViewportWidth, 
+            viewportRect = new Rectangle(0, 0,
+                GameConstants.ViewportWidth,
                 GameConstants.ViewportHeight);
         }
 
         /// <summary>
-        /// Draw the title screen.
+        /// Draw the Credits screen.
         /// </summary>
         public void Draw()
         {

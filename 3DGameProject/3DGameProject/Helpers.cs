@@ -59,6 +59,6 @@ namespace _3DGameProject
             return r;
         }
 
-        public static List<Vector2> AStarDebugList = new List<Vector2>();
+        //public static List<Vector2> AStarDebugList = new List<Vector2>();
     }
 }

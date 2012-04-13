@@ -166,7 +166,7 @@ namespace _3DGameProject
                     if (ShouldMoveTowardPlayer(player, enemies))
                     {
                         List<Vector2> aStarPath = AStar.FindPath(floorPlan, Position, player.Position);
-                        Helpers.AStarDebugList = aStarPath;
+                        //Helpers.AStarDebugList = aStarPath;
 
                         if (aStarPath == null)
                         {
