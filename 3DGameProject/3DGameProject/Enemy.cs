@@ -97,7 +97,7 @@ namespace _3DGameProject
         /// <summary>
         /// Allows the client to move the enemy craft
         /// </summary>
-        /// <param name="enemies">All of the other enemies in the game</param>
+        /// <param name="enemies">For positions of all of the other enemies in the game</param>
         /// <param name="player">Allows queries for attributes of the player</param>
         /// <param name="floorPlan">Gives the arrangement of the building in the city</param>
         ///<param name="gameTime">Information on the time since last update for missiles</param>
@@ -158,7 +158,7 @@ namespace _3DGameProject
                     // reset the time of chase to zero since we are not chasing
                     timeOfChase = 0.0;
 
-                    // check to see if no other player's are chasing and this is the closest enemy
+                    // check to see if no other enemyies are chasing and this is the closest enemy
                     // in terms of linear distance
                     // If so, find an A* path to the player if possible.
                     // This makes the game more challenging since the player will always be under pressure
@@ -219,7 +219,7 @@ namespace _3DGameProject
         }
 
         /// <summary>
-        /// Check whether is ready to make decision on where to move next
+        /// Check whether the enemy ready to make decision on where to move next
         /// </summary>
         /// <returns>True if the enemy can make a move decision, false otherwise</returns>
         /// <remarks>
@@ -633,7 +633,7 @@ namespace _3DGameProject
         */
 
         /// <summary>
-        /// Property to allow retreival/setting of the angular position of the enemy
+        /// Property to allow retrieval/setting of the angular position of the enemy
         /// when it is circling a position
         /// </summary>
         /// <remarks>
