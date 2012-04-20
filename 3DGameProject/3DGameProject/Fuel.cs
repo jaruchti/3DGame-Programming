@@ -29,7 +29,7 @@ namespace _3DGameProject
         /// <param name="content">Content pipeline (for models)</param>
         public void LoadContent(ContentManager content)
         {
-            Model = content.Load<Model>("Models/fuelcell");
+            Model = content.Load<Model>("Models/motoroil");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
