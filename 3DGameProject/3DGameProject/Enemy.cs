@@ -21,7 +21,7 @@ namespace _3DGameProject
         /// <summary>Cruising speed of the enemy</summary>
         public const float EnemySpeed = 0.75f / 60.0f;
         /// <summary>Ratio to scale bounding sphere for better fit</summary>
-        public const float EnemyBoundingSphereRatio = 10.0f;
+        public const float EnemyBoundingSphereRatio = 1.0f;
 
         /// <summary>
         /// Property which defines the direction the enemy is moving.
@@ -82,7 +82,7 @@ namespace _3DGameProject
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
             // Load model
-            Model = content.Load<Model>("Models/sphere1uR");
+            Model = content.Load<Model>("Models/UFO");
 
             // Load missile effects
             missiles.LoadContent(ref device, content);

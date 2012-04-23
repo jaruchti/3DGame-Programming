@@ -19,6 +19,8 @@ namespace _3DGameProject
     {
         /// <summary>Number of enemies the player must avoid</summary>
         public const int NumEnemy = 5;
+        /// <summary>Height in the map at which the UFOs fly</summary>
+        public const float Altitude = 0.135f;
 
         private Enemy[] enemies;
         private EnemyWarningScreen warningScreen;   // screen with information for the player on enemy activity
@@ -68,11 +70,11 @@ namespace _3DGameProject
         /// </summary>
         public void SetUpEnemyPositions()
         {
-            enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.18f, -8.5f));
-            enemies[1].UpdatePositionAndBoundingSphere(new Vector3(8.5f, 0.18f, -9.5f));
-            enemies[2].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.18f, -9.5f));
-            enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, 0.18f, -10.5f));
-            enemies[4].UpdatePositionAndBoundingSphere(new Vector3(15.5f, 0.18f,-4.5f));
+            enemies[0].UpdatePositionAndBoundingSphere(new Vector3(9.5f, Altitude, -8.5f));
+            enemies[1].UpdatePositionAndBoundingSphere(new Vector3(8.5f, Altitude, -9.5f));
+            enemies[2].UpdatePositionAndBoundingSphere(new Vector3(9.5f, Altitude, -9.5f));
+            enemies[3].UpdatePositionAndBoundingSphere(new Vector3(9.5f, Altitude, -10.5f));
+            enemies[4].UpdatePositionAndBoundingSphere(new Vector3(15.5f, Altitude, -4.5f));
         }
 
         /// <summary>
@@ -274,7 +276,7 @@ namespace _3DGameProject
         /// </remarks>
         public void PlayIntro(Player player)
         {
-            if (enemies[4].Position.Y > 0.18f)
+            if (enemies[4].Position.Y > Altitude)
             {
                 // Move with the player during the beginning of the introduction while descending
                 enemies[4].MoveTowardPlayer(player);
