@@ -29,13 +29,13 @@ namespace _3DGameProject
         /// <param name="content">Content pipeline (for models)</param>
         public void LoadContent(ContentManager content)
         {
-            Model = content.Load<Model>("Models/motoroil");
+            Model = content.Load<Model>("Models/gascan");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.5f;
+            scaledSphere.Radius *= 0.55f;
             BoundingSphere = new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 

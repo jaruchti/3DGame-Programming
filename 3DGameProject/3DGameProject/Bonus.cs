@@ -24,12 +24,12 @@ namespace _3DGameProject
         /// <param name="content">Content pipeline (for models)</param>
         public void LoadContent(ref GraphicsDevice device, ContentManager content)
         {
-            Model = content.Load<Model>("Models/cube10uR");
+            Model = content.Load<Model>("Models/motoroil");
 
             // Find bounding sphere and scale for best fit
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere = BoundingSphere;
-            scaledSphere.Radius = BoundingSphere.Radius * 0.7f;
+            scaledSphere.Radius = BoundingSphere.Radius * 0.5f;
             BoundingSphere = scaledSphere;
         }
 
