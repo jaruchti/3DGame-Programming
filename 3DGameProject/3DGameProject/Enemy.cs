@@ -602,7 +602,7 @@ namespace _3DGameProject
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);    // move the model to the correct position
-            Matrix worldMatrix = translateMatrix;   // setup worl matrix based on translation
+            Matrix worldMatrix = translateMatrix;   // setup world matrix based on translation
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -688,6 +688,9 @@ namespace _3DGameProject
         /// <summary>Cost to move a single square in the grid to the left, right, up, or down</summary>
         public const int MoveCost = 10;
 
+        /// <summary>
+        /// Node in the A* path planning algorithm
+        /// </summary>
         public class Node
         {
             private Node parent;    // parent of this node

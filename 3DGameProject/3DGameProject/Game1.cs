@@ -169,7 +169,8 @@ namespace _3DGameProject
 
             // check to see if we should enable full screen
             if (currentKeyboardState.IsKeyDown(Keys.LeftControl) && currentKeyboardState.IsKeyDown(Keys.F) &&
-                (prevKeyBoardState.IsKeyUp(Keys.LeftControl) || prevKeyBoardState.IsKeyUp(Keys.F)))
+                (prevKeyBoardState.IsKeyUp(Keys.LeftControl) || prevKeyBoardState.IsKeyUp(Keys.F)) &&
+                currentGameState != GameConstants.GameState.Playing && currentGameState != GameConstants.GameState.Ready)
             {
                 ToggleFullScreen();
             }
@@ -252,7 +253,6 @@ namespace _3DGameProject
             else if (currentGameState == GameConstants.GameState.End)
             {
                 enemies.Update(player, map.FloorPlan, gameTime, ref currentGameState); // move the enemy torward the player
-
                
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) || currentGamePadState.Buttons.A == ButtonState.Pressed)
                 {
